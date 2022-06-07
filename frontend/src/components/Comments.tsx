@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import './styles/CommentsAndReplies.css';
+import './styles/Comments.css';
 import { getUserDetails } from '../state/actions/userActions';
-import { createComment, listCommentsAndReplies } from '../state/actions/commentsAndRepliesActions';
+import { createComment, listComments } from '../state/actions/commentsActions';
 import { listPostDetails } from '../state/actions/postActions';
 import { COMMENT } from '../constants/constants';
 import defaultEndpoint from '../inputs/defaultEndpoint';
@@ -17,17 +17,17 @@ import Loader from './Loader';
 import HeaderControls from './HeaderControls';
 import InputBoxWithAvatar from './InputBoxWithAvatar';
 import Pagination from './Pagination';
-import CommentsAndRepliesCard from './CommentsAndRepliesCard';
+import CommentsCard from './CommentsCard';
 import scrollTo from '../helpers/scrollTo';
-import CommentsAndRepliesProps from '../models/components/CommentsAndRepliesProps';
+import CommentsProps from '../models/components/CommentsProps';
 import useTypedSelector from '../hooks/useTypedSelector';
 
-const CommentsAndReplies: React.FC<CommentsAndRepliesProps> = ({
+const Comments: React.FC<CommentsProps> = ({
   match,
   postId: postIdProp,
   setCommentsCount,
   isScreen,
-  commentsAndRepliesRef
+  commentsRef
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ const CommentsAndReplies: React.FC<CommentsAndRepliesProps> = ({
   const postId = postIdProp || match.params.postId;
 
   const [endpoint, setEndpoint] = useState({
-    ...defaultEndpoint['commentsAndReplies'],
+    ...defaultEndpoint['comments'],
     pageSize: `pageSize=${isScreen ? 6 : 3}&`
   });
 
@@ -45,15 +45,11 @@ const CommentsAndReplies: React.FC<CommentsAndRepliesProps> = ({
 
   const { post } = useTypedSelector((state) => state.postDetails);
 
-  const { comments, loading, error } = useTypedSelector((state) => state.commentsAndRepliesList);
+  const { comments, loading, error } = useTypedSelector((state) => state.commentsList);
 
   const { success: successCommentCreate } = useTypedSelector((state) => state.commentCreate);
 
   const { success: successCommentDelete } = useTypedSelector((state) => state.commentDelete);
-
-  const { success: successReplyCreate } = useTypedSelector((state) => state.replyCreate);
-
-  const { success: successReplyDelete } = useTypedSelector((state) => state.replyDelete);
 
   useEffect(() => {
     dispatch(getUserDetails(userInfo?.userId));
@@ -69,24 +65,22 @@ const CommentsAndReplies: React.FC<CommentsAndRepliesProps> = ({
   useEffect(() => {
     const { page, pageSize, sort, search } = endpoint;
 
-    dispatch(listCommentsAndReplies(postId, `${page}${pageSize}${sort}${search}`));
+    dispatch(listComments(postId, `${page}${pageSize}${sort}${search}`));
   }, [
     dispatch,
     postId,
     endpoint,
     successCommentCreate,
-    successReplyCreate,
     successCommentDelete,
-    successReplyDelete
   ]);
 
   return (
-    <div className="comments_and_replies">
+    <div className="comments">
       {comments?.length > 0 && (
         <HeaderControls
           updateQuery={(prop, value) => setEndpoint({ ...endpoint, [prop]: value })}
           query={endpoint}
-          resource="comments and replies"
+          resource="comments"
           sortOptionsMap={commentsSortOptionsMap}
           pageSizeOptionsMap={isScreen ? commentsListPageSizeOptionsMap : undefined}
           breadcrumbsPaths={
@@ -116,12 +110,11 @@ const CommentsAndReplies: React.FC<CommentsAndRepliesProps> = ({
         <div className="comments_list">
           {comments?.map((comment) => {
             return (
-              <CommentsAndRepliesCard
+              <CommentsCard
                 key={comment.commentId}
                 {...comment}
                 currentUser={currentUserDetails}
                 avatar={comment.avatar}
-                replies={comment.replies}
               />
             );
           })}
@@ -136,7 +129,7 @@ const CommentsAndReplies: React.FC<CommentsAndRepliesProps> = ({
                       endpoint.pageSize === 'pageSize=3&' ? 'pageSize=8&' : 'pageSize=3&'
                     }`
                   });
-                  scrollTo(commentsAndRepliesRef);
+                  scrollTo(commentsRef);
                 }}
               >
                 {endpoint.pageSize === 'pageSize=3&' ? (
@@ -172,4 +165,4 @@ const CommentsAndReplies: React.FC<CommentsAndRepliesProps> = ({
   );
 };
 
-export default CommentsAndReplies;
+export default Comments;

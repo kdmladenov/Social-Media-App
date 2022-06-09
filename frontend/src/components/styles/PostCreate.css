@@ -1,0 +1,25 @@
+.post_create {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 20px;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.post_create .button_group {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
+}
+
+.post_create .button_group i {
+  font-size: 30px;
+}
+
+.post_create .button_group .button_container:first-child i {
+  color: var(--cheetos);
+}
+.post_create .button_group .button_container:last-child i {
+  color: var(--kiwi);
+}

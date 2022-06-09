@@ -1,0 +1,65 @@
+.stories .carousel_container {
+  background-color: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.stories .carousel_container ul {
+  gap: 20px;
+}
+
+.stories .carousel_container li {
+  border-radius: 10px;
+  overflow-x: clip;
+  margin: 0;
+  padding: 0;
+}
+
+.stories .carousel_container li,
+.stories .carousel_container li .story_image {
+  height: 200px;
+  min-width: 120px;
+  width: 120px;
+}
+
+.stories .carousel_header,
+.stories .carousel_slider::-webkit-scrollbar {
+  display: none;
+}
+
+/* Buttons */
+/* Arrow buttons */
+.carousel_btn {
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  opacity: 1;
+}
+
+.carousel_btn.next {
+  border-radius: 50% 50% 50% 50%;
+  top: 50%;
+  right: 30px;
+}
+
+.carousel_btn.prev {
+  border-radius: 50% 50% 50% 50%;
+  top: 50%;
+  left: 30px;
+}
+
+.carousel_btn:hover {
+  border: solid 2px rgb(97, 96, 96);
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+.carousel_btn.next:hover {
+  border-radius: 50%;
+  border-right: solid 2px rgb(97, 96, 96);
+}
+
+.carousel_btn.prev:hover {
+  border-left: solid 2px rgb(97, 96, 96);
+  border-radius: 50%;
+}

@@ -14,7 +14,20 @@ import RolesType from '../models/RolesType.js';
 
 const getUser =
   (usersData: UsersData) => async (userId: number, isProfileOwner: boolean, role: RolesType) => {
-    const user = await usersData.getBy('user_id', userId, isProfileOwner, role);
+    let isProfileOwnerFriend = false;
+
+    if (role !== rolesEnum.admin && !isProfileOwner) {
+      isProfileOwnerFriend = true; //TODO find if user is a friend
+    }
+
+    const user = await usersData.getBy(
+      'user_id',
+      userId,
+      isProfileOwner,
+      role,
+      isProfileOwnerFriend
+    );
+
     if (!user) {
       return {
         error: errors.RECORD_NOT_FOUND,
@@ -118,103 +131,129 @@ const changePassword =
   };
 
 // update profile
-const update = (usersData: UsersData) => async (userUpdate: UserType, userId: number) => {
-  let existingUser = await usersData.getBy('user_id', userId, true);
-  if (!existingUser) {
-    return {
-      error: errors.RECORD_NOT_FOUND,
-      result: null
-    };
-  }
-
-  if (userUpdate.email) {
-    const user = await usersData.getBy('email', userUpdate.email, true);
-    if (user?.userId !== userId) {
+const update =
+  (usersData: UsersData) =>
+  async (userUpdate: UserType, userId: number, role: RolesType, isProfileOwner: boolean) => {
+    let existingUser = await usersData.getBy('user_id', userId, true);
+    if (!existingUser) {
       return {
-        error: errors.DUPLICATE_RECORD,
+        error: errors.RECORD_NOT_FOUND,
         result: null
       };
     }
-  }
 
-  // update home city and country
-  if (userUpdate.homeCity && userUpdate.homeCountry) {
-    let existingCity = await usersData.getLocation(userUpdate.homeCity);
-
-    if (!existingCity) {
-      existingCity = await usersData.createLocation(userUpdate.homeCity, userUpdate.homeCountry);
+    if (userUpdate.email) {
+      const user = await usersData.getBy('email', userUpdate.email, true);
+      if (user?.userId !== userId) {
+        return {
+          error: errors.DUPLICATE_RECORD,
+          result: null
+        };
+      }
     }
 
-    if (existingCity.city !== existingUser.homeCity) {
-      userUpdate = { ...userUpdate, homeCityId: existingCity.locationId };
-    }
-  }
-
-  // update current city and country
-  if (userUpdate.currentCity && userUpdate.currentCountry) {
-    let existingCity = await usersData.getLocation(userUpdate.currentCity);
-
-    if (!existingCity) {
-      existingCity = await usersData.createLocation(
-        userUpdate.currentCity,
-        userUpdate.currentCountry
-      );
+    if (role !== rolesEnum.admin && !isProfileOwner) {
+      return {
+        error: errors.OPERATION_NOT_PERMITTED,
+        post: null
+      };
     }
 
-    if (existingCity.city !== existingUser.currentCity) {
-      userUpdate = { ...userUpdate, currentCityId: existingCity.locationId };
+    // update home city and country
+    if (userUpdate.homeCity && userUpdate.homeCountry) {
+      let existingCity = await usersData.getLocation(userUpdate.homeCity);
+
+      if (!existingCity) {
+        existingCity = await usersData.createLocation(userUpdate.homeCity, userUpdate.homeCountry);
+      }
+
+      if (existingCity.city !== existingUser.homeCity) {
+        userUpdate = { ...userUpdate, homeCityId: existingCity.locationId };
+      }
     }
-  }
 
-  const updatedData = { ...existingUser, ...userUpdate, userId };
+    // update current city and country
+    if (userUpdate.currentCity && userUpdate.currentCountry) {
+      let existingCity = await usersData.getLocation(userUpdate.currentCity);
 
-  await usersData.updateUser(updatedData);
+      if (!existingCity) {
+        existingCity = await usersData.createLocation(
+          userUpdate.currentCity,
+          userUpdate.currentCountry
+        );
+      }
 
-  return {
-    error: null,
-    result: updatedData
+      if (existingCity.city !== existingUser.currentCity) {
+        userUpdate = { ...userUpdate, currentCityId: existingCity.locationId };
+      }
+    }
+
+    const updatedData = { ...existingUser, ...userUpdate, userId };
+
+    await usersData.updateUser(updatedData);
+
+    return {
+      error: null,
+      result: updatedData
+    };
   };
-};
 
 // delete user
-const deleteUser = (usersData: UsersData) => async (userId: number) => {
-  const existingUser = await usersData.getBy('user_id', userId);
-  if (!existingUser) {
+const deleteUser =
+  (usersData: UsersData) => async (userId: number, role: RolesType, isProfileOwner: boolean) => {
+    const existingUser = await usersData.getBy('user_id', userId);
+    if (!existingUser) {
+      return {
+        error: errors.RECORD_NOT_FOUND,
+        result: null
+      };
+    }
+
+    if (role !== rolesEnum.admin && !isProfileOwner) {
+      return {
+        error: errors.OPERATION_NOT_PERMITTED,
+        post: null
+      };
+    }
+
+    await usersData.remove(userId);
+
     return {
-      error: errors.RECORD_NOT_FOUND,
-      result: null
+      error: null,
+      result: existingUser
     };
-  }
-
-  await usersData.remove(userId);
-
-  return {
-    error: null,
-    result: existingUser
   };
-};
 
 const logout = (usersData: UsersData) => async (token: string) => {
   await usersData.logoutUser(token);
 };
 
 // restore deleted user
-const restoreUser = (usersData: UsersData) => async (deletedUserId: number) => {
-  const existingDeletedUser = await usersData.getBy('user_id', +deletedUserId, false, 'admin');
-  if (!existingDeletedUser) {
+const restoreUser =
+  (usersData: UsersData) =>
+  async (deletedUserId: number, role: RolesType, isProfileOwner: boolean) => {
+    const existingDeletedUser = await usersData.getBy('user_id', +deletedUserId, false, 'admin');
+    if (!existingDeletedUser) {
+      return {
+        error: errors.RECORD_NOT_FOUND,
+        result: null
+      };
+    }
+
+        if (role !== rolesEnum.admin && !isProfileOwner) {
+          return {
+            error: errors.OPERATION_NOT_PERMITTED,
+            post: null
+          };
+        }
+
+    await usersData.restore(deletedUserId);
+
     return {
-      error: errors.RECORD_NOT_FOUND,
-      result: null
+      error: null,
+      result: existingDeletedUser
     };
-  }
-
-  await usersData.restore(deletedUserId);
-
-  return {
-    error: null,
-    result: existingDeletedUser
   };
-};
 
 // forgotten password
 const forgottenPassword = (usersData: UsersData) => async (email: string) => {

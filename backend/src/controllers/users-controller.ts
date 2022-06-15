@@ -80,7 +80,7 @@ usersController
   // @desc Get user by ID
   // @route GET /users/:userId
   // @access Public - only basic info
-  // @access Private - Admin or Profile Owner - full info
+  // @access Private - Admin, Profile Owner or a Profile Owner's friend  - full info, Other logged users - limited info
 
   .get(
     '/:userId',
@@ -115,13 +115,20 @@ usersController
     loggedUserGuard,
     validateBody('user', updateUserSchema),
     errorHandler(async (req: Request, res: Response) => {
-      const { role } = req.user;
       // const id = role === rolesEnum.admin ? req.params.userId : req.user.userId;
+      const { role } = req.user;
       const { userId } = req.params;
+
+      const isProfileOwner = +userId === req.user.userId;
 
       const update = req.body;
 
-      const { error, result } = await usersServices.update(usersData)(update, +userId);
+      const { error, result } = await usersServices.update(usersData)(
+        update,
+        +userId,
+        role,
+        isProfileOwner
+      );
 
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
@@ -130,6 +137,10 @@ usersController
       } else if (error === errors.DUPLICATE_RECORD) {
         res.status(409).send({
           message: 'User with same email already exists.'
+        });
+      } else if (error === errors.OPERATION_NOT_PERMITTED) {
+        res.status(403).send({
+          message: 'You are not authorized to edit this user.'
         });
       } else {
         res.status(200).send(result);
@@ -145,15 +156,26 @@ usersController
     authMiddleware,
     loggedUserGuard,
     errorHandler(async (req: Request, res: Response) => {
-      const { role } = req.user;
       // case admin-delete every user, case: basic user - delete only itself
-      const deletedUserId = role === rolesEnum.admin ? req.params.userId : req.user.userId;
+      // const deletedUserId = role === rolesEnum.admin ? req.params.userId : req.user.userId;
+      const { role } = req.user;
+      const { userId } = req.params;
 
-      const { error, result } = await usersServices.deleteUser(usersData)(+deletedUserId);
+      const isProfileOwner = +userId === req.user.userId;
+
+      const { error, result } = await usersServices.deleteUser(usersData)(
+        +userId,
+        role,
+        isProfileOwner
+      );
 
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
-          message: `User ${deletedUserId} is not found.`
+          message: `User ${userId} is not found.`
+        });
+      } else if (error === errors.OPERATION_NOT_PERMITTED) {
+        res.status(403).send({
+          message: 'You are not authorized to delete this user.'
         });
       } else {
         res.status(200).send(result);
@@ -171,13 +193,24 @@ usersController
     // Admins only
     roleMiddleware(rolesEnum.admin),
     errorHandler(async (req: Request, res: Response) => {
+      const { role } = req.user;
       const { userId } = req.params;
 
-      const { error, result } = await usersServices.restoreUser(usersData)(+userId);
+      const isProfileOwner = +userId === req.user.userId;
+
+      const { error, result } = await usersServices.restoreUser(usersData)(
+        +userId,
+        role,
+        isProfileOwner
+      );
 
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
           message: `User ${userId} is not found.`
+        });
+      } else if (error === errors.OPERATION_NOT_PERMITTED) {
+        res.status(403).send({
+          message: 'You are not authorized to restore this deleted user.'
         });
       } else {
         res.status(200).send(result);

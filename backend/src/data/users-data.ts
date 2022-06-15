@@ -8,7 +8,8 @@ const getBy = async (
   column: string,
   value: string | number,
   isProfileOwner: boolean = false,
-  role: RolesType = rolesEnum.basic
+  role: RolesType = rolesEnum.basic,
+  isProfileOwnerFriend: boolean = false
 ) => {
   const sql = `
     SELECT 
@@ -18,7 +19,7 @@ const getBy = async (
       u.avatar,
       u.about_me
       ${
-        role === 'admin' || isProfileOwner // TODO or friend
+        role === 'admin' || isProfileOwner || isProfileOwnerFriend // TODO or friend
           ? `,u.email,
               u.phone,
               u.date_of_birth as dateOfBirth,
@@ -63,7 +64,7 @@ const getAll = async (
   sort: string,
   page: number,
   pageSize: number,
-  role: RolesType
+  role: RolesType = rolesEnum.basic
 ) => {
   const sortArr = sort.split(' ');
   const direction = ['ASC', 'asc', 'DESC', 'desc'].includes(sortArr[1]) ? sortArr[1] : 'asc';

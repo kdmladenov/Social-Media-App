@@ -5,6 +5,7 @@ import PostImagesData from '../models/PostImagesData.js';
 import PostsData from '../models/PostsData.js';
 import RolesType from '../models/RolesType.js';
 import rolesEnum from '../constants/roles.enum.js';
+import UsersData from '../models/UsersData.js';
 
 const getAllPosts =
   (postsData: PostsData) =>
@@ -30,7 +31,10 @@ const getAllPosts =
     }
     const result = await postsData.getAllPosts(search, filter, sort, pageSize, page, role);
 
-    return result;
+    return {
+      error: null,
+      posts: result
+    };
   };
 
 const getPostById =
@@ -62,7 +66,16 @@ const getPostById =
     };
   };
 
-const createPost = (postsData: PostsData) => async (data: PostType) => {
+const createPost = (postsData: PostsData, usersData: UsersData) => async (data: PostType) => {
+  // create city and country
+  if (data.city && data.country) {
+    let existingCity = await usersData.getLocation(data.city);
+
+    if (!existingCity) {
+      existingCity = await usersData.createLocation(data.city, data.country);
+    }
+  }
+
   return {
     error: null,
     post: await postsData.create(data)
@@ -70,7 +83,7 @@ const createPost = (postsData: PostsData) => async (data: PostType) => {
 };
 
 const updatePost =
-  (postsData: PostsData) =>
+  (postsData: PostsData, usersData: UsersData) =>
   async (
     postId: number,
     userId: number,
@@ -88,7 +101,16 @@ const updatePost =
         };
       }
     }
-    
+
+    // create city and country
+    if (updatedData.city && updatedData.country) {
+      let existingCity = await usersData.getLocation(updatedData.city);
+
+      if (!existingCity) {
+        existingCity = await usersData.createLocation(updatedData.city, updatedData.country);
+      }
+    }
+
     const existingPost = await postsData.getBy('post_id', +postId, 'admin');
 
     if (!existingPost) {

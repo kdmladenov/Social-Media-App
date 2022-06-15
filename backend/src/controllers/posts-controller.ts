@@ -21,6 +21,7 @@ import errors from '../constants/service-errors.js';
 import { paging } from '../constants/constants.js';
 import rolesEnum from '../constants/roles.enum.js';
 import RequestQuery from '../models/RequestQuery.js';
+import usersData from '../data/users-data.js';
 
 const postsController = express.Router();
 
@@ -48,7 +49,7 @@ postsController
       if (+pageSize < paging.MIN_POST_PAGESIZE) pageSize = paging.MIN_POST_PAGESIZE;
       if (page < paging.DEFAULT_PAGE) page = paging.DEFAULT_PAGE;
 
-      const post = await postsServices.getAllPosts(postsData)(
+      const { error, posts } = await postsServices.getAllPosts(postsData)(
         +userId,
         search,
         filter,
@@ -59,7 +60,13 @@ postsController
         isProfileOwner
       );
 
-      res.status(200).send(post);
+      if (error === errors.OPERATION_NOT_PERMITTED) {
+        res.status(403).send({
+          message: `You are not authorized to view this user's posts.`
+        });
+      } else {
+        res.status(200).send(posts);
+      }
     })
   )
   //OK
@@ -84,6 +91,10 @@ postsController
         res.status(404).send({
           message: 'A post with this number is not found!'
         });
+      } else if (error === errors.OPERATION_NOT_PERMITTED) {
+        res.status(403).send({
+          message: 'You are not authorized to view this post.'
+        });
       } else {
         res.status(200).send(post);
       }
@@ -100,14 +111,14 @@ postsController
     validateBody('post', createPostSchema),
     errorHandler(async (req: Request, res: Response) => {
       const data = req.body;
-      const { post } = await postsServices.createPost(postsData)(data);
+      const { post } = await postsServices.createPost(postsData, usersData)(data);
 
       res.status(201).send(post);
     })
   )
   // @desc EDIT posts by ID
   // @route PUT /posts/:postId
-  // @access Private - Admin only
+  // @access Private - Admin or Profile Owner
   .put(
     '/:userId/:postId',
     authMiddleware,
@@ -115,12 +126,12 @@ postsController
     roleMiddleware(rolesEnum.admin),
     validateBody('post', updatePostSchema),
     errorHandler(async (req: Request, res: Response) => {
-        const { postId, userId } = req.params;
-        
-        const { role } = req.user;
-        const isProfileOwner = +userId === req.user.userId;
+      const { postId, userId } = req.params;
+
+      const { role } = req.user;
+      const isProfileOwner = +userId === req.user.userId;
       const data = req.body;
-      const { error, result } = await postsServices.updatePost(postsData)(
+      const { error, result } = await postsServices.updatePost(postsData, usersData)(
         +postId,
         +userId,
         isProfileOwner,
@@ -132,10 +143,10 @@ postsController
         res.status(404).send({
           message: 'The post is not found.'
         });
-        // } else if (error === errors.DUPLICATE_RECORD) {
-        //   res.status(409).send({
-        //     message: 'Another post with this title already exist.'
-        //   });
+      } else if (error === errors.OPERATION_NOT_PERMITTED) {
+        res.status(403).send({
+          message: 'You are not authorized to update this post.'
+        });
       } else {
         res.status(200).send(result);
       }
@@ -163,6 +174,10 @@ postsController
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
           message: 'A post with this id is not found!'
+        });
+      } else if (error === errors.OPERATION_NOT_PERMITTED) {
+        res.status(403).send({
+          message: 'You are not authorized to delete this post.'
         });
       } else {
         res.status(200).send(post);

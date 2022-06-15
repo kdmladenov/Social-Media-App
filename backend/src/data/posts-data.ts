@@ -117,52 +117,34 @@ const create = async (post: PostType) => {
     post.city || null
   ]);
 
-  console.log(result);
-
   return getBy('post_id', +result.insertId);
 };
 
-// const update = async (updatedPost: PostType) => {
-//   const sql = `
-//         UPDATE posts
-//         SET
-//           title = ?,
-//           brand = ?,
-//           description = ?,
-//           post_category = ?,
-//           price = ?,
-//           stock_count = ?,
-//           discount = ?,
-//           color = ?,
-//           color_family = ?,
-//           dimensions = ?,
-//           model_number = ?,
-//           release_year = ?,
-//           sku = ?,
-//           weight = ?
-//         WHERE post_id = ?
-//     `;
+const update = async (updatedPost: PostType) => {
+  const sql = `
+        UPDATE posts
+        SET
+        user_id = ?,
+        author_id = ?,
+        message = ?,
+        image = ?,
+        feeling_type_id = (SELECT feeling_type_id from feeling_types WHERE feeling_type = ?),
+        location_id = (SELECT location_id from locations WHERE city = ?)
+        WHERE post_id = ?
+    `; 
 
-//   await db.query(sql, [
-//     updatedPost.title || null,
-//     updatedPost.brand || null,
-//     updatedPost.description || null,
-//     updatedPost.postCategory || null,
-//     +updatedPost.price || 0,
-//     +updatedPost.stockCount || 0,
-//     +updatedPost.discount || 0,
-//     updatedPost.color || null,
-//     updatedPost.colorFamily || null,
-//     updatedPost.dimensions || null,
-//     updatedPost.modelNumber || null,
-//     +updatedPost.releaseYear || 2020,
-//     updatedPost.sku || null,
-//     +updatedPost.weight || 0,
-//     +updatedPost.postId
-//   ]);
+  await db.query(sql, [
+    +updatedPost.userId || null,
+    +updatedPost.authorId || null,
+    updatedPost.message || null,
+    updatedPost.image || 'storage/images/defaultImage.png',
+    updatedPost.feelingType || null,
+    updatedPost.city || null,
+    +updatedPost.postId
+  ]);
 
-//   return getBy('post_id', updatedPost.postId);
-// };
+  return getBy('post_id', updatedPost.postId);
+};
 
 const remove = async (postToDelete: PostType) => {
   const sql = `
@@ -178,6 +160,6 @@ export default {
   getAllPosts,
   getBy,
   create,
-  // update,
+  update,
   remove
 };

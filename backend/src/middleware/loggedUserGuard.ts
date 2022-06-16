@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import tokenLoggedOut from '../data/tokens-data';
+import tokenLoggedOut from '../data/tokens-data.js';
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization!.replace('Bearer ', '');

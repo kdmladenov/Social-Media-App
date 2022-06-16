@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import errorStrings from '../constants/error-strings';
+import errorStrings from '../constants/error-strings.js';
 
 export default (resource: string, scheme: { [key: string]: Function }) =>
   async (req: Request, res: Response, next: NextFunction) => {

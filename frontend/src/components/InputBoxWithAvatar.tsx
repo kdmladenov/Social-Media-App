@@ -45,7 +45,8 @@ const InputBoxWithAvatar: React.FC<InputBoxWithAvatarProps> = ({
         <Avatar
           classes="image_only"
           imageUrl={currentUserDetails?.avatar}
-          fullName={currentUserDetails?.fullName}
+          firstName={currentUserDetails?.firstName}
+          lastName={currentUserDetails?.lastName}
         />
       )}
       {showForm && (

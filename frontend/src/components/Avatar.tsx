@@ -7,9 +7,9 @@ import AvatarProps from '../models/components/AvatarProps';
 
 // classes: image_only, name_only, small
 
-const Avatar: React.FC<AvatarProps> = ({ classes, imageUrl, fullName }) => {
-  const firstName = fullName?.split(' ')[0];
-  const firstInitials = `${fullName?.split(' ')?.[0]?.[0]}${fullName?.split(' ')?.[1]?.[0] || ''}`;
+const Avatar: React.FC<AvatarProps> = ({ classes, imageUrl, firstName='', lastName='' }) => {
+
+  const initials = `${firstName?.[0]}${lastName?.[0] || ''}`;
 
   const backgroundColors = ['peeps', 'watermelon', 'mimosa', 'kiwi', 'hendrix', 'thanos'];
 
@@ -19,9 +19,9 @@ const Avatar: React.FC<AvatarProps> = ({ classes, imageUrl, fullName }) => {
         {imageUrl ? (
           <img
             src={imageUrl?.startsWith('http') ? imageUrl : `${BASE_URL}/${imageUrl}`}
-            alt={fullName || 'image'}
+            alt={firstName || 'image'}
           />
-        ) : fullName ? (
+        ) : firstName ? (
           <div
             className="initials"
             style={{
@@ -30,14 +30,16 @@ const Avatar: React.FC<AvatarProps> = ({ classes, imageUrl, fullName }) => {
               })`
             }}
           >
-            {firstInitials}
+            {initials}
           </div>
         ) : (
           <i className="fa fa-user" />
         )}
       </div>
-      {fullName && !classes?.includes('large') && (
-        <div className="name">{classes?.includes('header') ? firstName : fullName}</div>
+      {firstName && !classes?.includes('large') && (
+        <div className="name">
+          {classes?.includes('header') ? firstName : `${firstName} ${lastName}`}
+        </div>
       )}
     </div>
   );

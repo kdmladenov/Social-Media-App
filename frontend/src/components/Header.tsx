@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import './styles/Header.css';
@@ -13,9 +13,11 @@ import MegaMenu from './MegaMenu';
 import Login from './Login';
 import DropDown from './Dropdown';
 import Avatar from './Avatar';
+import ButtonNav from './ButtonNav';
 
 const Header: React.FC = () => {
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
 
   const { userInfo } = useTypedSelector((state) => state.userLogin);
 
@@ -29,23 +31,32 @@ const Header: React.FC = () => {
 
   return (
     <header>
-      <div className="logo_mega_menu_group">
-        <div className="mega_menu">
-          <MegaMenu />
-        </div>
+      <div className="logo_search_group">
         <NavLink to="/" className="header_logo">
-          <img src={`${BASE_URL}/storage/images/logo.png`} alt="logo" />
+          {/* <img src={`${BASE_URL}/storage/images/logo.png`} alt="logo" /> */}
+          <img
+            src={
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkNqlwu8zxTt1fy6b2lZrYnQVUTTba15IX8Q&usqp=CAU'
+            }
+            alt="logo"
+          />
         </NavLink>
-      </div>
-      <div className="search">
         <SearchBar />
       </div>
+
+      <ButtonNav currentPath={pathname} screen="home" />
+
       <div className="header_menu_btn_group">
         <DropDown
           userInfo={userInfo}
           button={
             <div className={`header_menu_btn ${userInfo?.token ? 'user' : 'login_menu'}`}>
-              <Avatar classes="image_only" imageUrl={user?.avatar} fullName={user?.fullName} />
+              <Avatar
+                classes="image_only"
+                imageUrl={user?.avatar}
+                firstName={user?.firstName}
+                lastName={user?.lastName}
+              />
             </div>
           }
           tooltipText={`${userInfo?.token ? 'User Menu' : 'Login'}`}

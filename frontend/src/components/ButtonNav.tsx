@@ -2,27 +2,31 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import './styles/ButtonNav.css';
-import getButtonNavMap from '../helpers/getButtonNavMap';
 import ButtonNavProps from '../models/components/ButtonNavProps';
 import TabType from '../models/TabType';
+import Tooltip from './Tooltip';
+import buttonNavMap from '../inputs/buttonNavMap';
 
-const ButtonNav: React.FC<ButtonNavProps> = ({ activeTab, screen, postId }) => {
+const ButtonNav: React.FC<ButtonNavProps> = ({ currentPath, screen }) => {
   const navigate = useNavigate();
 
   const buttonNav: {
     [key: string]: TabType[];
-  } = getButtonNavMap(postId);
+  } = buttonNavMap;
+
 
   return (
-    <nav className={`button_nav_container card ${screen}`}>
+    <nav className={`button_nav ${screen}`}>
       {buttonNav[screen].map((tab: TabType, index: number) => (
         <button
-          className={`tab ${activeTab === tab.tabName ? 'active' : ''}`}
+          className={`tab ${currentPath === tab.path ? 'active' : ''}`}
           onClick={() => navigate(tab.path)}
           key={index}
           disabled={tab.disabled}
         >
-          {tab.label}
+          <Tooltip direction="bottom" text={tab.name}>
+            <i className={tab.icon} />
+          </Tooltip>
         </button>
       ))}
     </nav>

@@ -1,0 +1,51 @@
+/* Tab Buttons  Header*/
+.button_nav {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  background-color: var(--white);
+  color: var(--gray_dark);
+  padding: 5px 5px 0 5px;
+  outline: none;
+  /* border-radius: 5px; */
+}
+
+.button_nav .tab {
+  background-color: var(--white);
+  color: var(--gray_dark);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 17px;
+  width: 100%;
+  min-height: 100%;
+}
+
+.button_nav .tooltip i {
+  font-size: 25px;
+}
+
+.button_nav .tab.active {
+  color: var(--dory);
+  border-bottom: 3px solid var(--dory);
+  font-weight: bold;
+}
+
+.button_nav .tab:hover {
+  background-color: var(--blue_light);
+  border-radius: 5px;
+}
+
+.button_nav .tab.active:hover {
+  border-radius: 5px 5px 0 0;
+}
+
+
+/* @media (max-width: 768px) {
+  .button_nav {
+    width: calc(100vw);
+  }
+} */

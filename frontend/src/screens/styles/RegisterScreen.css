@@ -1,0 +1,21 @@
+.register_screen {
+  height: 100%;
+  width: 100%;
+  background-color: var(--gray_background);
+}
+
+.register_screen .register_container {
+  max-width: 500px;
+  padding: 30px 50px;
+  height: fit-content;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.register_screen .register_container .form_component {
+  width: 400px;
+}
+
+.register_screen .register_container .form_component .wrapper {
+  height: 36px;
+}

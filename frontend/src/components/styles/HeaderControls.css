@@ -1,0 +1,30 @@
+.header_controls {
+  grid-area: header_controls;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--gray);
+  background: var(--white);
+}
+
+.header_controls.gray {
+  background-color: var(--gray_background);
+}
+
+.header_controls.gray .search_box input {
+  background: var(--white);
+  border: 1px solid var(--gray);
+}
+
+.header_controls .dropdown_group_container {
+  display: flex;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .header_controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

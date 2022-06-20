@@ -1,0 +1,33 @@
+.photo_list {
+  padding: 15px;
+}
+
+.photo_list .header {
+  width: 100%;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.photo_list .header h1{
+  font-size: 25px;
+}
+
+.photo_list .header button{
+  font-size: 17px;
+}
+
+.photo_list.profile_posts_screen .photo_list {
+  display: grid;
+  grid-template-columns: repeat(3, 150px);
+  grid-template-rows: repeat(3, 150px);
+  gap: 5px;
+  overflow: clip;
+  border-radius: 10px;
+  padding: 0;
+}
+
+.photo_list.profile_posts_screen img {
+  height: 150px;
+  width: 150px;
+  object-fit: cover;
+}

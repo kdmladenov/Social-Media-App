@@ -1,0 +1,46 @@
+.friend_list {
+  padding: 10px;
+  height: fit-content;
+}
+
+.friend_list .header {
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px;
+}
+
+.friend_list .friends_info {
+  align-items: flex-start;
+}
+
+.friend_list .header h1 {
+  font-size: 25px;
+}
+
+.friend_list .header h3 {
+  font-size: 20px;
+  color: var(--gray_dark);
+  font-weight: 500;
+}
+
+.friend_list .header button {
+  font-size: 17px;
+}
+
+.friend_list.profile_posts_screen .friend_list {
+  display: grid;
+  grid-template-columns: repeat(3, 145px);
+  grid-template-rows: repeat(3, 170px);
+  gap: 10px;
+}
+
+.friend_list.profile_posts_screen .friend_list .friend img {
+  height: 145px;
+  width: 145px;
+  object-fit: cover;
+  overflow: clip;
+  border: 1px solid blue;
+  border-radius: 10px;
+  padding: 0;
+}

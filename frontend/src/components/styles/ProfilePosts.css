@@ -1,0 +1,29 @@
+.profile_posts {
+  display: grid;
+  grid-template-columns: 490px 680px;
+  gap: 20px;
+  justify-content: flex-start;
+  padding: 20px 0 20px 0;
+}
+
+.profile_posts .sidebar {
+  height: fit-content;
+  gap: 20px;
+  position: sticky;
+  top: 80px;
+}
+
+.profile_posts .sidebar .intro {
+  height: 500px;
+  width: 100%;
+}
+
+.profile_posts .sidebar .photos {
+  height: 500px;
+  width: 100%;
+}
+
+.profile_posts .sidebar .friends {
+  height: 500px;
+  width: 100%;
+}

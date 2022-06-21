@@ -1,6 +1,7 @@
 .friend_list {
   padding: 10px;
   height: fit-content;
+  width: 100%;
 }
 
 .friend_list .header {
@@ -28,19 +29,55 @@
   font-size: 17px;
 }
 
-.friend_list.profile_posts_screen .friend_list {
+.friend_list .list {
   display: grid;
-  grid-template-columns: repeat(3, 145px);
-  grid-template-rows: repeat(3, 170px);
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 115px;
+  width: 100%;
   gap: 10px;
 }
 
-.friend_list.profile_posts_screen .friend_list .friend img {
+.friend_list.profile_posts_screen .list {
+  grid-template-columns: repeat(3, 145px);
+  grid-template-rows: repeat(3, 160px);
+}
+
+.friend_list .list .friend {
+  width: 100%;
+  justify-content: space-between;
+  box-shadow: var(--box_shadow);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.friend_list.profile_posts_screen .list .friend {
+  padding: 0px;
+}
+
+.friend_list.profile_posts_screen .list .friend .avatar {
+  min-height: 100%;
+  width: 100%;
+  gap: 5px;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.friend_list .list .friend .avatar .image,
+.friend_list .list .friend .avatar .image img {
+  height: 80px;
+  width: 80px;
+  object-fit: cover;
+  overflow: clip;
+  border-radius: 10px;
+  padding: 0;
+}
+
+.friend_list.profile_posts_screen .list .friend .avatar .image,
+.friend_list.profile_posts_screen .list .friend .avatar .image img {
   height: 145px;
   width: 145px;
   object-fit: cover;
   overflow: clip;
-  border: 1px solid blue;
   border-radius: 10px;
   padding: 0;
 }

@@ -8,22 +8,34 @@
   padding: 10px;
 }
 
-.photo_list .header h1{
+.photo_list .header h1 {
   font-size: 25px;
 }
 
-.photo_list .header button{
+.photo_list .header button {
   font-size: 17px;
 }
 
-.photo_list.profile_posts_screen .photo_list {
+.photo_list .photo_list {
   display: grid;
+  grid-template-columns: repeat(6, 185px);
+  grid-auto-rows: 185px;
+  gap: 10px;
+  padding: 0;
+}
+
+.photo_list.profile_posts_screen .photo_list {
   grid-template-columns: repeat(3, 150px);
   grid-template-rows: repeat(3, 150px);
-  gap: 5px;
   overflow: clip;
   border-radius: 10px;
-  padding: 0;
+  gap: 5px;
+}
+
+.photo_list img {
+  overflow: clip;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 .photo_list.profile_posts_screen img {

@@ -13,12 +13,16 @@ const Modal: React.FC<ModalProps> = ({ classes, setIsOpenModal, children }) => {
 
   return loaded ? (
     ReactDOM.createPortal(
-      <div ref={nodeRef} className={`modal_container ${classes ? classes : ''}`}>
-        {children}
-        <button className="close_modal_btn" onClick={() => setIsOpenModal(false)}>
-          <i className="fa fa-times" />
-        </button>
-      </div>,
+      <>
+        <div ref={nodeRef} className={`modal_container flex ${classes ? classes : ''}`}>
+          {children}
+          <button className="close_modal_btn" onClick={() => setIsOpenModal(false)}>
+            <i className="fa fa-times" />
+          </button>
+        </div>
+        <div className="background" />
+      </>,
+
       document.getElementById(divId)!
     )
   ) : (

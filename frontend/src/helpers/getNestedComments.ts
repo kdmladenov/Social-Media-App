@@ -11,19 +11,26 @@ const getNestedComments = (comments: CommentType[]) => {
     postId: -1,
     replyTo: null,
     content: 'Fake root',
-    replies: []
+    replies: [],
+    authorId: -1,
+    authorFirstName: '',
+    authorLastName: '',
+    authorAvatar: '',
+    createdAt: '',
+    updatedAt: '',
+    isDeleted: false
   };
 
-  //index nodes by their id
+  //index nested by their commentId
   comments.forEach((comment) => {
-    if (comment.replyTo == null) {
+    if (comment.replyTo === null) {
       comment.replyTo = -1;
     }
     nested[comment.commentId] = comment;
     comment.replies = [];
   });
 
-  //put items into parent replies
+  //put comments into parent replies arr
   comments.forEach((comment) => {
     if (comment.replyTo) {
       const parent = nested[comment.replyTo];

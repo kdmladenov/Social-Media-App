@@ -26,7 +26,7 @@ authController
 
       if (error === errors.INVALID_LOGIN) {
         res.status(401).send({
-          message: 'Invalid email or password.'
+          message: 'Wrong email or password.'
         });
       } else {
         const payload = {

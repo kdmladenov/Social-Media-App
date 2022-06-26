@@ -17,6 +17,7 @@ const getBy = async (
       u.first_name as firstName,
       u.last_name as lastName,
       u.avatar,
+      u.cover,
       u.about_me
       ${
         role === 'admin' || isProfileOwner || isProfileOwnerFriend // TODO or friend
@@ -80,6 +81,7 @@ const getAll = async (
       u.first_name as firstName,
       u.last_name as lastName,
       u.avatar,
+      u.cover,
       u.about_me
       ${
         role === rolesEnum.admin

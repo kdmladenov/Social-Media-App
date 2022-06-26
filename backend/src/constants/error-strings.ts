@@ -37,6 +37,6 @@ export default {
     isDeleted: `Expected a boolean`
   },
   comment: {
-    commentContent: `Expected valid name string with length in the range [${COMMENTS.MIN_CONTENT_LENGTH}-${COMMENTS.MAX_CONTENT_LENGTH}]`
+    comment: `Expected valid comment string with length in the range [${COMMENTS.MIN_CONTENT_LENGTH}-${COMMENTS.MAX_CONTENT_LENGTH}]`
   }
 };

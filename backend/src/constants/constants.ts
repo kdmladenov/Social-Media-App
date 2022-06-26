@@ -74,5 +74,5 @@ export const forgotPassword = {
 
 export const comments = {
   MIN_CONTENT_LENGTH: 2,
-  MAX_CONTENT_LENGTH: 255
+  MAX_CONTENT_LENGTH: 1000
 };

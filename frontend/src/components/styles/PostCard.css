@@ -1,9 +1,10 @@
 .post_card {
   display: flex;
   flex-direction: column;
-  padding: 15px 15px 5px 15px;
+  padding: 15px 15px 0px 15px;
   width: 100%;
   height: fit-content;
+  border: 1px solid var(--gray)
 }
 
 .post_card .images {

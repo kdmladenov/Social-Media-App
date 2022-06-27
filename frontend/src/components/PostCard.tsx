@@ -13,12 +13,11 @@ import Avatar from './Avatar';
 import InputBoxWithAvatar from './InputBoxWithAvatar';
 import usersDummyData from '../inputs/dummyInputs/usersDummyData';
 import { createComment } from '../state/actions/commentsActions';
+import PostCardFooter from './PostCardFooter';
+import PostType from '../models/PostType';
 
-const PostCard: React.FC<PostCardProps> = ({
-  postId,
-  author,
-  message,
-  images
+const PostCard: React.FC<{ post: PostType }> = ({
+  post
   // reactions,
   // comments
 }) => {
@@ -29,42 +28,52 @@ const PostCard: React.FC<PostCardProps> = ({
   //   portalRefsMap: { toast_cart: toastCartRef }
   // } = portalRefs;
 
-  const { fullName, avatar } = author;
+  const {
+    postId,
+    userId,
+    userFirstName,
+    userLastName,
+    userAvatar,
+    authorId,
+    authorFirstName,
+    authorLastName,
+    authorAvatar,
+    message,
+    image,
+    feelingTypeId,
+    feelingType,
+    locationId,
+    city,
+    country,
+    createdAt,
+    updatedAt,
+    isDeleted,
+    totalDBItems
+  } = post;
+
+  // const { firstName, lastName, avatar } = author;
 
   return (
     <div className={`post_card card`}>
       <div className="post_header">
-        <Avatar imageUrl={avatar} fullName={fullName} />
+        <Avatar imageUrl={userAvatar} firstName={userFirstName} lastName={userLastName} />
       </div>
       <div className="message">
         <Link to={`/posts/${postId}`}>{message}</Link>
       </div>
       <div className="images">
-        {images.map((image) => (
-          <Link to={`/posts/${postId}`}>
+        {[image].map((image) => (
+          <Link key={image} to={`/posts/${postId}`}>
             <img
-              // src={image?.startsWith('http') ? image : `${BASE_URL}/${image}`}
-              src={image.image}
+              src={image?.startsWith('http') ? image : `${BASE_URL}/${image}`}
+              // src={image}
               alt="post"
               className="image"
             />
           </Link>
         ))}
       </div>
-      <div>Reactions</div>
-      <hr/>
-      <div>
-        Comments
-        <InputBoxWithAvatar
-          resourceId={postId}
-          currentUserDetails={usersDummyData[0]}
-          createAction={createComment}
-          validationMin={COMMENT.MIN_CONTENT_LENGTH}
-          validationMax={COMMENT.MAX_CONTENT_LENGTH}
-          placeholder="Write your comment ..."
-          errorMessage={`The comment should be ${COMMENT.MIN_CONTENT_LENGTH} - ${COMMENT.MAX_CONTENT_LENGTH} characters long`}
-        />
-      </div>
+      <PostCardFooter />
     </div>
   );
 };

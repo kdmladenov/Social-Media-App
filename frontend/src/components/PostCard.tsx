@@ -65,15 +65,15 @@ const PostCard: React.FC<{ post: PostType }> = ({
         {[image].map((image) => (
           <Link key={image} to={`/posts/${postId}`}>
             <img
+              crossOrigin="anonymous"
               src={image?.startsWith('http') ? image : `${BASE_URL}/${image}`}
-              // src={image}
               alt="post"
               className="image"
             />
           </Link>
         ))}
       </div>
-      <PostCardFooter />
+      <PostCardFooter postId={postId} />
     </div>
   );
 };

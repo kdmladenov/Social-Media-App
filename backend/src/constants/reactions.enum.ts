@@ -1,16 +1,13 @@
 export default {
-  THUMBS_UP: 1,
-  THUMBS_DOWN: 2,
-  // RED_HEART: 3,
-  // SMILING_FACE: 4,
-  // LAUGHING_FACE: 5,
-  // WINKING_FACE: 6,
-  // NEUTRAL_FACE: 7,
-  // UNAMUSED_FACE: 8,
-  // FEARFUL_FACE: 9,
-  // CRYING_FACE: 10,
-  // FROWNING_FACE: 11,
+  like: 'fa fa-thumbs-up',
+  dislike: 'fa fa-thumbs-down',
+  heart: 'fa fa-heart',
+  laugh: 'fas fa-laugh',
+  smile: 'fas fa-smile',
+  sad: 'fas fa-sad-tear',
+  angry: 'fas fa-angry'
 };
+
 // export default {
 //   THUMBS_UP: '👍',
 //   THUMBS_DOWN: '👎',

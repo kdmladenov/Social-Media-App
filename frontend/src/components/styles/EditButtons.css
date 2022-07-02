@@ -1,0 +1,21 @@
+.edit_buttons {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+
+}
+.edit_buttons .button_group_edit {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 0;
+}
+
+.edit_buttons .button_container {
+  padding: 0;
+  color: var(--gray_dark);
+}
+
+
+.edit_buttons button:disabled {
+  color: var(--gray);
+}

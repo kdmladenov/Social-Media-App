@@ -10,6 +10,8 @@ const getNestedComments = (comments: CommentType[]) => {
     commentId: -1,
     postId: -1,
     replyTo: null,
+    replyToAuthorFirstName: '',
+    replyToAuthorLastName: '',
     content: 'Fake root',
     replies: [],
     authorId: -1,
@@ -35,6 +37,8 @@ const getNestedComments = (comments: CommentType[]) => {
     if (comment.replyTo) {
       const parent = nested[comment.replyTo];
       parent?.replies?.push(comment);
+      comment.replyToAuthorFirstName = parent?.authorFirstName;
+      comment.replyToAuthorLastName = parent?.authorLastName;
     }
   });
 

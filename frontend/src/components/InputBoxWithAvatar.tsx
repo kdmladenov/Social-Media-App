@@ -9,18 +9,20 @@ import InputBoxWithAvatarProps from '../models/components/InputBoxWithAvatarProp
 
 const InputBoxWithAvatar: React.FC<InputBoxWithAvatarProps> = ({
   resourceId,
+  replyTo,
   currentUserDetails,
   createAction,
   validationMin,
   validationMax,
   placeholder,
   errorMessage,
-  closedButtonText
+  closedButtonText,
+  closedAtStart
 }) => {
   const dispatch = useDispatch();
 
   const [content, setContent] = useState('');
-  const [showForm, setShowForm] = useState(!closedButtonText);
+  const [showForm, setShowForm] = useState(!closedAtStart);
 
   const isValid = content.length >= validationMin && content.length < validationMax;
 
@@ -34,36 +36,41 @@ const InputBoxWithAvatar: React.FC<InputBoxWithAvatarProps> = ({
     e.preventDefault();
 
     if (e.key === 'Enter' && isValid) {
-      dispatch(createAction(resourceId, content));
+      dispatch(createAction(resourceId, content, replyTo && replyTo));
       setContent('');
     }
   };
 
   return (
     <div className={`input_with_avatar ${!showForm ? 'button' : ''}`}>
-      {showForm && (
-        <Avatar
-          classes="image_only"
-          imageUrl={currentUserDetails?.avatar}
-          firstName={currentUserDetails?.firstName}
-          lastName={currentUserDetails?.lastName}
-        />
+      {showForm ? (
+        <>
+          <Avatar
+            classes="image_only"
+            imageUrl={currentUserDetails?.avatar}
+            firstName={currentUserDetails?.firstName}
+            lastName={currentUserDetails?.lastName}
+          />
+
+          <input
+            type="textarea"
+            value={content}
+            placeholder={placeholder}
+            onChange={inputHandler}
+            onKeyUp={keyPressHandler}
+          />
+
+          <p className={content.length > 0 && !isValid ? 'show_message' : ''}>{errorMessage}</p>
+
+          <Button classes="icon" onClick={() => setShowForm(!showForm)}>
+            <i className="fa fa-times" />
+          </Button>
+        </>
+      ) : (
+        <Button classes="text" onClick={() => setShowForm(!showForm)}>
+          {closedButtonText}
+        </Button>
       )}
-      {showForm && (
-        <input
-          type="textarea"
-          value={content}
-          placeholder={placeholder}
-          onChange={inputHandler}
-          onKeyUp={keyPressHandler}
-        />
-      )}
-      {showForm && (
-        <p className={content.length > 0 && !isValid ? 'show_message' : ''}>{errorMessage}</p>
-      )}
-      <Button classes={`${showForm ? 'icon' : 'text'}`} onClick={() => setShowForm(!showForm)}>
-        {showForm ? <i className="fa fa-times" /> : closedButtonText}
-      </Button>
     </div>
   );
 };

@@ -13,6 +13,7 @@ const EditButtons: React.FC<EditButtonsProps> = ({
   handleEditButton,
   handleCloseButton,
   handleDeleteButton,
+  disabledDelete = false,
   handleSaveButton,
   disabledSaveButton
 }) => {
@@ -35,9 +36,9 @@ const EditButtons: React.FC<EditButtonsProps> = ({
             </Button>
           )}
           {!createMode && (
-            <Button classes="icon">
+            <Button classes="icon" disabled={disabledDelete}>
               <Tooltip direction="top" text="Delete">
-                <i className="fas fa-trash" onClick={handleDeleteButton} />
+                <i className="fas fa-trash" onClick={ handleDeleteButton} />
               </Tooltip>
             </Button>
           )}

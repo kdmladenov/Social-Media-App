@@ -3,9 +3,8 @@
   border-top: 1px solid var(--gray);
 }
 
-.post_comments .header {
-  justify-content: space-between;
-  height: fit-content;
+.post_comments .button_container.comments_count {
+  height: 20px;
 }
 
 .post_comments .comments_container {

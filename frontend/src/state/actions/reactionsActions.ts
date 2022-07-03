@@ -93,7 +93,7 @@ export const listPostsReactions =
 
       const { data } = await axios.get(`${BASE_URL}/reactions/post/${postId}`, config);
 
-      dispatch({ type: REACTIONS_POST_LIST_SUCCESS, payload: data });
+      dispatch({ type: REACTIONS_POST_LIST_SUCCESS, payload: { reactions: data, postId } });
     } catch (error) {
       axios.isAxiosError(error) &&
         dispatch({
@@ -228,7 +228,7 @@ export const listCommentsReactions =
 
       const { data } = await axios.get(`${BASE_URL}/reactions/comment/${commentId}`, config);
 
-      dispatch({ type: REACTIONS_COMMENT_LIST_SUCCESS, payload: data });
+      dispatch({ type: REACTIONS_COMMENT_LIST_SUCCESS, payload: { reactions: data, commentId } });
     } catch (error) {
       axios.isAxiosError(error) &&
         dispatch({

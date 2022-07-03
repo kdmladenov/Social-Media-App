@@ -1,4 +1,4 @@
-const reactionTypes = [
+const reactionButtons = [
   { icon: 'fa fa-thumbs-up', name: 'like' },
   { icon: 'fa fa-thumbs-down', name: 'dislike' },
   { icon: 'fa fa-heart', name: 'heart' },
@@ -8,4 +8,4 @@ const reactionTypes = [
   { icon: 'fas fa-angry', name: 'angry' }
 ];
 
-export default reactionTypes;
+export default reactionButtons;

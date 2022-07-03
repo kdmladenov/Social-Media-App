@@ -6,7 +6,7 @@ interface ReactionsCommentsListActionRequest {
 
 interface ReactionsCommentsListActionSuccess {
   type: 'REACTIONS_COMMENT_LIST_SUCCESS';
-  payload: ReactionType[];
+  payload: { reactions: ReactionType[]; commentId: number };
 }
 interface ReactionsCommentsListActionError {
   type: 'REACTIONS_COMMENT_LIST_FAIL';

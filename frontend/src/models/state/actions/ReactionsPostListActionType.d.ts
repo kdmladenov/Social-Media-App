@@ -6,7 +6,7 @@ interface ReactionsPostListActionRequest {
 
 interface ReactionsPostListActionSuccess {
   type: 'REACTIONS_POST_LIST_SUCCESS';
-  payload: ReactionType[];
+  payload: { reactions: ReactionType[]; postId: number };
 }
 interface ReactionsPostListActionError {
   type: 'REACTIONS_POST_LIST_FAIL';

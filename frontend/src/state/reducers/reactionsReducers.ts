@@ -63,7 +63,10 @@ export const postReactionsListReducer = (
     case REACTIONS_POST_LIST_REQUEST:
       return { loading: true };
     case REACTIONS_POST_LIST_SUCCESS:
-      return { loading: false, postReactions: action.payload };
+      return {
+        loading: false,
+        postReactions: { ...state.postReactions, [action.payload.postId]: action.payload.reactions }
+      };
     case REACTIONS_POST_LIST_FAIL:
       return { loading: false, error: action.payload };
     default:
@@ -128,7 +131,13 @@ export const commentReactionsListReducer = (
     case REACTIONS_COMMENT_LIST_REQUEST:
       return { loading: true };
     case REACTIONS_COMMENT_LIST_SUCCESS:
-      return { loading: false, commentReactions: action.payload };
+      return {
+        loading: false,
+        commentReactions: {
+          ...state.commentReactions,
+          [action.payload.commentId]: action.payload.reactions
+        }
+      };
     case REACTIONS_COMMENT_LIST_FAIL:
       return { loading: false, error: action.payload };
     default:

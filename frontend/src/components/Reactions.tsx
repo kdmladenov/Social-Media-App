@@ -15,6 +15,8 @@ import {
   listPostsReactions
 } from '../state/actions/reactionsActions';
 import useTypedSelector from '../hooks/useTypedSelector';
+import ReactionButtonType from '../models/ReactionButtonType';
+import ReactionType from '../models/ReactionType';
 
 const Reactions: React.FC<{ type: string; resourceId: number; classes?: string }> = ({
   type,
@@ -22,26 +24,22 @@ const Reactions: React.FC<{ type: string; resourceId: number; classes?: string }
   classes
 }) => {
   const dispatch = useDispatch();
-  const { postReactions } = useTypedSelector((state) => state.postReactionsList);
-  const { commentReactions } = useTypedSelector((state) => state.commentReactionsList);
 
   const { userInfo } = useTypedSelector((state) => state.userLogin);
 
-  const reactionInState = (
-    type === 'post' ? postReactions?.[resourceId] : commentReactions?.[resourceId]
-  )?.filter((reaction) => reaction?.userId === userInfo?.userId)[0];
+  const { postReactions } = useTypedSelector((state) => state.postReactionsList);
 
-  console.log(reactionInState, 'reactionInState');
+  const { commentReactions } = useTypedSelector((state) => state.commentReactionsList);
 
-  const [currentReactionButton, setCurrentReactionButton] = useState<{
-    icon: string;
-    name: string;
-  }>(reactionButtons[0]);
+  const [reactionInState, setReactionInState] = useState<ReactionType | null>(null);
 
-  // const [isReactionActive, setIsReactionActive] = useState<boolean>(false);
+  const [currentReactionButton, setCurrentReactionButton] = useState<ReactionButtonType>(
+    reactionButtons[0]
+  );
 
-  const [reactionId, setReactionId] = useState<number | null>(null);
+  // console.log(type, resourceId, reactionInState, 'type, resourceId , reactionInState');
 
+  // Post reactions state
   const { postReaction: createdPostReaction, success: successPostReactionCreate } =
     useTypedSelector((state) => state.postReactionCreate);
 
@@ -53,6 +51,7 @@ const Reactions: React.FC<{ type: string; resourceId: number; classes?: string }
     (state) => state.postReactionDelete
   );
 
+  // Comment reactions state
   const { commentReaction: createdCommentReaction, success: successCommentReactionCreate } =
     useTypedSelector((state) => state.commentReactionCreate);
 
@@ -63,73 +62,44 @@ const Reactions: React.FC<{ type: string; resourceId: number; classes?: string }
     (state) => state.commentReactionDelete
   );
 
-  const selectionHandler = (selectedReaction: { icon: string; name: string }) => {
-    console.log('create');
+  // Handlers
+  const selectionHandler = (selectedReaction: ReactionButtonType) => {
     const reactionCreateAction = type === 'post' ? createPostReaction : createCommentReaction;
-    dispatch(reactionCreateAction(resourceId, selectedReaction.name));
+    dispatch(reactionCreateAction(resourceId, selectedReaction.reactionName));
     setCurrentReactionButton(selectedReaction);
-    // setIsReactionActive(true);
   };
 
-  const updateSelectionHandler = (selectedReaction: { icon: string; name: string }) => {
-    console.log('update');
-    setCurrentReactionButton(reactionButtons[0]);
-    // setIsReactionActive(true);
-    if (reactionId) {
+  const updateSelectionHandler = (selectedReaction: ReactionButtonType) => {
+    setCurrentReactionButton(selectedReaction);
+
+    if (reactionInState?.reactionId) {
       const reactionUpdateAction = type === 'post' ? editPostReaction : editCommentReaction;
-      dispatch(reactionUpdateAction(reactionId, selectedReaction.name));
+      dispatch(reactionUpdateAction(reactionInState.reactionId, selectedReaction.reactionName));
     }
   };
 
   const unSelectHandler = () => {
-    console.log('delete');
     setCurrentReactionButton(reactionButtons[0]);
-    // setIsReactionActive(false);
-    if (reactionId) {
+
+    if (reactionInState?.reactionId) {
       const reactionDeleteAction = type === 'post' ? deletePostReaction : deleteCommentReaction;
-      dispatch(reactionDeleteAction(reactionId));
+      dispatch(reactionDeleteAction(reactionInState.reactionId));
+      setReactionInState(null);
     }
   };
 
   useEffect(() => {
-    console.log('list');
-    dispatch(type === 'post' ? listPostsReactions(resourceId) : listCommentsReactions(resourceId));
-  }, [dispatch, type, resourceId]);
-
-  useEffect(() => {
-    if (reactionInState) {
-      console.log('reactionInState');
-      // setIsReactionActive(true);
-      setCurrentReactionButton({
-        icon: reactionInState?.reactionCode,
-        name: reactionInState?.reactionName
-      });
-      setReactionId(reactionInState?.reactionId);
-    }
-  }, [reactionInState]);
-
-  useEffect(() => {
-    console.log('setReactionId');
-    setReactionId(
+    setReactionInState(
       successPostReactionCreate
-        ? createdPostReaction?.reactionId
+        ? createdPostReaction
         : successPostReactionEdit
-        ? editedPostReaction?.reactionId
+        ? editedPostReaction
         : successCommentReactionCreate
-        ? createdCommentReaction?.reactionId
+        ? createdCommentReaction
         : successCommentReactionEdit
-        ? editedCommentReaction?.reactionId
+        ? editedCommentReaction
         : null
     );
-    if (reactionInState) {
-      console.log('reactionInState');
-      // setIsReactionActive(true);
-      setCurrentReactionButton({
-        icon: reactionInState?.reactionCode,
-        name: reactionInState?.reactionName
-      });
-      setReactionId(reactionInState?.reactionId);
-    }
   }, [
     successPostReactionCreate,
     successPostReactionEdit,
@@ -137,32 +107,65 @@ const Reactions: React.FC<{ type: string; resourceId: number; classes?: string }
     successCommentReactionCreate,
     successCommentReactionEdit,
     successCommentReactionDelete,
-    createdCommentReaction?.reactionId,
-    createdPostReaction?.reactionId,
-    editedCommentReaction?.reactionId,
-    editedPostReaction?.reactionId,
-    reactionInState
+    createdCommentReaction,
+    createdPostReaction,
+    editedCommentReaction,
+    editedPostReaction
   ]);
+
+  useEffect(() => {
+    if (reactionInState) {
+      if (successPostReactionDelete && successCommentReactionDelete) {
+        setCurrentReactionButton(reactionButtons[0]);
+      } else {
+        setCurrentReactionButton({
+          reactionIcon: reactionInState?.reactionCode,
+          reactionName: reactionInState?.reactionName
+        });
+      }
+    } else {
+      setReactionInState(
+        (type === 'post' ? postReactions?.[resourceId] : commentReactions?.[resourceId])?.filter(
+          (reaction) => reaction?.userId === userInfo?.userId
+        )[0]
+      );
+    }
+  }, [
+    reactionInState,
+    postReactions,
+    commentReactions,
+    userInfo,
+    successPostReactionDelete,
+    successCommentReactionDelete,
+    resourceId,
+    type
+  ]);
+
+  // useEffect(() => {
+  //   dispatch(type === 'post' ? listPostsReactions(resourceId) : listCommentsReactions(resourceId));
+  // }, [dispatch, type, resourceId]);
 
   return (
     <div className="reactions">
       <div className="reactions_button_group flex card">
-        {reactionButtons.map((button) => (
-          <Tooltip direction="top" text={button.name} key={button.name}>
+        {reactionButtons.map(({ reactionName, reactionIcon }) => (
+          <Tooltip direction="top" text={reactionName} key={reactionName}>
             <Button
-              classes={`icon ${button.name}`}
+              classes={`icon ${reactionName}`}
               onClick={() =>
-                reactionInState?.reactionName === button.name
-                  ? unSelectHandler
-                  : reactionInState?.reactionName !== button.name
-                  ? updateSelectionHandler({ name: button.name, icon: button.icon })
+                reactionInState?.[type === 'post' ? 'postId' : 'commentId'] === resourceId &&
+                reactionInState?.reactionName === reactionName
+                  ? unSelectHandler()
+                  : reactionInState?.[type === 'post' ? 'postId' : 'commentId'] === resourceId &&
+                    reactionInState?.reactionName !== reactionName
+                  ? updateSelectionHandler({ reactionName, reactionIcon })
                   : selectionHandler({
-                      icon: reactionInState?.reactionCode,
-                      name: reactionInState?.reactionName
+                      reactionName,
+                      reactionIcon
                     })
               }
             >
-              <i className={button.icon}></i>
+              <i className={reactionIcon}></i>
             </Button>
           </Tooltip>
         ))}
@@ -170,13 +173,13 @@ const Reactions: React.FC<{ type: string; resourceId: number; classes?: string }
       <Button
         classes={`${classes}${reactionInState ? ' active' : ''}`}
         onClick={() =>
-          reactionInState?.reactionName === 'like'
-            ? unSelectHandler
-            : selectionHandler(reactionButtons[0])
+          reactionInState?.reactionId ? unSelectHandler() : selectionHandler(reactionButtons[0])
         }
       >
-        {classes !== 'text' && <i className={currentReactionButton.icon}></i>}
-        {classes !== 'icon' && <span>{currentReactionButton.name}</span>}
+        {classes !== 'text' && <i className={currentReactionButton.reactionIcon}></i>}
+        {classes !== 'icon' && (
+          <span>{currentReactionButton.reactionName.replace(/^\w/, (c) => c.toUpperCase())}</span>
+        )}
       </Button>
     </div>
   );

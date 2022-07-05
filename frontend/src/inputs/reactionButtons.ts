@@ -1,11 +1,11 @@
 const reactionButtons = [
-  { icon: 'fa fa-thumbs-up', name: 'like' },
-  { icon: 'fa fa-thumbs-down', name: 'dislike' },
-  { icon: 'fa fa-heart', name: 'heart' },
-  { icon: 'fas fa-laugh', name: 'laugh' },
-  { icon: 'fas fa-smile', name: 'smile' },
-  { icon: 'fas fa-sad-tear', name: 'sad' },
-  { icon: 'fas fa-angry', name: 'angry' }
+  { reactionIcon: 'fa fa-thumbs-up', reactionName: 'like' },
+  { reactionIcon: 'fa fa-thumbs-down', reactionName: 'dislike' },
+  { reactionIcon: 'fa fa-heart', reactionName: 'heart' },
+  { reactionIcon: 'fas fa-laugh', reactionName: 'laugh' },
+  { reactionIcon: 'fas fa-smile', reactionName: 'smile' },
+  { reactionIcon: 'fas fa-sad-tear', reactionName: 'sad' },
+  { reactionIcon: 'fas fa-angry', reactionName: 'angry' }
 ];
 
 export default reactionButtons;

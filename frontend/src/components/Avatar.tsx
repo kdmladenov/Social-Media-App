@@ -20,6 +20,7 @@ const Avatar: React.FC<AvatarProps> = ({ classes, imageUrl, firstName='', lastNa
           <img
             src={imageUrl?.startsWith('http') ? imageUrl : `${BASE_URL}/${imageUrl}`}
             alt={firstName || 'image'}
+            crossOrigin="anonymous"
           />
         ) : firstName ? (
           <div

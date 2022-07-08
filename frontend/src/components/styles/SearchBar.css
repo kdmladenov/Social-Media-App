@@ -1,0 +1,103 @@
+.search_bar {
+  width: fit-content;
+  position: relative;
+  background: var(--gray_light);
+  z-index: 100;
+  border-radius: 18px;
+}
+
+/* Search input */
+.search_bar input {
+  height: 36px;
+  width: 100%;
+  outline: none;
+  border: none;
+  padding: 0 60px 0 20px;
+  font-size: 18px;
+  background-color: var(--gray_light);
+  border-radius: 18px;
+}
+
+.search_bar i {
+  color: var(--gray_dark);
+}
+
+/* Search and reset buttons */
+.search_bar .search_button_group {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.search_bar .search_button,
+.search_bar .reset_search_term_button {
+  border: none;
+  cursor: pointer;
+  height: 26px;
+  width: 26px;
+  margin: 5px;
+  line-height: 26px;
+  text-align: center;
+  background-color: transparent;
+}
+
+.search_bar .search_button {
+  font-size: 20px;
+  color: var(--gray_dark);
+  background: transparent;
+  border-radius: 26px;
+}
+
+.search_bar .search_button i {
+  font-size: 20px;
+}
+
+/* Dropdown menu  */
+.search_bar ul.dropdown {
+  display: flex;
+  height: fit-content;
+  overflow: hidden;
+  flex-direction: column;
+  padding: 10px 0;
+  gap: 5px;
+}
+.search_bar.closed_dropdown ul.dropdown {
+  display: none;
+}
+
+.search_bar ul.dropdown li {
+  display: flex;
+  width: 90%;
+  height: 26px;
+  cursor: pointer;
+  border-radius: 5px;
+  z-index: 3;
+}
+.search_bar ul.dropdown li .previous_search_btn {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex: 1;
+  gap: 10px;
+}
+
+.search_bar ul.dropdown li .remove_previous_search_btn {
+  height: 26px;
+  width: 26px;
+  opacity: 0%;
+}
+
+.search_bar ul.dropdown li:hover .remove_previous_search_btn {
+  opacity: 100%;
+}
+
+.search_bar:hover,
+.search_bar input button:hover,
+.search_bar ul.dropdown li:hover,
+.search_bar .search_button:hover {
+  box-shadow: var(--box_shadow_angle);
+}
+.search_bar:hover,
+.search_bar:focus {
+  border: 1px solid var(--gray);
+}

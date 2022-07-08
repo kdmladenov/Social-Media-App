@@ -1,0 +1,21 @@
+.show_more_button button{
+  border: none;
+  margin: 0;
+  font-size: 13px;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: normal;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+  cursor: pointer;
+  color: rgb(70, 139, 157);
+  min-width: 0;
+  width: auto;
+}
+
+.show_more_button button:hover {
+  color: rgb(243, 7, 7);
+  border-bottom: 1px solid rgb(243, 7, 7);
+}

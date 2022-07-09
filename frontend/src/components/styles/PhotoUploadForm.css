@@ -28,14 +28,6 @@
 }
 
 .modal_container .image_upload_form .input_group .file_upload {
-  /* width: 100%; */
-  /* height: 100%; */
-  /* padding: 5px; */
-  /* border: 1px solid var(--gray); */
-  /* border-radius: 5px; */
-}
-
-.modal_container .image_upload_form .input_group .file_upload {
   width: 100%;
   margin: 0px;
   padding: 0;
@@ -67,7 +59,8 @@
   display: none;
 }
 
-.modal_container .image_upload_form .input_group .file_upload label:hover {
+.modal_container .image_upload_form .input_group .file_upload label:hover,
+.modal_container .image_url:hover {
   cursor: pointer;
   filter: contrast(110%);
 }
@@ -83,54 +76,37 @@
   left: 0px;
 }
 
-/* .modal_container .image_upload_form .input_group .file_upload .button_container label {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-} */
-
-/* Avatar change inputs */
-/* .profile_avatar .modal_container .input_group .image_url,
-.profile_avatar .input_group .file_upload,
-.profile_avatar .input_group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  height: fit-content;
-  justify-content: center;
-  align-items: center;
-} */
-
-/* .profile_avatar .input_group .button_container {
-  width: 160px;
-} */
-
-/* URL input */
-/* .profile_avatar .input_group .image_url input {
+/* URL form */
+.modal_container .image_url {
   width: 100%;
-} */
-
-/* .profile_avatar .input_group .file_upload input[type='file'] {
-  display: none;
+  position: relative;
+  background: var(--gray_light);
+  border-radius: 5px;
+  box-shadow: var(--box_shadow);
 }
 
-.profile_avatar .input_group .file_upload label {
+.image_url input {
+  height: 36px;
+  width: 100%;
+  outline: none;
+  border: none;
+  padding: 0 60px 0 10px;
+  font-size: 18px;
+  background-color: var(--gray_background);
+}
+
+.image_url .add_button {
+  display: flex;
+  padding: 5px;
+  position: absolute;
+  top: 0;
+  right: 0;
   cursor: pointer;
+  height: 26px;
+  min-width: 20px;
+  margin: 5px;
+  text-align: center;
+  font-size: 20px;
+  color: var(--white);
+  border-radius: 5px;
 }
-.profile_avatar .input_group .file_upload .button_container {
-  margin: 0;
-  padding: 0;
-}
-
-.profile_avatar .divider {
-  z-index: 1;
-}
-
-@media (max-width: 768px) {
-  .profile_avatar {
-    justify-content: flex-start;
-    border-right: none;
-    border-bottom: 2px solid var(--gray_light);
-  }
-} */

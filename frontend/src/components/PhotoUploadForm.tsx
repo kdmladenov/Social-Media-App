@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { IMAGE } from '../constants/constants';
 import UserType from '../models/UserType';
 import { updateUserAvatarReducer } from '../state/actions/userActions';
 import Button from './Button';
 import Divider from './Divider';
 import './styles/PhotoUploadForm.css';
+import Tooltip from './Tooltip';
 
 const PhotoUploadForm: React.FC<{ user: UserType; multiple?: boolean }> = ({
   user,
   multiple = false
 }) => {
   const dispatch = useDispatch();
-  const [image, setImage] = useState('');
+  const [imageURL, setImageURL] = useState('');
   const [dragActive, setDragActive] = useState(false);
+
+  const isUrlValid = IMAGE.IMAGE_URL_REGEX.test(imageURL);
 
   const uploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(updateUserAvatarReducer(user?.userId, 'file_upload', e));
@@ -34,21 +38,23 @@ const PhotoUploadForm: React.FC<{ user: UserType; multiple?: boolean }> = ({
     setDragActive(false);
     if (e?.dataTransfer?.files?.[0]) {
       dispatch(updateUserAvatarReducer(user?.userId, 'file_upload', e));
-      setImage('');
+      setImageURL('');
     }
   };
 
   const addImageUrlHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    dispatch(updateUserAvatarReducer(user?.userId, 'add_image_url', e, image));
-    setImage('');
+    e.preventDefault();
+
+    dispatch(updateUserAvatarReducer(user?.userId, 'add_image_url', e, imageURL));
+    setImageURL('');
   };
 
   const keyPressHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     if (e.key === 'Enter') {
-      dispatch(updateUserAvatarReducer(user?.userId, 'add_image_url', e, image));
-      setImage('');
+      dispatch(updateUserAvatarReducer(user?.userId, 'add_image_url', e, imageURL));
+      setImageURL('');
     }
   };
 
@@ -57,7 +63,7 @@ const PhotoUploadForm: React.FC<{ user: UserType; multiple?: boolean }> = ({
       <div className="header flex">
         <h4>Change avatar</h4>
       </div>
-      <div className="input_group">
+      <div className="input_group flex_col">
         <form
           className="file_upload flex"
           onDragEnter={handleDrag}
@@ -89,18 +95,23 @@ const PhotoUploadForm: React.FC<{ user: UserType; multiple?: boolean }> = ({
         <Divider>
           <h6>or</h6>
         </Divider>
-        <div className="image_url">
-          <Button onClick={addImageUrlHandler} disabled={!image}>
-            Add Image URL
-          </Button>
+        <form className="image_url">
           <input
-            type="text"
-            placeholder="Enter image url"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
+            type="url"
+            placeholder="Add image url"
+            pattern={IMAGE.IMAGE_URL_PATTERN}
+            value={imageURL}
+            onChange={(e) => setImageURL(e.target.value)}
             onKeyUp={(e) => keyPressHandler(e)}
           />
-        </div>
+          {isUrlValid ? (
+            <Button type="submit" classes="add_button flex blue" onClick={addImageUrlHandler}>
+              Add
+            </Button>
+          ) : (
+            <></>
+          )}
+        </form>
       </div>
     </section>
   );

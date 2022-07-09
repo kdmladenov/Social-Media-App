@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-
 import './styles/ProfileAvatar.css';
 import { deleteUserAvatar } from '../state/actions/userActions';
 
@@ -9,12 +7,24 @@ import Button from './Button';
 import UserType from '../models/UserType';
 import Modal from './Modal';
 import PhotoUploadForm from './PhotoUploadForm';
+import ConfirmMessage from './ConfirmMessage';
 
 const ProfileAvatar: React.FC<{ user: UserType }> = ({ user }) => {
-  const dispatch = useDispatch();
   const [showImageUrlForm, setShowImageUrlForm] = useState(false);
+  const [showDeleteAvatarModal, setShowDeleteAvatarModal] = useState(false);
+  const [modalContent, setModalContent] = useState(<></>);
 
-  console.log(user?.avatar, 'user?.avatar');
+  const deleteAvatarHandler = (userId: number) => {
+    setShowDeleteAvatarModal(true);
+    setModalContent(
+      <ConfirmMessage
+        setIsModalOpen={setShowDeleteAvatarModal}
+        message={`Are your sure you want to delete this avatar?`}
+        resourceId={userId}
+        action={deleteUserAvatar}
+      />
+    );
+  };
 
   return (
     <div className="profile_avatar flex_col">
@@ -28,13 +38,18 @@ const ProfileAvatar: React.FC<{ user: UserType }> = ({ user }) => {
         <Button classes="icon" onClick={() => setShowImageUrlForm(!showImageUrlForm)}>
           <i className="fa fa-camera" />
         </Button>
-        <Button classes="icon delete" onClick={() => dispatch(deleteUserAvatar(user.userId))}>
+        <Button classes="icon delete" onClick={() => deleteAvatarHandler(user.userId)}>
           <i className="fas fa-trash" />
         </Button>
       </div>
       {showImageUrlForm && (
         <Modal classes="image" setIsOpenModal={setShowImageUrlForm}>
           <PhotoUploadForm user={user} />
+        </Modal>
+      )}
+      {showDeleteAvatarModal && (
+        <Modal classes="confirm" setIsOpenModal={setShowDeleteAvatarModal}>
+          {modalContent}
         </Modal>
       )}
     </div>

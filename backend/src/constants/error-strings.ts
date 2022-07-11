@@ -2,8 +2,11 @@ import {
   user as USER,
   post as POST,
   comments as COMMENTS,
-  locations as LOCATIONS
+  locations as LOCATIONS,
+  school as SCHOOL,
+  workplace as WORKPLACE
 } from './constants.js';
+import reactionsEnum from './reactions.enum.js';
 
 export default {
   user: {
@@ -37,6 +40,34 @@ export default {
     isDeleted: `Expected a boolean`
   },
   comment: {
-    comment: `Expected valid comment string with length in the range [${COMMENTS.MIN_CONTENT_LENGTH}-${COMMENTS.MAX_CONTENT_LENGTH}]`
+    content: `Expected valid comment string with length in the range [${COMMENTS.MIN_CONTENT_LENGTH}-${COMMENTS.MAX_CONTENT_LENGTH}]`,
+    replyTo: `Expected a number`
+  },
+
+  postReaction: {
+    reactionName: `Expected valid reaction from ${Object.keys(reactionsEnum)}]`
+  },
+
+  commentReaction: {
+    reactionName: `Expected valid reaction from ${Object.keys(reactionsEnum)}]`
+  },
+
+  school: {
+    schoolName: `Expected valid school name string with length in the range [${SCHOOL.MIN_SCHOOL_LENGTH}-${SCHOOL.MAX_SCHOOL_LENGTH}]`,
+    degree: `Expected valid degree string with length in the range [${SCHOOL.MIN_DEGREE_LENGTH}-${SCHOOL.MAX_DEGREE_LENGTH}]`,
+    schoolType: `Expected valid schoolType string from ${SCHOOL.SCHOOL_TYPES}`,
+    city: `Expected a string with length in the range [${LOCATIONS.MIN_CITY_LENGTH}-${LOCATIONS.MAX_CITY_LENGTH}]`,
+    country: `Expected a string with length in the range [${LOCATIONS.MIN_COUNTRY_LENGTH}-${LOCATIONS.MAX_COUNTRY_LENGTH}]`,
+    startYear: `Expected a start year from the past`,
+    endYear: `Expected a end year from the past`
+  },
+
+  workplace: {
+    workplaceName: `Expected valid workplace name string with length in the range [${WORKPLACE.MIN_COMPANY_NAME_LENGTH}-${WORKPLACE.MAX_COMPANY_NAME_LENGTH}]`,
+    position: `Expected valid position string with length in the range [${WORKPLACE.MIN_POSITION_LENGTH}-${WORKPLACE.MAX_POSITION_LENGTH}]`,
+    city: `Expected a string with length in the range [${LOCATIONS.MIN_CITY_LENGTH}-${LOCATIONS.MAX_CITY_LENGTH}]`,
+    country: `Expected a string with length in the range [${LOCATIONS.MIN_COUNTRY_LENGTH}-${LOCATIONS.MAX_COUNTRY_LENGTH}]`,
+    startDate: `Expected a start date from the past`,
+    endDate: `Expected a end date from the past`
   }
 };

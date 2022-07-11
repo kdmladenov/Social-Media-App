@@ -29,9 +29,15 @@ export const paging = {
   MIN_USERS_PAGESIZE: 10,
   MAX_USERS_PAGESIZE: 20,
   DEFAULT_USERS_PAGESIZE: 15,
-  MIN_POST_PAGESIZE: 5,
+  MIN_POST_PAGESIZE: 1,
   MAX_POST_PAGESIZE: 50,
   DEFAULT_POST_PAGESIZE: 20,
+  MIN_SCHOOL_PAGESIZE: 1,
+  MAX_SCHOOL_PAGESIZE: 50,
+  DEFAULT_SCHOOL_PAGESIZE: 20,
+  MIN_STORY_PAGESIZE: 5,
+  MAX_STORY_PAGESIZE: 50,
+  DEFAULT_STORY_PAGESIZE: 20,
   MIN_REVIEWS_PAGESIZE: 3,
   MAX_REVIEWS_PAGESIZE: 20,
   DEFAULT_REVIEWS_PAGESIZE: 3,
@@ -52,15 +58,30 @@ export const paging = {
 export const post = {
   MIN_MESSAGE_LENGTH: 1,
   MAX_MESSAGE_LENGTH: 10000,
+};
 
-  // MIN_NAME_LENGTH: 2,
-  // MAX_NAME_LENGTH: 250,
-  // MIN_NAME_LENGTH: 2,
-  // MAX_NAME_LENGTH: 250,
+export const story = {
+  MIN_MESSAGE_LENGTH: 1,
+  MAX_MESSAGE_LENGTH: 10000
+};
+
+export const school = {
+  MIN_SCHOOL_LENGTH: 1,
+  MAX_SCHOOL_LENGTH: 1000,
+  MIN_DEGREE_LENGTH: 1,
+  MAX_DEGREE_LENGTH: 1000,
+  SCHOOL_TYPES: ['College', 'High school']
+};
+
+export const workplace = {
+  MIN_COMPANY_NAME_LENGTH: 1,
+  MAX_COMPANY_NAME_LENGTH: 1000,
+  MIN_POSITION_LENGTH: 1,
+  MAX_POSITION_LENGTH: 1000,
 };
 
 export const uploads = {
-  VALID_FILE_FORMATS: ['jpg', 'png', 'jpeg', 'gif', 'bmp', 'webp'],
+  VALID_FILE_FORMATS: ['jpg', 'png', 'jpeg'],
   MAX_FILE_SIZE: 102400, //   divide by 1000 for KB
   MIN_FILE_SIZE: 0,
   DEFAULT_IMAGE_URL: 'storage/images/defaultImage.png'

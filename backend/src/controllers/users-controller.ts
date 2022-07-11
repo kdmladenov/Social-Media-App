@@ -3,6 +3,8 @@ import express, { Request, Response } from 'express';
 import usersServices from '../services/users-services.js';
 
 import usersData from '../data/users-data.js';
+import workplacesData from '../data/workplaces-data.js';
+import schoolsData from '../data/schools-data.js';
 
 import validateBody from '../middleware/validate-body.js';
 import loggedUserGuard from '../middleware/loggedUserGuard.js';
@@ -90,7 +92,7 @@ usersController
       const { userId } = req.params;
       const { role } = req.user;
       const isProfileOwner = +userId === req.user.userId;
-      const { error, result } = await usersServices.getUser(usersData)(
+      const { error, result } = await usersServices.getUser(usersData, workplacesData, schoolsData)(
         +userId,
         isProfileOwner,
         role
@@ -114,7 +116,8 @@ usersController
     authMiddleware,
     loggedUserGuard,
     validateBody('user', updateUserSchema),
-    errorHandler(async (req: Request, res: Response) => {
+    // errorHandler(
+      async (req: Request, res: Response) => {
       // const id = role === rolesEnum.admin ? req.params.userId : req.user.userId;
       const { role } = req.user;
       const { userId } = req.params;
@@ -146,7 +149,7 @@ usersController
         res.status(200).send(result);
       }
     })
-  )
+  // )
   // OK
   // @desc DELETE user
   // @route DELETE /users/:id
@@ -296,7 +299,7 @@ usersController
     })
   )
   // @desc UPLOAD user's avatar
-  // @route POST /users/images/upload
+  // @route POST /users/avatars/upload
   // @access Private - Admin only
   .post(
     '/avatars/upload',

@@ -8,6 +8,7 @@ import UserType from '../models/UserType';
 import { getUserDetails, updateUserProfile } from '../state/actions/userActions';
 import validateInputUser from '../validations/userValidator';
 import Button from './Button';
+import ConfirmMessage from './ConfirmMessage';
 import DropDown from './Dropdown';
 import FormComponent from './FormComponent';
 import FriendList from './FriendList';
@@ -26,13 +27,31 @@ const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
     (state) => state.userUpdateProfile
   );
 
-  const itemEditHandler = () => {
+  const itemEditHandler = (inputData: FormInputDataType) => {
     setIsModalOpen(true);
-    setModalContent(<span>Edit</span>);
+    setModalContent(
+      <FormComponent
+        inputData={inputData}
+        updateAction={updateUserProfile}
+        getDetailsAction={getUserDetails}
+        resourceId={user?.userId}
+        successUpdate={successUserProfileUpdate}
+        resource={user}
+        validateInput={validateInputUser}
+      />
+    );
   };
-  const itemDeleteHandler = () => {
+  const itemDeleteHandler = (key: keyof UserType, label: string) => {
     setIsModalOpen(true);
-    setModalContent(<span>Delete</span>);
+    setModalContent(
+      <ConfirmMessage
+        setIsModalOpen={setIsModalOpen}
+        message={`Are your sure you want to delete this ${label}?`}
+        resourceId={user?.userId}
+        secondParam={{ key: null }}
+        action={updateUserProfile}
+      />
+    );
   };
 
   const itemAddHandler = (inputData: FormInputDataType) => {
@@ -65,8 +84,6 @@ const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
     // aboutMe
   } = user;
 
-  
-
   const profileInfoItemsMap = getProfileAboutInfoItems(user);
 
   return (
@@ -79,7 +96,7 @@ const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
             'Work and Education',
             'Places Lived',
             'Contact and basic info',
-            'Family and Relationships'
+            'Details about you'
           ].map((sectionName) => (
             <Button
               classes={`${section === sectionName ? 'blue_light' : 'white'}`}
@@ -92,44 +109,62 @@ const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
 
         <div className="profile_info">
           <ul className="info_list flex_col">
-            {profileInfoItemsMap[section].map(({ subsectionKey, label, icon, spanText, inputData }) =>
-              user[subsectionKey as keyof typeof user] ? (
-                <li className="info_item flex">
-                  <div className="info flex">
-                    <i className={icon}></i>
-                    <span>{spanText}</span>
-                  </div>
-                  <DropDown
-                    button={
-                      <Button classes="icon info_item_btn flex">
-                        <i className="fa fa-ellipsis-h"></i>
+            {profileInfoItemsMap[section].map(
+              ({ subsectionKey, label, icon, spanText, labelText, inputData, title, addButton }) =>
+                user[subsectionKey as keyof UserType] && inputData ? (
+                  <li className="info_item flex">
+                    <div className="info flex">
+                      <i className={icon}></i>
+                      <div className="info_details flex_col">
+                        <span>{spanText}</span>
+                        {labelText && <h5>{labelText}</h5>}
+                      </div>
+                    </div>
+                    <DropDown
+                      button={
+                        <Button classes="icon info_item_btn flex">
+                          <i className="fa fa-ellipsis-h"></i>
+                        </Button>
+                      }
+                    >
+                      <ul className="menu_info_item flex_col">
+                        <li className="flex" onClick={() => itemEditHandler(inputData)}>
+                          <i className="fa fa-edit"></i>
+                          <span>{`Edit ${label}`}</span>
+                        </li>
+                        <li
+                          className="flex"
+                          // onClick={() =>
+                          //   label && subsectionKey && itemDeleteHandler(subsectionKey, label)
+                          // }
+                        >
+                          <i className="fas fa-trash"></i>
+                          <span>{`Delete ${label}`}</span>
+                        </li>
+                      </ul>
+                    </DropDown>
+                  </li>
+                ) : title ? (
+                  <li>
+                    <h3>{title}</h3>
+                  </li>
+                ) : addButton ? (
+                  <li>
+                    <h3>{addButton}</h3>
+                  </li>
+                ) : (
+                  inputData && (
+                    <li>
+                      <Button
+                        onClick={() => itemAddHandler(inputData)}
+                        classes="text add_profile_info flex"
+                      >
+                        <i className="fa fa-plus"></i>
+                        <span>{`Add a ${label}`}</span>
                       </Button>
-                    }
-                  >
-                    <ul className="menu_info_item flex_col">
-                      <li className="flex" onClick={itemEditHandler}>
-                        <i className="fa fa-edit"></i>
-                        <span>{`Edit ${label}`}</span>
-                      </li>
-                      <li className="flex" onClick={itemDeleteHandler}>
-                        <i className="fas fa-trash"></i>
-                        <span>{`Delete ${label}`}</span>
-                      </li>
-                    </ul>
-                  </DropDown>
-                </li>
-              ) : (
-                // </ul>
-                <li>
-                  <Button
-                    onClick={() => itemAddHandler(inputData)}
-                    classes="text add_profile_info flex"
-                  >
-                    <i className="fa fa-plus"></i>
-                    <span>{`Add a ${label}`}</span>
-                  </Button>
-                </li>
-              )
+                    </li>
+                  )
+                )
             )}
           </ul>
         </div>

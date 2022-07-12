@@ -40,6 +40,27 @@
   gap: 10px;
 }
 
+.profile_about .profile_about_card .profile_info ul.info_list li h3 {
+  font-weight: 600;
+  padding-top: 20px;
+}
+
+.profile_about .profile_about_card .profile_info ul.info_list li:first-child h3 {
+  padding-top: 0px;
+}
+
+.profile_about .profile_about_card .profile_info ul.info_list .info .info_details {
+  align-items: flex-start;
+}
+
+.profile_about .profile_about_card .profile_info ul.info_list .info .info_details span {
+  font-weight: 600;
+}
+
+.profile_about .profile_about_card .profile_info ul.info_list .info .info_details h5 {
+  font-weight: 400;
+}
+
 .profile_about .profile_about_card .profile_info li {
   width: 100%;
   justify-content: space-between;

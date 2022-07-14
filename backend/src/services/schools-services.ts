@@ -25,19 +25,7 @@ const getAllMySchools = (schoolsData: SchoolsData) => async (userId: number) => 
 };
 
 const getSchoolById =
-  (schoolsData: SchoolsData) =>
-  async (schoolId: number, isProfileOwner: boolean, role: RolesType) => {
-    if (role !== rolesEnum.admin && !isProfileOwner) {
-      const isProfileOwnerFriend = true; //TODO find if user is a friend
-
-      if (!isProfileOwnerFriend) {
-        return {
-          error: errors.OPERATION_NOT_PERMITTED,
-          school: null
-        };
-      }
-    }
-
+  (schoolsData: SchoolsData) => async (schoolId: number, userId: number, role: RolesType) => {
     const school = await schoolsData.getBy('school_id', schoolId, role);
 
     if (!school) {
@@ -47,6 +35,17 @@ const getSchoolById =
       };
     }
 
+    if (role !== rolesEnum.admin && school.userId !== userId) {
+      // const isProfileOwnerFriend = true; //TODO find if user is a friend
+
+      // if (!isProfileOwnerFriend) {
+      return {
+        error: errors.OPERATION_NOT_PERMITTED,
+        school: null
+      };
+      // }
+    }
+
     return {
       error: null,
       school
@@ -54,7 +53,7 @@ const getSchoolById =
   };
 
 const createSchool =
-  (schoolsData: SchoolsData, usersData: UsersData) => async (data: SchoolType) => {
+  (schoolsData: SchoolsData, usersData: UsersData) => async (data: SchoolType, userId: number) => {
     // create city and country
     if (data.city && data.country) {
       let existingCity = await usersData.getLocation(data.city);
@@ -66,20 +65,23 @@ const createSchool =
 
     return {
       error: null,
-      school: await schoolsData.create(data)
+      school: await schoolsData.create({ ...data, userId })
     };
   };
 
 const updateSchool =
   (schoolsData: SchoolsData, usersData: UsersData) =>
-  async (
-    schoolId: number,
-    userId: number,
-    isProfileOwner: boolean,
-    role: RolesType,
-    updatedData: SchoolType
-  ) => {
-    if (role !== rolesEnum.admin && !isProfileOwner) {
+  async (schoolId: number, userId: number, role: RolesType, updatedData: SchoolType) => {
+    const existingSchool = await schoolsData.getBy('school_id', +schoolId, 'admin');
+
+    if (!existingSchool) {
+      return {
+        error: errors.RECORD_NOT_FOUND,
+        school: null
+      };
+    }
+
+    if (role !== rolesEnum.admin && existingSchool.userId !== userId) {
       return {
         error: errors.OPERATION_NOT_PERMITTED,
         school: null
@@ -95,15 +97,6 @@ const updateSchool =
       }
     }
 
-    const existingSchool = await schoolsData.getBy('school_id', +schoolId, 'admin');
-
-    if (!existingSchool) {
-      return {
-        error: errors.RECORD_NOT_FOUND,
-        school: null
-      };
-    }
-
     const updated = { ...existingSchool, ...updatedData };
     const result = await schoolsData.update(updated);
 
@@ -114,20 +107,19 @@ const updateSchool =
   };
 
 const deleteSchool =
-  (schoolsData: SchoolsData) =>
-  async (schoolId: number, isProfileOwner: boolean, role: RolesType) => {
-    if (role !== rolesEnum.admin && !isProfileOwner) {
-      return {
-        error: errors.OPERATION_NOT_PERMITTED,
-        school: null
-      };
-    }
-
+  (schoolsData: SchoolsData) => async (schoolId: number, userId: number, role: RolesType) => {
     const schoolToDelete = await schoolsData.getBy('school_id', schoolId, 'admin');
 
     if (!schoolToDelete) {
       return {
         error: errors.RECORD_NOT_FOUND,
+        school: null
+      };
+    }
+
+    if (role !== rolesEnum.admin && schoolToDelete.userId !== userId) {
+      return {
+        error: errors.OPERATION_NOT_PERMITTED,
         school: null
       };
     }

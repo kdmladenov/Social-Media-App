@@ -1,4 +1,4 @@
-import GenderTypes from './GenderTypes';
+import GendersType from './GendersType';
 import RelationshipStatusTypes from './RelationshipStatusTypes';
 
 export interface UserType {
@@ -19,7 +19,7 @@ export interface UserType {
   dateOfBirth: string | Date;
   about_me: string;
   relationshipStatus: RelationshipStatusTypes;
-  gender: GenderTypes;
+  gender: GendersType;
   homeCityId: number;
   homeCity: string;
   homeCountry: string;

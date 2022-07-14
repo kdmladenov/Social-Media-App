@@ -5,21 +5,15 @@ import schoolsServices from '../services/schools-services.js';
 import schoolsData from '../data/schools-data.js';
 
 import validateBody from '../middleware/validate-body.js';
-import validateFile from '../middleware/validate-file.js';
 import loggedUserGuard from '../middleware/loggedUserGuard.js';
-import uploadImage from '../middleware/upload-image.js';
 import errorHandler from '../middleware/errorHandler.js';
 
-import { authMiddleware, roleMiddleware } from '../authentication/auth.middleware.js';
+import { authMiddleware } from '../authentication/auth.middleware.js';
 
 import updateSchoolSchema from '../validator/update-school-schema.js';
-import uploadFileSchema from '../validator/upload-file-schema.js';
 import createSchoolSchema from '../validator/create-school-schema.js';
 
 import errors from '../constants/service-errors.js';
-import { paging } from '../constants/constants.js';
-import rolesEnum from '../constants/roles.enum.js';
-import RequestQuery from '../models/RequestQuery.js';
 import usersData from '../data/users-data.js';
 
 const schoolsController = express.Router();
@@ -35,9 +29,7 @@ schoolsController
     loggedUserGuard,
     errorHandler(async (req: Request, res: Response) => {
       const { userId } = req.user;
-      const { error, schools } = await schoolsServices.getAllMySchools(schoolsData)(
-        +userId
-      );
+      const { error, schools } = await schoolsServices.getAllMySchools(schoolsData)(+userId);
 
       if (error === errors.OPERATION_NOT_PERMITTED) {
         res.status(403).send({
@@ -53,17 +45,16 @@ schoolsController
   // @route GET /schools/:schoolId
   // @access Private - Admin, the ProfileOwner or a Friend of the ProfileOwner
   .get(
-    '/:userId/:schoolId',
+    '/:schoolId',
     authMiddleware,
     loggedUserGuard,
     errorHandler(async (req: Request, res: Response) => {
-      const { userId, schoolId } = req.params;
-      const isProfileOwner = +userId === req.user.userId;
-      const { role } = req.user;
+      const { schoolId } = req.params;
+      const { role, userId } = req.user;
 
       const { error, school } = await schoolsServices.getSchoolById(schoolsData)(
         +schoolId,
-        isProfileOwner,
+        +userId,
         role
       );
 
@@ -89,33 +80,30 @@ schoolsController
     authMiddleware,
     loggedUserGuard,
     validateBody('school', createSchoolSchema),
-    // errorHandler(
-      async (req: Request, res: Response) => {
+    errorHandler(async (req: Request, res: Response) => {
       const data = req.body;
-      const { school } = await schoolsServices.createSchool(schoolsData, usersData)(data);
+      const { userId } = req.user;
+      const { school } = await schoolsServices.createSchool(schoolsData, usersData)(data, +userId);
 
       res.status(201).send(school);
     })
-  // )
+  )
   // @desc EDIT schools by ID
   // @route PUT /schools/:schoolId
   // @access Private - Admin or Profile Owner
   .put(
-    '/:userId/:schoolId',
+    '/:schoolId',
     authMiddleware,
     loggedUserGuard,
     validateBody('school', updateSchoolSchema),
-    // errorHandler(
-      async (req: Request, res: Response) => {
-      const { schoolId, userId } = req.params;
-
-      const { role } = req.user;
-      const isProfileOwner = +userId === req.user.userId;
+    errorHandler(async (req: Request, res: Response) => {
+      const { schoolId } = req.params;
+      const { role, userId } = req.user;
       const data = req.body;
+
       const { error, result } = await schoolsServices.updateSchool(schoolsData, usersData)(
         +schoolId,
         +userId,
-        isProfileOwner,
         role,
         data
       );
@@ -132,26 +120,25 @@ schoolsController
         res.status(200).send(result);
       }
     })
-  // )
+  )
 
   // @desc DELETE school
   // @route DELETE /schools/:schoolId
   // @access Private - Admin or the ProfileOwner
   .delete(
-    '/:userId/:schoolId',
+    '/:schoolId',
     authMiddleware,
     loggedUserGuard,
-    // roleMiddleware(rolesEnum.admin),
     errorHandler(async (req: Request, res: Response) => {
-      const { schoolId, userId } = req.params;
-      const { role } = req.user;
-      const isProfileOwner = +userId === req.user.userId;
+      const { schoolId } = req.params;
+      const { role, userId } = req.user;
 
       const { error, school } = await schoolsServices.deleteSchool(schoolsData)(
         +schoolId,
-        isProfileOwner,
+        +userId,
         role
       );
+
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
           message: 'A school with this id is not found!'
@@ -165,6 +152,5 @@ schoolsController
       }
     })
   );
-  
 
 export default schoolsController;

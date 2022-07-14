@@ -67,8 +67,8 @@ const create = async (workplace: WorkplaceType) => {
     workplace.companyName,
     workplace.position || null,
     workplace.city || null,
-    workplace.startDate || null,
-    workplace.endDate || null
+    new Date(workplace.startDate) || null,
+    new Date(workplace.endDate) || null
   ]);
 
   return getBy('workplace_id', +result.insertId);
@@ -92,8 +92,8 @@ const update = async (updatedWorkplace: WorkplaceType) => {
     updatedWorkplace.companyName || null,
     updatedWorkplace.position || null,
     updatedWorkplace.city || null,
-    updatedWorkplace.startDate || null,
-    updatedWorkplace.endDate || null,
+    new Date(updatedWorkplace.startDate) || null,
+    new Date(updatedWorkplace.endDate) || null,
     +updatedWorkplace.workplaceId
   ]);
 

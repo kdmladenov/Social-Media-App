@@ -53,17 +53,16 @@ workplacesController
   // @route GET /workplaces/:workplaceId
   // @access Private - Admin, the ProfileOwner or a Friend of the ProfileOwner
   .get(
-    '/:userId/:workplaceId',
+    '/:workplaceId',
     authMiddleware,
     loggedUserGuard,
     errorHandler(async (req: Request, res: Response) => {
-      const { userId, workplaceId } = req.params;
-      const isProfileOwner = +userId === req.user.userId;
-      const { role } = req.user;
+      const { workplaceId } = req.params;
+      const { role, userId } = req.user;
 
       const { error, workplace } = await workplacesServices.getWorkplaceById(workplacesData)(
         +workplaceId,
-        isProfileOwner,
+        +userId,
         role
       );
 
@@ -89,33 +88,35 @@ workplacesController
     authMiddleware,
     loggedUserGuard,
     validateBody('workplace', createWorkplaceSchema),
-    // errorHandler(
-      async (req: Request, res: Response) => {
+    errorHandler(async (req: Request, res: Response) => {
       const data = req.body;
-      const { workplace } = await workplacesServices.createWorkplace(workplacesData, usersData)(data);
+      const { userId } = req.user;
+
+      const { workplace } = await workplacesServices.createWorkplace(workplacesData, usersData)(
+        data,
+        +userId
+      );
 
       res.status(201).send(workplace);
     })
-  // )
+  )
   // @desc EDIT workplaces by ID
   // @route PUT /workplaces/:workplaceId
   // @access Private - Admin or Profile Owner
   .put(
-    '/:userId/:workplaceId',
+    '/:workplaceId',
     authMiddleware,
     loggedUserGuard,
     validateBody('workplace', updateWorkplaceSchema),
     // errorHandler(
-      async (req: Request, res: Response) => {
-      const { workplaceId, userId } = req.params;
-
-      const { role } = req.user;
-      const isProfileOwner = +userId === req.user.userId;
+    async (req: Request, res: Response) => {
+      const { workplaceId } = req.params;
+      const { role, userId } = req.user;
       const data = req.body;
+
       const { error, result } = await workplacesServices.updateWorkplace(workplacesData, usersData)(
         +workplaceId,
         +userId,
-        isProfileOwner,
         role,
         data
       );
@@ -131,25 +132,25 @@ workplacesController
       } else {
         res.status(200).send(result);
       }
-    })
+    }
+  )
   // )
 
   // @desc DELETE workplace
   // @route DELETE /workplaces/:workplaceId
   // @access Private - Admin or the ProfileOwner
   .delete(
-    '/:userId/:workplaceId',
+    '/:workplaceId',
     authMiddleware,
     loggedUserGuard,
     // roleMiddleware(rolesEnum.admin),
     errorHandler(async (req: Request, res: Response) => {
-      const { workplaceId, userId } = req.params;
-      const { role } = req.user;
-      const isProfileOwner = +userId === req.user.userId;
+      const { workplaceId } = req.params;
+      const { role, userId } = req.user;
 
       const { error, workplace } = await workplacesServices.deleteWorkplace(workplacesData)(
         +workplaceId,
-        isProfileOwner,
+        userId,
         role
       );
       if (error === errors.RECORD_NOT_FOUND) {
@@ -165,6 +166,5 @@ workplacesController
       }
     })
   );
-  
 
 export default workplacesController;

@@ -1,5 +1,4 @@
 import errors from '../constants/service-errors.js';
-import Image from '../models/Image.js';
 import WorkplaceType from '../models/WorkplaceType.js';
 import WorkplacesData from '../models/WorkplacesData.js';
 import RolesType from '../models/RolesType.js';
@@ -26,24 +25,24 @@ const getAllMyWorkplaces = (workplacesData: WorkplacesData) => async (userId: nu
 
 const getWorkplaceById =
   (workplacesData: WorkplacesData) =>
-  async (workplaceId: number, isProfileOwner: boolean, role: RolesType) => {
-    if (role !== rolesEnum.admin && !isProfileOwner) {
-      const isProfileOwnerFriend = true; //TODO find if user is a friend
-
-      if (!isProfileOwnerFriend) {
-        return {
-          error: errors.OPERATION_NOT_PERMITTED,
-          workplace: null
-        };
-      }
-    }
-
+  async (workplaceId: number, userId: number, role: RolesType) => {
     const workplace = await workplacesData.getBy('workplace_id', workplaceId, role);
 
     if (!workplace) {
       return {
         error: errors.RECORD_NOT_FOUND,
         workplace: null
+      };
+    }
+
+    if (role !== rolesEnum.admin && workplace.userId !== userId) {
+      // const isProfileOwnerFriend = true; //TODO find if user is a friend
+
+      // if (!isProfileOwnerFriend) {
+      return {
+        error: errors.OPERATION_NOT_PERMITTED,
+        workplace: null
+        // };
       };
     }
 
@@ -54,7 +53,8 @@ const getWorkplaceById =
   };
 
 const createWorkplace =
-  (workplacesData: WorkplacesData, usersData: UsersData) => async (data: WorkplaceType) => {
+  (workplacesData: WorkplacesData, usersData: UsersData) =>
+  async (data: WorkplaceType, userId: number) => {
     // create city and country
     if (data.city && data.country) {
       let existingCity = await usersData.getLocation(data.city);
@@ -66,20 +66,23 @@ const createWorkplace =
 
     return {
       error: null,
-      workplace: await workplacesData.create(data)
+      workplace: await workplacesData.create({ ...data, userId })
     };
   };
 
 const updateWorkplace =
   (workplacesData: WorkplacesData, usersData: UsersData) =>
-  async (
-    workplaceId: number,
-    userId: number,
-    isProfileOwner: boolean,
-    role: RolesType,
-    updatedData: WorkplaceType
-  ) => {
-    if (role !== rolesEnum.admin && !isProfileOwner) {
+  async (workplaceId: number, userId: number, role: RolesType, updatedData: WorkplaceType) => {
+    const existingWorkplace = await workplacesData.getBy('workplace_id', +workplaceId, 'admin');
+
+    if (!existingWorkplace) {
+      return {
+        error: errors.RECORD_NOT_FOUND,
+        workplace: null
+      };
+    }
+
+    if (role !== rolesEnum.admin && existingWorkplace.userId !== userId) {
       return {
         error: errors.OPERATION_NOT_PERMITTED,
         workplace: null
@@ -95,15 +98,6 @@ const updateWorkplace =
       }
     }
 
-    const existingWorkplace = await workplacesData.getBy('workplace_id', +workplaceId, 'admin');
-
-    if (!existingWorkplace) {
-      return {
-        error: errors.RECORD_NOT_FOUND,
-        workplace: null
-      };
-    }
-
     const updated = { ...existingWorkplace, ...updatedData };
     const result = await workplacesData.update(updated);
 
@@ -115,15 +109,15 @@ const updateWorkplace =
 
 const deleteWorkplace =
   (workplacesData: WorkplacesData) =>
-  async (workplaceId: number, isProfileOwner: boolean, role: RolesType) => {
-    if (role !== rolesEnum.admin && !isProfileOwner) {
+  async (workplaceId: number, userId: number, role: RolesType) => {
+    const workplaceToDelete = await workplacesData.getBy('workplace_id', workplaceId, 'admin');
+
+    if (role !== rolesEnum.admin && workplaceToDelete.userId !== userId) {
       return {
         error: errors.OPERATION_NOT_PERMITTED,
         workplace: null
       };
     }
-
-    const workplaceToDelete = await workplacesData.getBy('workplace_id', workplaceId, 'admin');
 
     if (!workplaceToDelete) {
       return {

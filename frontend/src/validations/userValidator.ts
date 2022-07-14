@@ -84,8 +84,8 @@ const validate = {
       value.length <= LOCATIONS.MAX_COUNTRY_LENGTH),
   startDate: (value: string) =>
     !value || (typeof value === 'string' && new Date() >= new Date(value)),
-  endDate: (value: string) =>
-    !value || (typeof value === 'string' && new Date() >= new Date(value)),
+  endDate: (value: string, match?: string) =>
+    !value || (typeof value === 'string' && match && new Date(value) >= new Date(match)),
   schoolName: (value: string) =>
     typeof value === 'string' &&
     value.length >= SCHOOL.MIN_SCHOOL_LENGTH &&
@@ -96,9 +96,8 @@ const validate = {
     value.length <= SCHOOL.MAX_DEGREE_LENGTH,
   schoolType: (value: string) => typeof value === 'string' && SCHOOL.SCHOOL_TYPES.includes(value),
   startYear: (value: string) => typeof value === 'string' && new Date().getFullYear() >= +value,
-  endYear: (value: string) =>
-    !value ||
-    (typeof value === 'string' && typeof value === 'string' && new Date().getFullYear() >= +value)
+  endYear: (value: string, match?: string) =>
+    !value || (typeof value === 'string' && typeof value === 'string' && match && +value >= +match)
 };
 
 const validateInputUser = {
@@ -304,12 +303,13 @@ const validateInputUser = {
     }
     return '';
   },
-  endDate: (value: string) => {
+  endDate: (value: string, match?: string) => {
     if (!value) {
       return ' is required!';
     }
-    if (!validate.endDate(value)) {
-      return ` must be a date in the past`;
+
+    if (!validate.endDate(value, match)) {
+      return ' must be after the start date';
     }
     return '';
   },
@@ -349,12 +349,12 @@ const validateInputUser = {
     }
     return '';
   },
-  endYear: (value: string) => {
+  endYear: (value: string, match?: string) => {
     if (!value) {
       return ' is required!';
     }
-    if (!validate.endYear(value)) {
-      return ` must be a date in the past`;
+    if (!validate.endYear(value, match)) {
+      return ` must be a year before or equal to the start year`;
     }
     return '';
   }

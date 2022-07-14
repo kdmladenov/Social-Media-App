@@ -1,0 +1,19 @@
+.confirm{
+  gap: 20px;
+}
+
+.confirm .message{
+  font-size: 18px;
+  color: var(--black);
+}
+
+
+.confirm .button_group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirm .button_group button {
+  width: 150px;
+}

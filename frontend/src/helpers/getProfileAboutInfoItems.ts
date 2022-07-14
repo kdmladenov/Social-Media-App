@@ -1,6 +1,8 @@
 import profileUpdateInitialInputState from '../inputs/profileUpdateInitialInputState';
 import FormInputDataType from '../models/FormInputDataType';
+import SchoolType from '../models/SchoolType';
 import UserType from '../models/UserType';
+import WorkplaceType from '../models/WorkplaceType';
 import getDate from './getDate';
 
 interface ProfileItemType {
@@ -10,6 +12,9 @@ interface ProfileItemType {
   spanText?: string;
   labelText?: string;
   inputData?: FormInputDataType;
+  resource?: UserType | SchoolType | WorkplaceType;
+  resourceId?: number;
+  subResourceId?: number;
   title?: string;
   addButton?: string;
 }
@@ -40,6 +45,8 @@ const getProfileAboutInfoItems = (user: UserType): { [key: string]: ProfileItemT
         label: 'workplace',
         icon: 'fas fa-briefcase',
         spanText: `Worked at ${workplace?.companyName}`,
+        resource: workplace,
+        resourceId: workplace.workplaceId,
         labelText: `${workplace?.city}, ${workplace?.country}`,
         inputData: profileUpdateInitialInputState.workplaces
       };
@@ -53,7 +60,8 @@ const getProfileAboutInfoItems = (user: UserType): { [key: string]: ProfileItemT
         subsectionKey: 'schools',
         label: 'college',
         icon: 'fas fa-user-graduate',
-
+        resource: college,
+        resourceId: college.schoolId,
         spanText: `Studied at ${college?.schoolName}`,
         labelText: `${college.endYear && 'Class of '}${college.endYear}`,
         inputData: profileUpdateInitialInputState.schools
@@ -63,13 +71,15 @@ const getProfileAboutInfoItems = (user: UserType): { [key: string]: ProfileItemT
   const mappedHighSchools: ProfileItemType[] = schools
     ?.filter((school) => school.schoolType === 'High school')
     .sort((a, b) => b.startYear - a.startYear)
-    .map((college) => {
+    .map((highSchool) => {
       return {
         subsectionKey: 'schools',
-        label: 'college',
-        icon: 'fa fa-home',
-        spanText: `Studied at ${college?.schoolName}`,
-        labelText: `${college.endYear && 'Class of '}${college.endYear}`,
+        label: 'high school',
+        icon: 'fas fa-user-graduate',
+        resource: highSchool,
+        resourceId: highSchool.schoolId,
+        spanText: `Studied at ${highSchool?.schoolName}`,
+        labelText: `${highSchool.endYear && 'Class of '}${highSchool.endYear}`,
         inputData: profileUpdateInitialInputState.schools
       };
     });
@@ -168,7 +178,7 @@ const getProfileAboutInfoItems = (user: UserType): { [key: string]: ProfileItemT
         subsectionKey: 'dateOfBirth',
         label: 'date of birth',
         icon: 'fas fa-birthday-cake',
-        spanText: `${getDate(dateOfBirth, 0, false, false)}, ${new Date(
+        spanText: dateOfBirth && `${getDate(dateOfBirth, 0, false, false)}, ${new Date(
           dateOfBirth
         ).getFullYear()}`,
         labelText: 'Date of birth',

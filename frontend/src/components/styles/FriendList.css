@@ -29,7 +29,7 @@
   font-size: 17px;
 }
 
-.friend_list .list {
+.friend_list > ul {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-auto-rows: 115px;
@@ -37,12 +37,12 @@
   gap: 10px;
 }
 
-.friend_list.profile_posts_screen .list {
+.friend_list.profile_posts_screen ul {
   grid-template-columns: repeat(3, 145px);
   grid-template-rows: repeat(3, 160px);
 }
 
-.friend_list .list .friend {
+.friend_list ul li.friend {
   width: 100%;
   justify-content: space-between;
   box-shadow: var(--box_shadow);
@@ -50,11 +50,11 @@
   padding: 20px;
 }
 
-.friend_list.profile_posts_screen .list .friend {
+.friend_list.profile_posts_screen ul li.friend {
   padding: 0px;
 }
 
-.friend_list.profile_posts_screen .list .friend .avatar {
+.friend_list.profile_posts_screen ul li.friend .avatar {
   min-height: 100%;
   width: 100%;
   gap: 5px;
@@ -62,22 +62,70 @@
   align-items: flex-start;
 }
 
-.friend_list .list .friend .avatar .image,
-.friend_list .list .friend .avatar .image img {
+.friend_list ul li.friend .avatar .image,
+.friend_list ul li.friend .avatar .image img {
   height: 80px;
   width: 80px;
-  object-fit: cover;
   overflow: clip;
   border-radius: 10px;
   padding: 0;
 }
 
-.friend_list.profile_posts_screen .list .friend .avatar .image,
-.friend_list.profile_posts_screen .list .friend .avatar .image img {
+.friend_list.profile_posts_screen ul li.friend .avatar .image,
+.friend_list.profile_posts_screen ul li.friend .avatar .image img {
   height: 145px;
   width: 145px;
-  object-fit: cover;
   overflow: clip;
   border-radius: 10px;
   padding: 0;
+}
+
+.friend_list ul li.friend .avatar .name {
+  padding: 0 10px;
+}
+
+
+/* Button Dropdown */
+.friend_list ul li.friend .dropdown {
+  justify-content: flex-end;
+}
+
+.friend_list ul li.friend .dropdown .body::before {
+  right: 5px;
+}
+
+.friend_list ul li.friend .dropdown .tooltip button.item_btn {
+  background: var(--gray_background);
+  padding: 0;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+
+.friend_list ul li.friend .dropdown .body.show {
+  top: calc(100% + 5px);
+  width: fit-content;
+  min-width: 250px;
+  height: fit-content;
+  border: none;
+}
+
+.friend_list ul li.friend .dropdown .body.show:before {
+  border: none;
+  background-color: transparent;
+}
+
+.friend_list ul li.friend .dropdown .body.show ul.menu li {
+  width: 100%;
+  gap: 10px;
+  justify-content: flex-start;
+  padding: 0 10px;
+}
+.friend_list ul li.friend .dropdown .body.show ul.menu li:hover {
+  cursor: pointer;
+}
+
+.friend_list ul li.friend .dropdown .body.show ul.menu li i {
+  font-size: 18px;
+  width: 20px;
 }

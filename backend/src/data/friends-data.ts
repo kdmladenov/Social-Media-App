@@ -1,5 +1,6 @@
 import db from './pool.js';
-import FriendsType from '../models/FriendsType.js';
+import  { FriendTypeFriendsAsJson } from '../models/FriendsType.js';
+import FriendRequestType from '../models/FriendRequestType.js';
 
 const getFriendRequestBy = async (userId: number, friendUserId: number) => {
   const sql = `
@@ -43,10 +44,27 @@ const getAllMyFriends = async (
       u.firstName,
       u.lastName,
       u.avatar,
+      u.cover,
+      u.aboutMe,
+      u.email,
+      u.phone,
+      u.dateOfBirth,
+      u.homeCityId,
+      u.homeCity,
+      u.homeCountry,
+      u.currentCityId,
+      u.currentCity,
+      u.currentCountry,
+      u.relationshipStatus,
+      u.gender,
+      u.dateRegistered,
+      u.isDeleted,
+      u.role,
       f.request_status_id as requestStatusId, 
       rs.request_status as requestStatus, 
       f.created_at as createdAt, 
       f.updated_at as updatedAt,
+      u.friends,
       t.totalDBItems
       
     FROM friends f
@@ -69,6 +87,7 @@ const getAllMyFriends = async (
               u.last_name as lastName,
               u.avatar,
               u.cover,
+              JSON_ARRAYAGG(JSON_OBJECT('friendUserId', fr.friendUserId,'firstName', fr.firstName, 'lastName', fr.lastName, 'avatar', fr.avatar)) as friends,
               u.about_me as aboutMe,
               u.email,
               u.phone,
@@ -85,6 +104,46 @@ const getAllMyFriends = async (
               u.is_deleted as isDeleted,
               u.role
         FROM users u
+        INNER JOIN (
+                SELECT 
+                  f.target_id as user_id,
+                  f.source_id as friendUserId,
+                  u.firstName,
+                  u.lastName,
+                  u.avatar
+                FROM friends f
+                LEFT JOIN (
+                      SELECT 
+                        u.user_id as userId, 
+                        u.first_name as firstName,
+                        u.last_name as lastName,
+                        u.avatar
+                      FROM users u
+                      WHERE is_deleted = 0
+                      GROUP BY userId) as u ON userId = f.source_id
+                WHERE f.request_status_id = 1
+
+                UNION
+
+                SELECT 
+                  f.source_id as user_id,
+                  f.target_id as friendUserId,
+                  u.firstName,
+                  u.lastName,
+                  u.avatar
+                FROM friends f
+                LEFT JOIN (  
+                      SELECT 
+                        u.user_id as userId, 
+                        u.first_name as firstName,
+                        u.last_name as lastName,
+                        u.avatar
+                      FROM users u
+                      WHERE is_deleted = 0
+                      GROUP BY userId) as u ON userId = f.target_id
+                WHERE f.request_status_id = 1
+            
+          ) as fr USING (user_id)
         LEFT JOIN (SELECT location_id, city, country
           FROM locations
           GROUP BY location_id) as hc ON u.home_city_id = hc.location_id
@@ -101,22 +160,46 @@ const getAllMyFriends = async (
         GROUP BY userId) as u ON userId = f.${friendIdType}
     WHERE rs.request_status = 'approved' AND f.${userIdType} = ${userId} 
     AND CONCAT_WS(',', userId, firstName, lastName) Like '%${search}%'`;
-    
-
   const sql = `
     ${getQuery('source_id', 'target_id', +userId)}
     union
     ${getQuery('target_id', 'source_id', +userId)}
     ORDER BY ${sortColumn} ${direction} 
     LIMIT ? OFFSET ?
-      `;
+    `;
 
-  return db.query(sql, [+pageSize, +offset]);
+  const friends = (await db.query(sql, [+pageSize, +offset])) as FriendTypeFriendsAsJson[];
+
+  return friends.map((friend) => {
+    return {
+      ...friend,
+      friends: JSON.parse(friend?.friends)
+    };
+  });
 };
 
 const getAllMySentPendingRequests = async (userId: number) => {
   const sql = `SELECT 
       f.target_id as userId, 
+      u.firstName,
+      u.lastName,
+      u.avatar,
+      u.cover,
+      u.aboutMe,
+      u.email,
+      u.phone,
+      u.dateOfBirth,
+      u.homeCityId,
+      u.homeCity,
+      u.homeCountry,
+      u.currentCityId,
+      u.currentCity,
+      u.currentCountry,
+      u.relationshipStatus,
+      u.gender,
+      u.dateRegistered,
+      u.isDeleted,
+      u.role,
       f.request_status_id as requestStatusId, 
       rs.request_status as requestStatus, 
       f.created_at as createdAt, 
@@ -172,6 +255,25 @@ const getAllMySentPendingRequests = async (userId: number) => {
 const getAllMyReceivedPendingRequests = async (userId: number) => {
   const sql = `SELECT 
       f.source_id as userId, 
+      u.firstName,
+      u.lastName,
+      u.avatar,
+      u.cover,
+      u.aboutMe,
+      u.email,
+      u.phone,
+      u.dateOfBirth,
+      u.homeCityId,
+      u.homeCity,
+      u.homeCountry,
+      u.currentCityId,
+      u.currentCity,
+      u.currentCountry,
+      u.relationshipStatus,
+      u.gender,
+      u.dateRegistered,
+      u.isDeleted,
+      u.role,
       f.request_status_id as requestStatusId, 
       rs.request_status as requestStatus, 
       f.created_at as createdAt, 
@@ -239,7 +341,7 @@ const createRequest = async (sourceUserId: number, targetUserId: number) => {
   return getFriendRequestBy(+sourceUserId, +targetUserId);
 };
 
-const updateRequestStatus = async (friendRequest: FriendsType) => {
+const updateRequestStatus = async (friendRequest: FriendRequestType) => {
   const sql = `
     UPDATE friends SET
       request_status_id = (SELECT request_status_id from request_statuses WHERE request_status = ?),

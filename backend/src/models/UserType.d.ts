@@ -26,7 +26,18 @@ export interface UserType {
   currentCityId: number;
   currentCity: string;
   currentCountry: string;
-  aboutMe:string;
+  aboutMe: string;
+  friends: {
+    friendUserId: number;
+    firstName: string;
+    lastName: string;
+    avatar: string;
+    friends: { friendUserId: number; firstName: string; lastName: string; avatar: string }[];
+  }[];
 }
 
 export default UserType;
+
+export interface UserTypeFriendsAsJson extends UserType {
+  friends: string;
+}

@@ -116,8 +116,7 @@ usersController
     authMiddleware,
     loggedUserGuard,
     validateBody('user', updateUserSchema),
-    // errorHandler(
-      async (req: Request, res: Response) => {
+    errorHandler(async (req: Request, res: Response) => {
       // const id = role === rolesEnum.admin ? req.params.userId : req.user.userId;
       const { role } = req.user;
       const { userId } = req.params;
@@ -149,7 +148,7 @@ usersController
         res.status(200).send(result);
       }
     })
-  // )
+  )
   // OK
   // @desc DELETE user
   // @route DELETE /users/:id

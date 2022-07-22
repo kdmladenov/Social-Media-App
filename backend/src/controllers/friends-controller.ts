@@ -111,34 +111,25 @@ friendsController
       res.status(200).send(result);
     })
   )
-  // // @desc Get all friend suggestions, with mutual friends count
+  // @desc Get all friend suggestions, with mutual friends count
 
-  // // @route GET /friends/suggestions
-  // // @access Public - Logged users only
-  // .get(
-  //   '/suggestions',
-  //   authMiddleware,
-  //   loggedUserGuard,
-  //   errorHandler(async (req: Request, res: Response) => {
-  //     const { role } = req.user;
-  //     const { search = '', sort = 'sort=user_id asc' } = req.query;
+  // @route GET /friends/suggestions
+  // @access Public - Logged users only
+  .get(
+    '/suggestions',
+    authMiddleware,
+    loggedUserGuard,
+    // errorHandler(
+      async (req: Request, res: Response) => {
+      const { userId } = req.user;
 
-  //     let { pageSize = paging.DEFAULT_FRIENDS_PAGESIZE, page = paging.DEFAULT_PAGE } = req.query;
+      const suggestions = await friendsServices.getAllFriendSuggestions(
+        friendsData,
+        usersData
+      )(+userId);
 
-  //     if (+pageSize > paging.MAX_FRIENDS_PAGESIZE) pageSize = paging.MAX_FRIENDS_PAGESIZE;
-  //     if (+pageSize < paging.MIN_FRIENDS_PAGESIZE) pageSize = paging.MIN_FRIENDS_PAGESIZE;
-  //     if (page < paging.DEFAULT_PAGE) page = paging.DEFAULT_PAGE;
-
-  //     const result = await friendsServices.getAllFriendSuggestions(friendsData)(
-  //       search,
-  //       sort,
-  //       +page,
-  //       +pageSize,
-  //       role
-  //     );
-
-  //     res.status(200).send(result);
-  //   })
+      res.status(200).send(suggestions);
+    })
   // )
   // @desc Accept or reject a friend request
 

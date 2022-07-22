@@ -1,5 +1,5 @@
 import db from './pool.js';
-import  { FriendTypeFriendsAsJson } from '../models/FriendsType.js';
+import { FriendTypeFriendsAsJson } from '../models/FriendsType.js';
 import FriendRequestType from '../models/FriendRequestType.js';
 
 const getFriendRequestBy = async (userId: number, friendUserId: number) => {
@@ -326,6 +326,190 @@ const getAllMyReceivedPendingRequests = async (userId: number) => {
   return db.query(sql, +userId);
 };
 
+const getAllFriendSuggestions = async (userId: number) => {
+  const getQuery = (friendIdType: string, userIdType: string, userId: number) => `SELECT 
+      f.${friendIdType} as userId,
+      u.firstName,
+      u.lastName,
+      u.avatar,
+      u.friends
+      
+    FROM friends f
+    LEFT JOIN (  SELECT 
+              u.user_id as userId, 
+              u.first_name as firstName,
+              u.last_name as lastName,
+              u.avatar,
+              JSON_ARRAYAGG(JSON_OBJECT('friendUserId', fr.friendUserId,'firstName', fr.firstName, 'lastName', fr.lastName, 'avatar', fr.avatar, 'homeCityId', fr.home_city_id, 'currentCityId', fr.current_city_id, 'friends' , fr.friends)) as friends
+
+        FROM users u
+        INNER JOIN (
+                SELECT 
+                  f.target_id as user_id,
+                  f.source_id as friendUserId,
+                  u.firstName,
+                  u.lastName,
+                  u.avatar,
+                  u.home_city_id,
+                  u.current_city_id,
+                  u.friends
+                FROM friends f
+                LEFT JOIN (
+                      SELECT 
+                        u.user_id as userId, 
+                        u.first_name as firstName,
+                        u.last_name as lastName,
+                        u.avatar,
+                        u.home_city_id,
+                        u.current_city_id,
+                        f.friends
+                      FROM users u
+                      LEFT JOIN(
+                                SELECT
+                                    u.user_id,
+                                    JSON_ARRAYAGG(JSON_OBJECT('friendUserId', frr.friendUserId,'firstName', frr.firstName, 'lastName', frr.lastName, 'avatar', frr.avatar)) as friends
+                                FROM users u
+                                INNER JOIN (
+                                      SELECT
+                                        f.target_id as user_id,
+                                        f.source_id as friendUserId,
+                                        u.firstName,
+                                        u.lastName,
+                                        u.avatar
+                                      FROM friends f
+                                      LEFT JOIN (
+                                            SELECT
+                                              u.user_id as userId,
+                                              u.first_name as firstName,
+                                              u.last_name as lastName,
+                                              u.avatar
+                                            FROM users u
+                                            WHERE is_deleted = 0
+                                            GROUP BY userId) as u ON userId = f.source_id
+                                      WHERE f.request_status_id = 1
+                                      UNION
+                                      SELECT
+                                        f.source_id as user_id,
+                                        f.target_id as friendUserId,
+                                        u.firstName,
+                                        u.lastName,
+                                        u.avatar
+                                      FROM friends f
+                                      LEFT JOIN (  
+                                            SELECT
+                                              u.user_id as userId,
+                                              u.first_name as firstName,
+                                              u.last_name as lastName,
+                                              u.avatar
+                                            FROM users u
+                                            WHERE is_deleted = 0
+                                            GROUP BY userId) as u ON userId = f.target_id
+                                      WHERE f.request_status_id = 1
+            
+                                ) as frr USING (user_id)
+                                GROUP BY user_id) as f USING (user_id)
+                                
+                                
+                                
+                      WHERE is_deleted = 0
+                      GROUP BY userId) as u ON userId = f.source_id
+                WHERE f.request_status_id = 1
+
+                UNION
+
+                SELECT 
+                  f.source_id as user_id,
+                  f.target_id as friendUserId,
+                  u.firstName,
+                  u.lastName,
+                  u.avatar,
+                  u.home_city_id,
+                  u.current_city_id,
+                  u.friends
+                FROM friends f
+                LEFT JOIN (  
+                      SELECT 
+                        u.user_id as userId, 
+                        u.first_name as firstName,
+                        u.last_name as lastName,
+                        u.avatar,
+                        u.home_city_id,
+                        u.current_city_id,
+                        f.friends
+                      FROM users u
+                          
+                      LEFT JOIN(
+                                SELECT
+                                    u.user_id,
+                                    JSON_ARRAYAGG(JSON_OBJECT('friendUserId', frr.friendUserId,'firstName', frr.firstName, 'lastName', frr.lastName, 'avatar', frr.avatar)) as friends
+                                FROM users u
+                                INNER JOIN (
+                                      SELECT
+                                        f.source_id as user_id,
+                                        f.target_id as friendUserId,
+                                        u.firstName,
+                                        u.lastName,
+                                        u.avatar
+                                      FROM friends f
+                                      LEFT JOIN (
+                                            SELECT
+                                              u.user_id as userId,
+                                              u.first_name as firstName,
+                                              u.last_name as lastName,
+                                              u.avatar
+                                            FROM users u
+                                            WHERE is_deleted = 0
+                                            GROUP BY userId) as u ON userId = f.target_id
+                                      WHERE f.request_status_id = 1
+                                      UNION
+                                      SELECT
+                                        f.target_id as user_id,
+                                        f.source_id as friendUserId,
+                                        u.firstName,
+                                        u.lastName,
+                                        u.avatar
+                                      FROM friends f
+                                      LEFT JOIN (  
+                                            SELECT
+                                              u.user_id as userId,
+                                              u.first_name as firstName,
+                                              u.last_name as lastName,
+                                              u.avatar
+                                            FROM users u
+                                            WHERE is_deleted = 0
+                                            GROUP BY userId) as u ON userId = f.source_id
+                                      WHERE f.request_status_id = 1
+            
+                                ) as frr USING (user_id)
+                                GROUP BY user_id) as f USING (user_id)
+                                
+                                
+                                
+                      WHERE is_deleted = 0
+                      GROUP BY userId) as u ON userId = f.target_id
+                WHERE f.request_status_id = 1
+            
+          ) as fr USING (user_id)
+        WHERE is_deleted = 0
+        GROUP BY userId) as u ON userId = f.${friendIdType}
+    WHERE f.request_status_id = 1 AND f.${userIdType} = ${userId}`;
+
+  const sql = `
+    ${getQuery('source_id', 'target_id', +userId)}
+    union
+    ${getQuery('target_id', 'source_id', +userId)}
+    `;
+
+  const friends = (await db.query(sql)) as FriendTypeFriendsAsJson[];
+
+  return friends.map((friend) => {
+    return {
+      ...friend,
+      friends: JSON.parse(friend?.friends)
+    };
+  });
+};
+
 const createRequest = async (sourceUserId: number, targetUserId: number) => {
   const sql = `
     INSERT INTO friends (
@@ -375,6 +559,7 @@ export default {
   getAllMyFriends,
   getAllMySentPendingRequests,
   getAllMyReceivedPendingRequests,
+  getAllFriendSuggestions,
   createRequest,
   updateRequestStatus,
   unfriend

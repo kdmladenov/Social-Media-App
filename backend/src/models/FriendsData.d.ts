@@ -1,3 +1,4 @@
+import FriendRequestType from './FriendRequestType';
 import FriendsType from './FriendsType';
 
 interface FriendsData {
@@ -8,9 +9,10 @@ interface FriendsData {
     sort: string,
     page: number,
     pageSize: number
-  ) => Promise<any>;
+  ) => Promise<FriendType[]>;
   getAllMySentPendingRequests: (userId: number) => Promise<FriendRequestType[]>;
   getAllMyReceivedPendingRequests: (userId: number) => Promise<FriendRequestType[]>;
+  getAllFriendSuggestions: (userId: number) => Promise<FriendType[]>;
   createRequest: (sourceUserId: number, targetUserId: number) => Promise<FriendRequestType>;
   updateRequestStatus: (friendRequest: FriendRequestType) => Promise<FriendRequestType>;
   unfriend: (userId: number, friendId: number) => Promise<FriendRequestType>;

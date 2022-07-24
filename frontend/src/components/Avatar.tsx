@@ -1,9 +1,9 @@
 import React from 'react';
 
 import './styles/Avatar.css';
-import { BASE_URL } from '../constants/constants';
-import getRandomNumber from '../helpers/getRandomNumber';
-import AvatarProps from '../models/components/AvatarProps';
+import { BASE_URL } from '../data/constants';
+import getRandomNumber from '../utils/getRandomNumber';
+import AvatarProps from '../types/components/AvatarProps';
 
 // classes: image_only, name_only, small
 

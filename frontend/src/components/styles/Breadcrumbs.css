@@ -1,0 +1,105 @@
+.breadcrumbs {
+  height: 30px;
+  width: fit-content;
+  box-shadow: var(--box_shadow);
+  border-radius: 5px;
+  background: var(--gray_background);;
+}
+
+.breadcrumbs ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.breadcrumbs ul li a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  float: left;
+  height: 30px;
+  background-color: var(--white);
+  text-align: center;
+  padding-left: 20px;
+  margin-right: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  position: relative;
+}
+
+.breadcrumbs ul li a span{
+  text-align: left;
+  max-width: 200px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: left;
+  word-break: break-all;
+}
+
+.breadcrumbs li a:after {
+  content: '';
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left: 15px solid var(--white);
+  position: absolute;
+  right: -15px;
+  top: 0;
+  z-index: 10;
+}
+
+.breadcrumbs li a:before {
+  content: '';
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left: 15px solid var(--gray_background);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+
+/* first child fixes*/
+.breadcrumbs li:first-child a:before {
+  border-left: 15px solid transparent;
+}
+
+.breadcrumbs li:first-child a {
+  padding-left: 10px;
+  border-radius: 5px 0 0 5px;
+}
+
+/* last child fixes*/
+.breadcrumbs li:last-child a:after {
+  display: none;
+}
+
+.breadcrumbs li:last-child a {
+  padding-right: 10px;
+  border-radius: 0 5px 5px 0;
+}
+
+.breadcrumbs ul li:last-child a {
+  margin-right: 0px;
+}
+
+/* Hover */
+.breadcrumbs li:hover a:after {
+  border-left-color: var(--gray_light);
+}
+
+.breadcrumbs li:last-child:hover a {
+  pointer-events: none;
+}
+
+.breadcrumbs li:last-child:hover a:after {
+  pointer-events: none;
+  border-left-color: transparent;
+}
+
+.breadcrumbs ul li a:hover {
+  background: var(--gray_light);
+  color: var(--cheetos);
+}
+

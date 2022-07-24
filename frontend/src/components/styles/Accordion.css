@@ -1,0 +1,84 @@
+.accordion {
+  width: 100%;
+  max-width: 100vw;
+  height: auto;
+  background: transparent;
+}
+
+.accordion_item {
+  background: var(--white);
+  margin-bottom: 0;
+  box-shadow: var(--box_shadow);
+  transition: 0.4s ease-out;
+}
+
+.accordion_item.show {
+  margin: 10px 0;
+  border-radius: 5px;
+  box-shadow: var(--box_shadow);
+}
+/* first item and the next sibling of open */
+.accordion_item:first-child,
+.accordion_item.show + .accordion_item {
+  margin-top: 0;
+  border-radius: 5px 5px 0 0;
+  box-shadow: var(--box_shadow);
+}
+
+.accordion_item:last-child {
+  margin-bottom: 0;
+  border-radius: 0 0 5px 5px;
+  border-bottom: none;
+}
+
+.accordion_header {
+  display: grid;
+  grid-template-columns: 1fr 50px;
+  grid-template-areas: 'title button_group';
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 20px;
+  color: rgb(88, 88, 88);
+}
+
+.accordion_header:hover {
+  cursor: pointer;
+}
+
+.accordion_header.show {
+  box-shadow: var(--box_shadow);
+}
+
+.accordion_title {
+  grid-area: title;
+  height: 100%;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--gray_dark);
+}
+
+.accordion_button_group {
+  grid-area: button_group;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  max-width: 150px;
+}
+
+.accordion_body {
+  display: none;
+  width: 100%;
+  padding: 0 30px;
+  font-size: 18px;
+  overflow: hidden;
+}
+
+.accordion_body.show {
+  display: block;
+  padding: 10px 30px;
+}

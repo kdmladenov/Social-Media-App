@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import ConfirmMessageProps from '../models/components/ConfirmMessageProps';
+import ConfirmMessageProps from '../types/components/ConfirmMessageProps';
 import Button from './Button';
 
 import './styles/ConfirmMessage.css';

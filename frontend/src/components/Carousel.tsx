@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 
 import './styles/Carousel.css';
 import { useResize } from '../hooks/useResize';
-import CarouselProps from '../models/components/CarouselProps';
+import CarouselProps from '../types/components/CarouselProps';
 
 const Carousel: React.FC<CarouselProps> = ({ title, children }) => {
   const [showControls, setShowControls] = useState(false);
@@ -26,7 +26,7 @@ const Carousel: React.FC<CarouselProps> = ({ title, children }) => {
 
   return (
     <div
-      className="carousel_container card"
+      className="carousel_container"
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >

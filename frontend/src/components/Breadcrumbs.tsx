@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import BreadcrumbsProps from '../models/components/BreadcrumbsProps';
+import BreadcrumbsProps from '../types/components/BreadcrumbsProps';
 
 import './styles/Breadcrumbs.css';
 

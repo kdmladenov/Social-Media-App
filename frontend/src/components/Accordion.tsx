@@ -6,7 +6,7 @@ import AccordionType, {
   AccordionItemType,
   AccordionTitleType,
   ToggleContextType
-} from '../models/components/AccordionProps';
+} from '../types/components/AccordionProps';
 import './styles/Accordion.css';
 import Tooltip from './Tooltip';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import DividerProps from '../models/components/DividerProps';
+import DividerProps from '../types/components/DividerProps';
 import './styles/Divider.css';
 
 const Divider: React.FC<DividerProps> = ({ vertical = false, margin = false, children }) => {

@@ -59,7 +59,6 @@
 .avatar:hover,
 .avatar:focus {
   cursor: pointer;
-  background-color: var(--gray_light);
 }
 
 /* Image Only */

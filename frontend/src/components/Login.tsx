@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import './styles/Login.css';
-import { login } from '../state/actions/userActions';
+import { login } from '../context/actions/userActions';
 import useTypedSelector from '../hooks/useTypedSelector';
 
 import Loader from './Loader';

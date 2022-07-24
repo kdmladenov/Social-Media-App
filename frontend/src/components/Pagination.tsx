@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import './styles/Pagination.css';
 
 import Button from './Button';
-import PaginationProps from '../models/components/PaginationProps';
+import PaginationProps from '../types/components/PaginationProps';
 
 const Pagination: React.FC<PaginationProps> = ({
   updateQuery,

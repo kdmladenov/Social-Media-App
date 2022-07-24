@@ -1,0 +1,64 @@
+.message_container {
+  position: relative;
+  width: 100%;
+  height: fit-content;
+  display: grid;
+  grid-template-columns: 20px 1fr 10px;
+  padding: 0 10px;
+  gap: 10px;
+  align-items: center;
+  border-radius: 5px;
+  box-shadow: var(--box_shadow_3);
+}
+.message_container:hover {
+  filter: brightness(97%);
+}
+
+.message {
+  font-size: 16px;
+  color: var(--white);
+  text-align: left;
+}
+
+.message_container i {
+  font-size: 20px;
+  color: var(--white);
+}
+
+.message i:hover {
+  color: var(--black);
+}
+
+.message_container .tooltip {
+  height: 100%;
+  text-align: end;
+  padding: 10px 0;
+}
+
+.message_container .tooltip i {
+  font-size: 13px;
+}
+
+.message_container .tooltip:hover {
+  cursor: pointer;
+}
+
+.message_container .tooltip:hover i {
+  color: black;
+}
+
+.message_container.error {
+  background: var(--red);
+}
+
+.message_container.success {
+  background: var(--mulah);
+}
+
+.message_container.info {
+  background: var(--dory);
+}
+
+.message_container.warning {
+  background: var(--masala);
+}

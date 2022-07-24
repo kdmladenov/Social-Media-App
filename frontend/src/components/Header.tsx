@@ -3,13 +3,11 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import './styles/Header.css';
-import { getUserDetails, logout } from '../state/actions/userActions';
-import { adminMenuMap, userMenuMap } from '../inputs/headerMenuMaps';
-import { BASE_URL } from '../constants/constants';
+import { getUserDetails, logout } from '../context/actions/userActions';
+import { userMenuMap } from '../data/inputs/headerMenuMaps';
 import useTypedSelector from '../hooks/useTypedSelector';
 
 import SearchBar from './SearchBar';
-import MegaMenu from './MegaMenu';
 import Login from './Login';
 import DropDown from './Dropdown';
 import Avatar from './Avatar';
@@ -48,7 +46,7 @@ const Header: React.FC = () => {
 
       <div className="header_menu_btn_group">
         <DropDown
-          userInfo={userInfo}
+          // userInfo={userInfo}
           button={
             <div className={`header_menu_btn ${userInfo?.token ? 'user' : 'login_menu'}`}>
               <Avatar
@@ -64,7 +62,7 @@ const Header: React.FC = () => {
           {userInfo?.token ? (
             <ul className="menu_user">
               {userMenuMap.map((link, index) => (
-                <NavLink to={link.path}>
+                <NavLink to={link.path} key={link.path}>
                   <li key={index}>{link.label}</li>
                 </NavLink>
               ))}
@@ -74,7 +72,7 @@ const Header: React.FC = () => {
             <Login />
           )}
         </DropDown>
-        {userInfo?.role === 'admin' && (
+        {/* {userInfo?.role === 'admin' && (
           <DropDown
             userInfo={userInfo}
             button={
@@ -86,13 +84,13 @@ const Header: React.FC = () => {
           >
             <ul className="menu_admin">
               {adminMenuMap.map((link, index) => (
-                <NavLink to={link.path}>
+                <NavLink to={link.path} key={link.path}>
                   <li key={index}>{link.label}</li>
                 </NavLink>
               ))}
             </ul>
           </DropDown>
-        )}
+        )} */}
       </div>
     </header>
   );

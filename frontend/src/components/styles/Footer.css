@@ -1,0 +1,42 @@
+footer {
+  height: 40px;
+  background: var(--white);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: inset 0px 10px 15px rgba(206, 204, 204, 0.6);
+}
+footer .button_group {
+  display: flex;
+  margin-right: 20px;
+  gap: 20px;
+}
+
+footer span {
+  color: var(--gray_dark);
+  margin-left: 20px;
+}
+
+footer button {
+  background-color: var(--gray);
+  height: 25px;
+  width: 25px;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--gray_dark);
+  font-size: 17px;
+  transition: 0.5s;
+}
+
+footer button:hover {
+  cursor: pointer;
+  box-shadow: var(--box_shadow_angle);
+  color: var(--sky);
+}
+
+footer button:active {
+  box-shadow: var(--box_shadow_angle_active);
+}

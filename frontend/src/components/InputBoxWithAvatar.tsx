@@ -5,7 +5,7 @@ import './styles/InputBoxWithAvatar.css';
 
 import Avatar from './Avatar';
 import Button from './Button';
-import InputBoxWithAvatarProps from '../models/components/InputBoxWithAvatarProps';
+import InputBoxWithAvatarProps from '../types/components/InputBoxWithAvatarProps';
 
 const InputBoxWithAvatar: React.FC<InputBoxWithAvatarProps> = ({
   resourceId,
@@ -17,7 +17,8 @@ const InputBoxWithAvatar: React.FC<InputBoxWithAvatarProps> = ({
   placeholder,
   errorMessage,
   closedButtonText,
-  closedAtStart
+  closedAtStart,
+  onClick
 }) => {
   const dispatch = useDispatch();
 
@@ -58,6 +59,7 @@ const InputBoxWithAvatar: React.FC<InputBoxWithAvatarProps> = ({
             placeholder={placeholder}
             onChange={inputHandler}
             onKeyUp={keyPressHandler}
+            onClick={onClick}
           />
 
           <p className={content.length > 0 && !isValid ? 'show_message' : ''}>{errorMessage}</p>

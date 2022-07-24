@@ -4,9 +4,9 @@ import './styles/DropDown.css';
 import useOutsideClick from '../hooks/useOutsideClick';
 
 import Tooltip from './Tooltip';
-import DropDownProps from '../models/components/DropDownProps';
+import DropDownProps from '../types/components/DropDownProps';
 
-const DropDown: React.FC<DropDownProps> = ({ button, tooltipText, userInfo, children }) => {
+const DropDown: React.FC<DropDownProps> = ({ button, tooltipText = '', children }) => {
   const [showBody, setShowBody] = useState(false);
 
   let nodeRef: LegacyRef<HTMLDivElement> = useOutsideClick(() => setShowBody(false));
@@ -17,10 +17,7 @@ const DropDown: React.FC<DropDownProps> = ({ button, tooltipText, userInfo, chil
         <Tooltip text={tooltipText}>{button}</Tooltip>
       </div>
 
-      <div
-        onClick={() => userInfo?.token && setShowBody(false)}
-        className={`body ${showBody ? 'show' : ''}`}
-      >
+      <div onClick={() => setShowBody(false)} className={`body ${showBody ? 'show' : ''}`}>
         {children}
       </div>
     </div>

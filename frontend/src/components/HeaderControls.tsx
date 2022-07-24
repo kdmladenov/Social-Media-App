@@ -6,7 +6,7 @@ import Breadcrumbs from './Breadcrumbs';
 import Button from './Button';
 import DropdownSelect from './DropdownSelect';
 import SearchBox from './SearchBox';
-import HeaderControlsProps from '../models/components/HeaderControlsProps';
+import HeaderControlsProps from '../types/components/HeaderControlsProps';
 
 const HeaderControls: React.FC<HeaderControlsProps> = ({
   updateQuery,

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { IMAGE } from '../constants/constants';
-import UserType from '../models/UserType';
-import { updateUserAvatarReducer } from '../state/actions/userActions';
+import { updateUserAvatarReducer } from '../context/actions/userActions';
+import { IMAGE } from '../data/constants';
+import UserType from '../types/UserType';
 import Button from './Button';
 import Divider from './Divider';
+
 import './styles/PhotoUploadForm.css';
-import Tooltip from './Tooltip';
 
 const PhotoUploadForm: React.FC<{ user: UserType; multiple?: boolean }> = ({
   user,

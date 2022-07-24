@@ -1,5 +1,5 @@
 import React from 'react';
-import DropdownSelectProps from '../models/components/DropdownSelectProps';
+import DropdownSelectProps from '../types/components/DropdownSelectProps';
 import './styles/DropdownSelect.css';
 
 const DropdownSelect: React.FC<DropdownSelectProps> = ({

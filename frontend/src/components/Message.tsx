@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import MessageProps from '../models/components/MessageProps';
+import MessageProps from '../types/components/MessageProps';
 import './styles/Message.css';
 import Tooltip from './Tooltip';
 

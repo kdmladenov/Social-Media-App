@@ -4,7 +4,7 @@ import './styles/EditButtons.css';
 
 import Button from './Button';
 import Tooltip from './Tooltip';
-import EditButtonsProps from '../models/components/EditButtonsProps';
+import EditButtonsProps from '../types/components/EditButtonsProps';
 
 const EditButtons: React.FC<EditButtonsProps> = ({
   createMode = false,

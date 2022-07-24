@@ -1,0 +1,7 @@
+select.dropdown_select {
+  border-radius: 5px;
+  background: var(--white);
+  font-size: 13px;
+  font-weight: 400;
+  box-shadow: var(--box_shadow_2);
+}

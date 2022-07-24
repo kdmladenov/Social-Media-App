@@ -1,0 +1,84 @@
+.pagination {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px auto;
+}
+
+.pagination ul {
+  width: fit-content;
+  max-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination .page_btn.edge.left {
+  border-radius: var(--border_radius_left);
+}
+
+.pagination .page_btn.edge.right {
+  border-radius: var(--border_radius_right);
+}
+
+/* In case pagination is visible with a single page */
+.pagination .page_btn.edge.right.left {
+  border-radius: var(--border_radius);
+}
+
+.pagination > ul button,
+.pagination > ul button.button_container,
+.pagination > ul li,
+.pagination > ul span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 30px;
+  padding: 0;
+  margin: 0;
+}
+
+.pagination > ul li {
+  border-left: 1px solid var(--gray_light);
+}
+
+.pagination .page_btn.current {
+  background-color: var(--gray_light);
+  pointer-events: none;
+}
+
+.pagination .page_btn:not(.pagination .page_btn.current):hover {
+  background-color: var(--gray_light);
+}
+
+.pagination .page_btn span:not(.pagination .page_btn.current span):hover {
+  font-weight: 700;
+}
+
+.pagination .page_btn.current {
+  background-color: var(--gray_light);
+  pointer-events: none;
+}
+
+.pagination .page_btn.current span {
+  font-weight: 700;
+}
+
+.pagination > ul li:first-child {
+  border-left: none;
+}
+
+.pagination .dots {
+  display: none;
+}
+
+.pagination .dots.visible {
+  display: block;
+}
+
+.pagination .dots button {
+  pointer-events: none;
+}

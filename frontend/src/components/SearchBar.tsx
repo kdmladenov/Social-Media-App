@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 
 import './styles/SearchBar.css';
 import useOutsideClick from '../hooks/useOutsideClick';
-import { PREVIOUS_SEARCHES_ARRAY_MAX_LENGTH } from '../constants/constants';
+import { PREVIOUS_SEARCHES_ARRAY_MAX_LENGTH } from '../data/constants';
 
 import Tooltip from './Tooltip';
 import Button from './Button';

@@ -1,0 +1,14 @@
+.scroll_to_top_btn i{
+  display: none;
+  position: fixed;
+  bottom: 50px;
+  right: 20px;
+  z-index: 100;
+  font-size: 30px;
+  color: rgb(184, 182, 182);
+  cursor: pointer;
+}
+
+.scroll_to_top_btn.top i{
+  display: block;
+}

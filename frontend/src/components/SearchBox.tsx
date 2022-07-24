@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 
 import './styles/SearchBox.css';
 import useThrottle from '../hooks/useThrottle';
-import { RESET_BTN_THRESHOLD_SHOW_CHAR_COUNT, THROTTLE_DELAY } from '../constants/constants';
+import { RESET_BTN_THRESHOLD_SHOW_CHAR_COUNT, THROTTLE_DELAY } from '../data/constants';
 
 import Tooltip from './Tooltip';
-import SearchBoxProps from '../models/components/SearchBoxProps';
+import SearchBoxProps from '../types/components/SearchBoxProps';
 
 const SearchBox: React.FC<SearchBoxProps> = ({ updateQuery, resource }) => {
   const [searchTerm, setSearchTerm] = useState('');

@@ -1,0 +1,353 @@
+.timeline_container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  justify-content: center;
+  padding-top: 10px;
+}
+
+/* The line */
+.timeline_container::after {
+  content: '';
+  position: absolute;
+  left: calc(50% - 5px);
+  background-color: var(--gray_light);
+  width: 10px;
+  height: calc(100% - 10px);
+  z-index: 1;
+}
+
+/* Item */
+.timeline_item {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 30px;
+  position: relative;
+  margin: 10px 0;
+  width: 50%;
+  z-index: 2;
+}
+
+.timeline_item:nth-child(odd) {
+  align-self: flex-end;
+  justify-content: flex-start;
+  padding-left: 30px;
+  padding-right: 0;
+}
+
+/* Content */
+.timeline_item_content {
+  width: fit-content;
+  height: fit-content;
+  border-radius: var(--border_radius);
+  background-color: var(--white);
+  border: 2px solid var(--gray);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  position: relative;
+  text-align: right;
+}
+
+.timeline_item:nth-child(odd) .timeline_item_content {
+  text-align: left;
+  align-items: flex-start;
+}
+
+/* Pointer */
+.timeline_item_content::after {
+  content: ' ';
+  background-color: var(--white);
+  position: absolute;
+  right: -9px;
+  top: calc(50% - 9px);
+  transform: rotate(45deg);
+  width: 15px;
+  height: 15px;
+  z-index: 2;
+  border: 2px solid var(--gray);
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+}
+
+.timeline_item:nth-child(odd) .timeline_item_content::after {
+  right: auto;
+  left: -9px;
+  border: 2px solid var(--gray);
+  border-top-color: transparent;
+  border-right-color: transparent;
+  z-index: 2;
+}
+
+/* Point, button, date */
+.timeline_item_content .remove_btn,
+.timeline_item_content .point {
+  background-color: var(--orange);
+  border: none;
+  border-radius: 50%;
+  position: absolute;
+  top: calc(50% - 5px);
+  right: -37px;
+  width: 10px;
+  height: 10px;
+  z-index: 2;
+}
+
+.timeline_item_content .remove_btn {
+  background-color: var(--gray);
+  color: var(--gray_dark);
+  border: 2px solid var(--gray_dark);
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: calc(50% - 10px);
+  right: -42px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.timeline_item_content .date {
+  position: absolute;
+  color: var(--gray_dark);
+  font-size: 15px;
+  top: calc(50% - 10px);
+  right: -205px;
+  width: 160px;
+  height: 20px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.timeline_item:nth-child(odd) .timeline_item_content .point,
+.timeline_item:nth-child(odd) .timeline_item_content .remove_btn,
+.timeline_item:nth-child(odd) .timeline_item_content .date {
+  right: auto;
+}
+
+.timeline_item:nth-child(odd) .timeline_item_content .point {
+  left: -37px;
+}
+
+.timeline_item:nth-child(odd) .timeline_item_content .remove_btn {
+  left: -42px;
+}
+
+.timeline_item:nth-child(odd) .timeline_item_content .date {
+  left: -205px;
+  text-align: right;
+}
+
+/* Horizontal version */
+.timeline_container.horizontal .timeline_item_content .point {
+  top: calc(100% + 20px);
+  right: calc(50% - 2.5px);
+}
+
+.timeline_container.horizontal .timeline_item_content .remove_btn {
+  top: calc(100% + 20px);
+  right: calc(50% - 9px);
+}
+
+.timeline_container.horizontal .timeline_item_content .date {
+  top: calc(100% + 35px);
+  right: calc(50% - 80px + 2.5px);
+  text-align: center;
+}
+
+.timeline_container.horizontal {
+  flex-direction: row;
+  width: fit-content;
+  height: 500px;
+}
+
+.timeline_container.horizontal::after {
+  left: 0;
+  top: calc(100% - 70px);
+  background-color: var(--gray);
+  width: 100%;
+  height: 10px;
+}
+
+.timeline_container.horizontal .timeline_item {
+  align-self: flex-start;
+  display: flex;
+  justify-content: flex-start;
+  padding: 0;
+  margin: 0 10px;
+  width: 300px;
+}
+
+.timeline_container.horizontal .timeline_item_content {
+  width: 300px;
+  height: 400px;
+  text-align: top;
+}
+.timeline_container.horizontal .timeline_item_content::after,
+.timeline_container.horizontal .timeline_item:nth-child(odd) .timeline_item_content::after {
+  position: absolute;
+  right: calc(50% - 9px);
+  top: calc(100% - 9px);
+  width: 15px;
+  height: 15px;
+}
+.timeline_container.horizontal .timeline_item_content::after {
+  transform: rotate(135deg);
+}
+.timeline_container.horizontal .timeline_item:nth-child(odd) .timeline_item_content::after {
+  transform: rotate(-45deg);
+}
+
+.timeline_container.horizontal .timeline_item:nth-child(odd) .timeline_item_content::after {
+  left: calc(50% - 10px);
+}
+
+.timeline_container.horizontal .timeline_item:nth-child(odd) .timeline_item_content .point,
+.timeline_container.horizontal .timeline_item:nth-child(odd) .timeline_item_content .remove_btn,
+.timeline_container.horizontal
+  .timeline_container.horizontal
+  .timeline_item:nth-child(odd)
+  .timeline_item_content
+  .date {
+  right: auto;
+}
+
+.timeline_container.horizontal .timeline_item:nth-child(odd) .timeline_item_content .point {
+  left: calc(50% - 5px);
+}
+.timeline_container.horizontal .timeline_item:nth-child(odd) .timeline_item_content .remove_btn {
+  left: calc(50% - 10px);
+  z-index: 100;
+}
+.timeline_container.horizontal .timeline_item:nth-child(odd) .timeline_item_content .date {
+  left: calc(50% - 80px);
+  text-align: center;
+}
+
+.timeline_container.horizontal .post_card {
+  width: 296px;
+  z-index: 10;
+  box-shadow: none;
+}
+
+/* Media Queries */
+@media (max-width: 1280px) {
+  .timeline_container {
+    padding-left: 60px;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: fit-content;
+  }
+
+  .timeline_container.horizontal {
+    padding-left: 10px;
+  }
+
+  .timeline_container::after {
+    left: calc(60px - 5px);
+  }
+
+  .timeline_item {
+    align-self: flex-end;
+    padding-left: 30px;
+    padding-right: 0;
+  }
+  .timeline_item:nth-child(odd) {
+    justify-content: flex-end;
+  }
+
+  .timeline_item_content {
+    text-align: left;
+    align-items: flex-start;
+  }
+
+  .timeline_container .timeline_item_content::after {
+    right: auto;
+    left: -9px;
+    border-bottom-color: var(--gray);
+    border-left-color: var(--gray);
+    border-top-color: transparent;
+    border-right-color: transparent;
+  }
+
+  .timeline_container.horizontal .timeline_item_content::after,
+  .timeline_container.horizontal .timeline_item_content .point,
+  .timeline_container.horizontal .timeline_item_content .date {
+    left: auto;
+  }
+
+  .timeline_container.horizontal .timeline_item_content::after {
+    transform: rotate(-45deg);
+  }
+
+  .timeline_item_content .point {
+    left: -35px;
+  }
+
+  .timeline_item_content .remove_btn {
+    left: -40px;
+  }
+
+  .timeline_item_content .date {
+    left: -205px;
+    text-align: right;
+  }
+}
+
+@media (max-width: 768px) {
+  .timeline_container .timeline_item_content {
+    width: 300px;
+    height: 400px;
+    text-align: top;
+  }
+  .timeline_container .timeline_item_content .post_card {
+    width: 296px;
+    height: 400px;
+    grid-template-columns: 1fr;
+    grid-template-rows: 200px 50px 30px 30px 1fr;
+    grid-template-areas: 'image' ' title' 'rating' 'price' 'cart_button';
+    padding: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .timeline_container .timeline_item_content .post_card {
+    width: 280px;
+    padding: 5px;
+  }
+  .timeline_container {
+    padding-left: 20px;
+  }
+  .timeline_container::after {
+    left: 45px;
+  }
+  .timeline_item_content .remove_btn,
+  .timeline_item_content .point {
+    right: -15px;
+  }
+  .timeline_item:nth-child(odd) .timeline_item_content .point,
+  .timeline_item_content .point {
+    left: -25px;
+  }
+
+  .timeline_item:nth-child(odd) .timeline_item_content .remove_btn,
+  .timeline_item_content .remove_btn {
+    left: -30px;
+  }
+
+  .timeline_item:nth-child(odd) .timeline_item_content .date,
+  .timeline_item_content .date {
+    left: -190px;
+    top: calc(50% - 20px);
+    display: flex;
+    flex-direction: column;
+    height: 40px;
+    gap: 0px;
+    justify-content: center;
+  }
+  .timeline_item:nth-child(odd) .timeline_item_content .date span,
+  .timeline_item_content .date span {
+    line-height: 20px;
+  }
+}

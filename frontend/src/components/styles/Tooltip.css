@@ -1,0 +1,40 @@
+.tooltip {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.tooltip .tooltip_body {
+  visibility: hidden;
+  position: absolute;
+  display: inline-block;
+  white-space: nowrap;
+  height: fit-content;
+  width: fit-content;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 1001;
+  padding: 3px;
+  line-height: 14px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  text-transform:none !important;
+  border-radius: 3px;
+  background: var(--black);
+  color: var(--white);
+}
+/* 
+.tooltip:hover .tooltip_body,
+.tooltip .tooltip_body:hover {
+  visibility: visible;
+  opacity: 1;
+} */
+
+/* Bottom-default */
+.tooltip .tooltip_body.bottom {
+  top: calc(100% + 5px);
+}
+/* Top */
+.tooltip .tooltip_body.top {
+  bottom: calc(100% + 5px);
+}

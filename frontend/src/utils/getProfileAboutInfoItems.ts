@@ -1,8 +1,8 @@
-import profileUpdateInitialInputState from '../inputs/profileUpdateInitialInputState';
-import FormInputDataType from '../models/FormInputDataType';
-import SchoolType from '../models/SchoolType';
-import UserType from '../models/UserType';
-import WorkplaceType from '../models/WorkplaceType';
+import profileUpdateInitialInputState from '../data/inputs/profileUpdateInitialInputState';
+import FormInputDataType from '../types/FormInputDataType';
+import SchoolType from '../types/SchoolType';
+import UserType from '../types/UserType';
+import WorkplaceType from '../types/WorkplaceType';
 import getDate from './getDate';
 
 interface ProfileItemType {

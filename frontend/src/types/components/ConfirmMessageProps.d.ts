@@ -1,9 +1,9 @@
 import React from 'react';
 import PostDeleteActionType from '../models/state/actions/PostDeleteActionType';
 import PostRestoreActionType from '../models/state/actions/PostRestoreActionType';
-import StateType from '../models/state/StateType';
-import UserDeleteActionType from '../state/actions/UserDeleteActionType';
-import UserRestoreActionType from '../state/actions/UserRestoreActionType';
+import StoreType from '../models/state/StoreType';
+import UserDeleteActionType from '../context/actions/UserDeleteActionType';
+import UserRestoreActionType from '../context/actions/UserRestoreActionType';
 import UserType from '../models/UserType';
 
 interface ConfirmMessageProps {
@@ -17,7 +17,7 @@ interface ConfirmMessageProps {
     dispatch: Dispatch<
       PostDeleteActionType | PostRestoreActionType | UserDeleteActionType | UserRestoreActionType
     >,
-    getState: () => StateType
+    getState: () => StoreType
   ) => Promise<void>;
   actionSecondParam?: { [key: keyof UserType]: string };
 }

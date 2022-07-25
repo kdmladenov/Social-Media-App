@@ -32,29 +32,26 @@ import {
   STORY_UPDATE_REQUEST,
   STORY_UPDATE_SUCCESS
 } from '../constants/storyConstants';
-import { BASE_URL } from '../../constants/constants';
-import StateType from '../../models/state/StateType';
+import { BASE_URL } from '../../data/constants';
+import StoreType from '../../types/context/StoreType';
 import { Dispatch } from 'redux';
-import StoriesMyListActionType from '../../models/state/actions/StoriesMyListActionType';
-import StoryDeleteActionType from '../../models/state/actions/StoryDeleteActionType';
-import StoryRestoreActionType from '../../models/state/actions/StoryRestoreActionType';
-import StoryType from '../../models/StoryType';
-import StoryCreateActionType from '../../models/state/actions/StoryCreateActionType';
-import StoryUpdateActionType from '../../models/state/actions/StoryUpdateActionType';
-import StoryImageUploadActionType from '../../models/state/actions/StoryImageUploadActionType';
-import StoryImagesListActionType from '../../models/state/actions/StoryImagesListActionType';
-import StoryImageDeleteActionType from '../../models/state/actions/StoryImageDeleteActionType';
-import StoryImageSetMainActionType from '../../models/state/actions/StoryImageSetMainActionType';
-import StoryDetailsActionType from '../../models/state/actions/StoryDetailsActionType';
+import StoriesMyListActionType from '../../types/context/actions/StoriesMyListActionType';
+import StoryDeleteActionType from '../../types/context/actions/StoryDeleteActionType';
+import StoryRestoreActionType from '../../types/context/actions/StoryRestoreActionType';
+import StoryType from '../../types/StoryType';
+import StoryCreateActionType from '../../types/context/actions/StoryCreateActionType';
+import StoryUpdateActionType from '../../types/context/actions/StoryUpdateActionType';
+import StoryImageUploadActionType from '../../types/context/actions/StoryImageUploadActionType';
+import StoryImagesListActionType from '../../types/context/actions/StoryImagesListActionType';
+import StoryImageDeleteActionType from '../../types/context/actions/StoryImageDeleteActionType';
+import StoryImageSetMainActionType from '../../types/context/actions/StoryImageSetMainActionType';
+import StoryDetailsActionType from '../../types/context/actions/StoryDetailsActionType';
 
 export const listMyStories =
   (endpoint: string = '') =>
-  async (dispatch: Dispatch<StoriesMyListActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<StoriesMyListActionType>, getState: () => StoreType) => {
     try {
       dispatch({ type: STORY_MY_LIST_REQUEST });
-
-      // console.log('dispatch')
-
       // access to the logged in user info
       const {
         userLogin: { userInfo }
@@ -67,8 +64,6 @@ export const listMyStories =
       };
 
       const { data } = await axios.get(`${BASE_URL}/stories?${endpoint}`, config);
-
-      // console.log(data, 'data');
 
       dispatch({
         type: STORY_MY_LIST_SUCCESS,
@@ -119,7 +114,7 @@ export const listStoryDetails =
 
 export const deleteStory =
   (storyId: number) =>
-  async (dispatch: Dispatch<StoryDeleteActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<StoryDeleteActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: STORY_DELETE_REQUEST
@@ -159,7 +154,7 @@ export const deleteStory =
 
 export const restoreStory =
   (storyId: number) =>
-  async (dispatch: Dispatch<StoryRestoreActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<StoryRestoreActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: STORY_RESTORE_REQUEST
@@ -199,7 +194,7 @@ export const restoreStory =
 
 export const createStory =
   (_: number, storyData: StoryType) =>
-  async (dispatch: Dispatch<StoryCreateActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<StoryCreateActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: STORY_CREATE_REQUEST
@@ -242,7 +237,7 @@ export const updateStory =
   (storyId: number, updatedStory: StoryType) =>
   async (
     dispatch: Dispatch<StoryUpdateActionType | StoryDetailsActionType>,
-    getState: () => StateType
+    getState: () => StoreType
   ) => {
     try {
       dispatch({
@@ -299,7 +294,7 @@ export const uploadStoryImage =
 
     imageAddress?: string
   ) =>
-  async (dispatch: Dispatch<StoryImageUploadActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<StoryImageUploadActionType>, getState: () => StoreType) => {
     // mode: 'file_upload' or 'add_image_url'
     let imageUrl = imageAddress || '';
 
@@ -381,7 +376,7 @@ export const listStoryImages =
 
 export const deleteStoryImage =
   (storyImageId: number) =>
-  async (dispatch: Dispatch<StoryImageDeleteActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<StoryImageDeleteActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: STORY_IMAGE_DELETE_REQUEST
@@ -416,7 +411,7 @@ export const deleteStoryImage =
 
 export const setImageAsMain =
   (storyImageId: number) =>
-  async (dispatch: Dispatch<StoryImageSetMainActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<StoryImageSetMainActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: STORY_IMAGE_SET_MAIN_REQUEST

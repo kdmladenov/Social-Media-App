@@ -32,16 +32,16 @@ import {
   STORY_UPDATE_RESET,
   STORY_UPDATE_SUCCESS
 } from '../constants/storyConstants';
-import StoryCreateActionType from '../../models/state/actions/StoryCreateActionType';
-import StoryUpdateActionType from '../../models/state/actions/StoryUpdateActionType';
-import StoryImageUploadActionType from '../../models/state/actions/StoryImageUploadActionType';
-import StoryImagesListActionType from '../../models/state/actions/StoryImagesListActionType';
-import StoryImageDeleteActionType from '../../models/state/actions/StoryImageDeleteActionType';
-import StoryImageSetMainActionType from '../../models/state/actions/StoryImageSetMainActionType';
-import StoryDetailsActionType from '../../models/state/actions/StoryDetailsActionType';
-import StoryRestoreActionType from '../../models/state/actions/StoryRestoreActionType';
-import StoryDeleteActionType from '../../models/state/actions/StoryDeleteActionType';
-import StoriesMyListActionType from '../../models/state/actions/StoriesMyListActionType';
+import StoryCreateActionType from '../../types/context/actions/StoryCreateActionType';
+import StoryUpdateActionType from '../../types/context/actions/StoryUpdateActionType';
+import StoryImageUploadActionType from '../../types/context/actions/StoryImageUploadActionType';
+import StoryImagesListActionType from '../../types/context/actions/StoryImagesListActionType';
+import StoryImageDeleteActionType from '../../types/context/actions/StoryImageDeleteActionType';
+import StoryImageSetMainActionType from '../../types/context/actions/StoryImageSetMainActionType';
+import StoryDetailsActionType from '../../types/context/actions/StoryDetailsActionType';
+import StoryRestoreActionType from '../../types/context/actions/StoryRestoreActionType';
+import StoryDeleteActionType from '../../types/context/actions/StoryDeleteActionType';
+import StoriesMyListActionType from '../../types/context/actions/StoriesMyListActionType';
 
 export const storiesMyListReducer = (state = { stories: [] }, action: StoriesMyListActionType) => {
   switch (action.type) {

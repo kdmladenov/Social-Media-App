@@ -1,0 +1,212 @@
+.stories_my {
+  width: 100%;
+  height: 100%;
+}
+
+.stories_my .carousel_container {
+  background-color: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.stories_my .carousel_container ul {
+  gap: 7px;
+}
+
+.stories_my .carousel_container li {
+  border-radius: 10px;
+  overflow-x: clip;
+  margin: 0;
+  padding: 0;
+}
+
+.stories_my .carousel_container li,
+.stories_my .carousel_container li .story_image {
+  height: 200px;
+  min-width: 130px;
+  width: 130px;
+}
+
+.stories_my .carousel_slider {
+  height: 100%;
+}
+
+.stories_my .carousel_header,
+.stories_my .carousel_slider::-webkit-scrollbar {
+  display: none;
+}
+
+/* Story card  */
+.stories_my li.story_card {
+  width: 120px;
+  height: 100%;
+  border-radius: 10px;
+  position: relative;
+}
+
+.stories_my li.story_card .story_image img {
+  object-fit: cover;
+}
+
+.stories_my li.story_card .avatar {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.stories_my li.story_card span.author_name {
+  position: absolute;
+  bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: var(--white);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* Buttons */
+/* Arrow buttons */
+.carousel_btn {
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  opacity: 1;
+}
+
+.carousel_btn.next {
+  border-radius: 50% 50% 50% 50%;
+  top: 50%;
+  right: 30px;
+}
+
+.carousel_btn.prev {
+  border-radius: 50% 50% 50% 50%;
+  top: 50%;
+  left: 30px;
+}
+
+.carousel_btn:hover {
+  border: solid 2px rgb(97, 96, 96);
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+.carousel_btn.next:hover {
+  border-radius: 50%;
+  border-right: solid 2px rgb(97, 96, 96);
+}
+
+.carousel_btn.prev:hover {
+  border-left: solid 2px rgb(97, 96, 96);
+  border-radius: 50%;
+}
+
+/* Full Screen Modal */
+#modal .modal_container.story {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: 'sidebar stories_container';
+}
+
+#modal .modal_container.story button.close_modal_btn {
+  height: 40px;
+  width: 40px;
+  font-size: 25px;
+  position: absolute;
+  top: 10px;
+  right: auto;
+  left: 10px;
+}
+
+/* Sidebar  */
+#modal .modal_container.story .stories_sidebar {
+  grid-area: sidebar;
+  height: 100%;
+  width: 100%;
+  background-color: var(--white);
+  padding: 50px 20px;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+#modal .modal_container.story .stories_sidebar ul {
+  width: 100%;
+  height: fit-content;
+  align-items: flex-start;
+  gap: 5px;
+}
+#modal .modal_container.story .stories_sidebar li.story_button {
+  width: 100%;
+  height: 80px;
+  justify-content: flex-start;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+#modal .modal_container.story .stories_sidebar li.story_button:hover,
+#modal .modal_container.story .stories_sidebar li.story_button.active {
+  background-color: var(--gray_background);
+}
+
+#modal .modal_container.story .stories_container {
+  grid-area: stories_container;
+}
+
+#modal .modal_container.story .stories_container .slider_container {
+  position: relative;
+}
+
+#modal .modal_container.story .stories_container .slider_container .slide,
+#modal .modal_container.story .stories_container .slider_container ul,
+#modal .modal_container.story .stories_container .slider_container ul li,
+#modal .modal_container.story .stories_container .slider_container ul li .slide_container {
+  width: 500px;
+  height: 900px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  overflow: clip;
+}
+
+#modal .modal_container.story .stories_container .slider_container ul li .slide_container {
+  position: relative;
+}
+
+#modal .modal_container.story .stories_container .slider_container ul li .slide_container .image {
+  z-index: 100;
+}
+#modal .modal_container.story .stories_container .slider_container li .slide_container .image img {
+  object-fit: contain;
+}
+
+#modal .modal_container.story .stories_container .slider_container ul li .blurred_background {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(20px);
+  z-index: 10;
+}
+
+/* Buttons */
+#modal .modal_container.story .stories_container .slider_container .next,
+#modal .modal_container.story .stories_container .slider_container .prev {
+  top: 120px;
+  transform: translateY(-100%);
+}
+
+#modal .modal_container.story .stories_container .slider_container .prev {
+  left: calc(50% - 350px);
+}
+
+#modal .modal_container.story .stories_container .slider_container .next {
+  right: calc(50% - 350px);
+}

@@ -1,0 +1,214 @@
+.post_card {
+  display: flex;
+  flex-direction: column;
+  padding: 15px 15px 0px 15px;
+  width: 100%;
+  height: fit-content;
+  border: 1px solid var(--gray);
+}
+
+.post_card .images {
+  margin: 0 -15px;
+  /* width: 100%; */
+  height: fit-content;
+  max-height: 768px;
+  overflow: hidden;
+  display: grid;
+  gap: 1px;
+}
+
+.post_card .images li {
+  width: 100%;
+}
+
+.post_card .images li img {
+  object-fit: cover;
+}
+.post_card .images li img:hover {
+  cursor: pointer;
+}
+
+.post_card .images.two {
+  grid-template-rows: 384px 383px;
+  grid-template-areas:
+    'image1'
+    'image2';
+}
+/* 
+.post_card .images.three {
+  grid-template-rows: 380px 380px;
+  grid-template-columns: 400px 270px;
+  grid-template-areas: 
+  'image1 image2'
+  'image1 image3';
+} */
+
+.post_card .images.three {
+  grid-template-columns: 339px 339px;
+  grid-template-rows: 490px 277px;
+  grid-template-areas:
+    'image1 image1'
+    'image2 image3';
+}
+
+.post_card .images.four,
+.post_card .images.more {
+  grid-template-columns: 226px 226px 226px;
+  grid-template-rows: 490px 277px;
+  grid-template-areas:
+    'image1 image1 image1'
+    'image2 image3 image4';
+}
+
+.post_card .images .image1 {
+  grid-area: image1;
+}
+
+.post_card .images .image2 {
+  grid-area: image2;
+}
+
+.post_card .images .image3 {
+  grid-area: image3;
+}
+
+.post_card .images .image4 {
+  grid-area: image4;
+  position: relative;
+}
+
+.post_card .images.more .image4 img {
+  filter: brightness(50%);
+}
+
+.post_card .images.more .image4 span {
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: 800;
+  font-size: 25px;
+}
+
+/* Full Screen Modal */
+#modal .modal_container.post_images {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: 1fr 360px;
+  grid-template-rows: 1fr;
+  grid-template-areas: 'post_images_container sidebar';
+  min-height: 100vh;
+  min-width: 100vw;
+}
+
+#modal .modal_container.post_images button.close_modal_btn {
+  height: 40px;
+  width: 40px;
+  font-size: 25px;
+  position: absolute;
+  top: 20px;
+  right: auto;
+  left: 10px;
+  background: transparent;
+}
+
+/* Sidebar  */
+#modal .modal_container.post_images .post_images_sidebar {
+  grid-area: sidebar;
+  background-color: var(--white);
+  height: 100%;
+  padding: 40px 20px;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+#modal .modal_container.post_images .post_images_container {
+  grid-area: post_images_container;
+  width: 100%;
+  height: 100%;
+  background-color: var(--black);
+}
+
+#modal .modal_container.post_images .post_images_container .slider_container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#modal .modal_container.post_images .post_images_container .slider_container .slide,
+#modal .modal_container.post_images .post_images_container .slider_container > ul,
+#modal .modal_container.post_images .post_images_container .slider_container ul li,
+#modal
+  .modal_container.post_images
+  .post_images_container
+  .slider_container
+  ul
+  li
+  .slide_container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  overflow: clip;
+  width: 100%;
+}
+
+
+#modal
+  .modal_container.post_images
+  .post_images_container
+  .slider_container
+  ul
+  li
+  .slide_container {
+  position: relative;
+}
+
+
+#modal
+  .modal_container.post_images
+  .post_images_container
+  .slider_container
+  ul
+  li
+  .slide_container
+  .image {
+  z-index: 100;
+}
+#modal
+  .modal_container.post_images
+  .post_images_container
+  .slider_container
+  li
+  .slide_container
+  .image
+  img {
+  object-fit: contain;
+}
+
+#modal
+  .modal_container.post_images
+  .post_images_container
+  .slider_container
+  ul
+  li
+  .blurred_background {
+  display: none;
+}
+
+/* Buttons */
+#modal .modal_container.post_images .post_images_container .slider_container .next,
+#modal .modal_container.post_images .post_images_container .slider_container .prev {
+  top: 50%;
+}
+
+#modal .modal_container.post_images .post_images_container .slider_container .prev {
+  left: - 50px;
+}
+
+#modal .modal_container.post_images .post_images_container .slider_container .next {
+  right: - 50px;
+}

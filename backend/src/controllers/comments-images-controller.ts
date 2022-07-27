@@ -1,9 +1,10 @@
 import express, { Request, Response } from 'express';
 
-import commentsServices from '../services/comments-services.js';
+import commentsImagesServices from '../services/comments-images-services.js';
 
 import commentsData from '../data/comments-data.js';
 import postsData from '../data/posts-data.js';
+import imagesData from '../data/images-data.js';
 
 import validateBody from '../middleware/validate-body.js';
 import loggedUserGuard from '../middleware/loggedUserGuard.js';
@@ -18,33 +19,32 @@ import voteCommentSchema from '../validator/create-comment-reaction-schema.js';
 import errors from '../constants/service-errors.js';
 import { paging } from '../constants/constants.js';
 import RequestQuery from '../models/RequestQuery.js';
+import commentsImagesData from '../data/comments-images-data.js';
 
-const commentsController = express.Router();
+const commentsImagesController = express.Router();
 
-commentsController
-  // @desc CREATE post comment
-  // @route POST/comments/:postId
+commentsImagesController
+  // @desc CREATE post image comment
+  // @route POST/comments-images/:postId/:imageId
   // @access Private - logged users
   .post(
-    '/:postId',
+    '/:postId/:imageId',
     authMiddleware,
     loggedUserGuard,
     validateBody('comment', createCommentSchema),
     errorHandler(async (req: Request, res: Response) => {
-      const { postId } = req.params;
+      const { postId, imageId } = req.params;
       const { content, replyTo } = req.body;
       const { userId: authorId } = req.user;
 
-      const { error, result } = await commentsServices.createComment(postsData, commentsData)(
-        content,
-        +authorId,
-        +postId,
-        replyTo
-      );
+      const { error, result } = await commentsImagesServices.createComment(
+        imagesData,
+        commentsImagesData
+      )(content, +authorId, +postId, +imageId, replyTo);
 
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
-          message: 'The post is not found.'
+          message: 'The post image is not found.'
         });
       } else {
         res.status(201).send(result);
@@ -53,7 +53,7 @@ commentsController
   )
 
   // @desc GET All post comments
-  // @route GET/comments/:postId
+  // @route GET/comments-images/:postId
   // @access Private - logged users
   .get(
     '/:postId',
@@ -69,13 +69,10 @@ commentsController
       if (+pageSize < paging.MIN_COMMENTS_PAGESIZE) pageSize = paging.MIN_COMMENTS_PAGESIZE;
       if (page < paging.DEFAULT_PAGE) page = paging.DEFAULT_PAGE;
 
-      const { error, result } = await commentsServices.getAllComments(commentsData, postsData)(
-        +postId,
-        search,
-        sort,
-        +page,
-        +pageSize
-      );
+      const { error, result } = await commentsImagesServices.getAllComments(
+        commentsImagesData,
+        postsData
+      )(+postId, search, sort, +page, +pageSize);
 
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
@@ -88,22 +85,22 @@ commentsController
   )
 
   // @desc EDIT post comment
-  // @route PUT/:commentId
+  // @route PUT /comments-images/:postImageCommentId
   // @access Private - logged users who have created the comment or Admin
   .put(
-    '/:commentId',
+    '/:postImageCommentId',
     authMiddleware,
     loggedUserGuard,
     validateBody('comment', updateCommentSchema),
     // errorHandler(
     async (req: Request, res: Response) => {
       const { content } = req.body;
-      const { commentId } = req.params;
+      const { postImageCommentId } = req.params;
       const { userId: authorId, role } = req.user;
 
-      const { error, result } = await commentsServices.updateComment(commentsData)(
+      const { error, result } = await commentsImagesServices.updateComment(commentsImagesData)(
         content,
-        +commentId,
+        +postImageCommentId,
         +authorId,
         role
       );
@@ -124,18 +121,18 @@ commentsController
   // )
 
   // @desc DELETE post comment
-  // @route DELETE/:commentId
+  // @route DELETE/comments-images/:postImageCommentId
   // @access Private - logged users who have created the comment or Admin
   .delete(
-    '/:commentId',
+    '/:postImageCommentId',
     authMiddleware,
     loggedUserGuard,
     errorHandler(async (req: Request, res: Response) => {
       const { userId: authorId, role } = req.user;
-      const { commentId } = req.params;
+      const { postImageCommentId } = req.params;
 
-      const { error, result } = await commentsServices.deleteComment(commentsData)(
-        +commentId,
+      const { error, result } = await commentsImagesServices.deleteComment(commentsImagesData)(
+        +postImageCommentId,
         +authorId,
         role
       );
@@ -154,4 +151,4 @@ commentsController
     })
   );
 
-export default commentsController;
+export default commentsImagesController;

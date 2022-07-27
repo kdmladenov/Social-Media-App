@@ -12,11 +12,11 @@ import errorHandler from '../middleware/errorHandler.js';
 import { authMiddleware } from '../authentication/auth.middleware.js';
 
 import errors from '../constants/service-errors.js';
-import createPostReactionSchema from '../validator/create-post-reaction-schema.js';
-import updatePostReactionSchema from '../validator/update-post-reaction-schema.js';
 import createCommentReactionSchema from '../validator/create-comment-reaction-schema.js';
 import commentsData from '../data/comments-data.js';
 import updateCommentReactionSchema from '../validator/update-comment-reaction-schema.js';
+import createReactionSchema from '../validator/create-reaction-schema.js';
+import updateReactionSchema from '../validator/update-reaction-schema.js';
 
 const reactionsController = express.Router();
 
@@ -28,7 +28,7 @@ reactionsController
     '/post/:postId',
     authMiddleware,
     loggedUserGuard,
-    validateBody('postReaction', createPostReactionSchema),
+    validateBody('reaction', createReactionSchema),
     errorHandler(async (req: Request, res: Response) => {
       const { postId } = req.params;
       const { reactionName } = req.body;
@@ -83,7 +83,7 @@ reactionsController
     '/post/:reactionId',
     authMiddleware,
     loggedUserGuard,
-    validateBody('postReaction', updatePostReactionSchema),
+    validateBody('reaction', updateReactionSchema),
     errorHandler(async (req: Request, res: Response) => {
       const { reactionName } = req.body;
       const { reactionId } = req.params;

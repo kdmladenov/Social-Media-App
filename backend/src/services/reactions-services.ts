@@ -7,7 +7,7 @@ import CommentsData from '../models/CommentsData.js';
 
 const getAllPostReactions =
   (reactionsData: ReactionsData, postsData: PostsData) => async (postId: number) => {
-    const existingPost = await postsData.getBy('post_id', postId);
+    const existingPost = await postsData.getBy('post_id', +postId);
 
     if (!existingPost) {
       return {
@@ -34,6 +34,29 @@ const createPostReaction =
         error: errors.RECORD_NOT_FOUND,
         createdPostReaction: null
       };
+    }
+
+    const existingReaction = await reactionsData.getPostReactionBy('post_id', +postId, +userId);
+
+    if (existingReaction) {
+      if (existingReaction.reactionName === reactionName) {
+        return {
+          error: null,
+          createdPostReaction: existingReaction
+        };
+      }
+
+      if (existingReaction.reactionName !== reactionName) {
+        const updatedPostReaction = await reactionsData.updatePostReaction(
+          reactionName,
+          existingReaction.reactionId
+        );
+
+        return {
+          error: null,
+          createdPostReaction: updatedPostReaction
+        };
+      }
     }
 
     const createdPostReaction = await reactionsData.createPostReaction(
@@ -103,104 +126,129 @@ const deletePostReaction =
     };
   };
 
-  const getAllCommentReactions =
-    (reactionsData: ReactionsData, commentsData: CommentsData) => async (commentId: number) => {
-      const existingComment = await commentsData.getBy('comment_id', commentId);
+const getAllCommentReactions =
+  (reactionsData: ReactionsData, commentsData: CommentsData) => async (commentId: number) => {
+    const existingComment = await commentsData.getBy('comment_id', commentId);
 
-      if (!existingComment) {
-        return {
-          error: errors.RECORD_NOT_FOUND,
-          commentReactions: null
-        };
-      }
-
-      const commentReactions = await reactionsData.getAllCommentReactions(commentId);
-
+    if (!existingComment) {
       return {
-        error: null,
-        commentReactions
+        error: errors.RECORD_NOT_FOUND,
+        commentReactions: null
       };
+    }
+
+    const commentReactions = await reactionsData.getAllCommentReactions(commentId);
+
+    return {
+      error: null,
+      commentReactions
     };
+  };
 
-  const createCommentReaction =
-    (commentsData: CommentsData, reactionsData: ReactionsData) =>
-    async (userId: number, commentId: number, reactionName: string) => {
-      const existingComment = await commentsData.getBy('comment_id', commentId);
+const createCommentReaction =
+  (commentsData: CommentsData, reactionsData: ReactionsData) =>
+  async (userId: number, commentId: number, reactionName: string) => {
+    const existingComment = await commentsData.getBy('comment_id', commentId);
 
-      if (!existingComment) {
-        return {
-          error: errors.RECORD_NOT_FOUND,
-          createdCommentReaction: null
-        };
-      }
-
-      const createdCommentReaction = await reactionsData.createCommentReaction(
-        userId,
-        commentId,
-        reactionName
-      );
-
+    if (!existingComment) {
       return {
-        error: null,
-        createdCommentReaction
+        error: errors.RECORD_NOT_FOUND,
+        createdCommentReaction: null
       };
+    }
+
+    const existingReaction = await reactionsData.getCommentReactionBy('comment_id', +commentId, +userId);
+
+    if (existingReaction) {
+      if (existingReaction.reactionName === reactionName) {
+        return {
+          error: null,
+          createdCommentReaction: existingReaction
+        };
+      }
+
+      if (existingReaction.reactionName !== reactionName) {
+        const updatedCommentReaction = await reactionsData.updateCommentReaction(
+          reactionName,
+          existingReaction.reactionId
+        );
+
+        return {
+          error: null,
+          createdCommentReaction: updatedCommentReaction
+        };
+      }
+    }
+
+    const createdCommentReaction = await reactionsData.createCommentReaction(
+      userId,
+      commentId,
+      reactionName
+    );
+
+    return {
+      error: null,
+      createdCommentReaction
     };
+  };
 
-  const updateCommentReaction =
-    (reactionsData: ReactionsData) =>
-    async (reactionName: string, reactionId: number, userId: number, role: RolesType) => {
-      const existingReaction = await reactionsData.getCommentReactionBy('reaction_id', +reactionId);
+const updateCommentReaction =
+  (reactionsData: ReactionsData) =>
+  async (reactionName: string, reactionId: number, userId: number, role: RolesType) => {
+    const existingReaction = await reactionsData.getCommentReactionBy('reaction_id', +reactionId);
 
-      if (!existingReaction) {
-        return {
-          error: errors.RECORD_NOT_FOUND,
-          updatedCommentReaction: null
-        };
-      }
-
-      // checks if the user isProfileOwner or is admin
-      if (+existingReaction.userId !== +userId && role !== rolesEnum.admin) {
-        return {
-          error: errors.OPERATION_NOT_PERMITTED,
-          updatedCommentReaction: null
-        };
-      }
-
-      const updatedCommentReaction = await reactionsData.updateCommentReaction(reactionName, reactionId);
-
+    if (!existingReaction) {
       return {
-        error: null,
-        updatedCommentReaction
+        error: errors.RECORD_NOT_FOUND,
+        updatedCommentReaction: null
       };
-    };
+    }
 
-  const deleteCommentReaction =
-    (reactionsData: ReactionsData) =>
-    async (reactionId: number, userId: number, role: RolesType) => {
-      const existingReaction = await reactionsData.getCommentReactionBy('reaction_id', reactionId);
-
-      if (!existingReaction) {
-        return {
-          error: errors.RECORD_NOT_FOUND,
-          deletedCommentReaction: null
-        };
-      }
-
-      // checks if the user isProfileOwner or is admin
-      if (+existingReaction.userId !== +userId && role !== rolesEnum.admin) {
-        return {
-          error: errors.OPERATION_NOT_PERMITTED,
-          deletedCommentReaction: null
-        };
-      }
-
-      await reactionsData.deleteCommentReaction(reactionId);
-
+    // checks if the user isProfileOwner or is admin
+    if (+existingReaction.userId !== +userId && role !== rolesEnum.admin) {
       return {
-        error: null,
-        deletedCommentReaction: { ...existingReaction, isDeleted: true }
+        error: errors.OPERATION_NOT_PERMITTED,
+        updatedCommentReaction: null
       };
+    }
+
+    const updatedCommentReaction = await reactionsData.updateCommentReaction(
+      reactionName,
+      reactionId
+    );
+
+    return {
+      error: null,
+      updatedCommentReaction
     };
+  };
+
+const deleteCommentReaction =
+  (reactionsData: ReactionsData) => async (reactionId: number, userId: number, role: RolesType) => {
+    const existingReaction = await reactionsData.getCommentReactionBy('reaction_id', reactionId);
+
+    if (!existingReaction) {
+      return {
+        error: errors.RECORD_NOT_FOUND,
+        deletedCommentReaction: null
+      };
+    }
+
+    // checks if the user isProfileOwner or is admin
+    if (+existingReaction.userId !== +userId && role !== rolesEnum.admin) {
+      return {
+        error: errors.OPERATION_NOT_PERMITTED,
+        deletedCommentReaction: null
+      };
+    }
+
+    await reactionsData.deleteCommentReaction(reactionId);
+
+    return {
+      error: null,
+      deletedCommentReaction: { ...existingReaction, isDeleted: true }
+    };
+  };
 
 export default {
   getAllPostReactions,

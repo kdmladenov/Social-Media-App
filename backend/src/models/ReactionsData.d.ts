@@ -2,7 +2,7 @@ import ReactionType from './ReactionType';
 
 interface ReactionsData {
   getAllPostReactions: (postId: number) => Promise<ReactionType[]>;
-  getPostReactionBy: (column: string, value: string | number) => Promise<ReactionsType>;
+  getPostReactionBy: (column: string, value: string | number, userId?: number ) => Promise<ReactionsType>;
   createPostReaction: (
     userId: number,
     postId: number,
@@ -11,7 +11,7 @@ interface ReactionsData {
   updatePostReaction: (reactionName: string, reactionId: number) => Promise<ReactionType>;
   deletePostReaction: (reactionId: number) => Promise<void>;
   getAllCommentReactions: (commentId: number) => Promise<ReactionType[]>;
-  getCommentReactionBy: (column: string, value: string | number) => Promise<ReactionsType>;
+  getCommentReactionBy: (column: string, value: string | number, userId?: number) => Promise<ReactionsType>;
   createCommentReaction: (
     userId: number,
     commentId: number,

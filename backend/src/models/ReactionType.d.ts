@@ -1,5 +1,6 @@
 interface ReactionType {
-  reactionId: number;
+  reactionId?: number;
+  reactionPostImageId?: number;
   postId?: number;
   commentId?: number;
   userId: number;

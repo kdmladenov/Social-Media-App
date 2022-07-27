@@ -25,7 +25,7 @@ const getAllPostReactions = async (postId: number) => {
   return db.query(sql, [+postId]);
 };
 
-const getPostReactionBy = async (column: string, value: string | number) => {
+const getPostReactionBy = async (column: string, value: string | number, userId?: number) => {
   const sql = `
     SELECT   
     rp.reaction_id as reactionId,
@@ -45,9 +45,9 @@ const getPostReactionBy = async (column: string, value: string | number) => {
     LEFT JOIN (SELECT *
           FROM reaction_types
           GROUP BY reaction_type_id) as rt USING (reaction_type_id)
-  WHERE ${column} = ? AND rp.is_deleted = 0
+  WHERE ${column} = ? ${userId ? 'AND rp.user_id = ?' : ''} AND rp.is_deleted = 0
   `;
-  const result = await db.query(sql, [value]);
+  const result = await db.query(sql, [value, userId || null]);
 
   return result[0];
 };
@@ -111,7 +111,7 @@ const getAllCommentReactions = async (commentId: number) => {
   return db.query(sql, [+commentId]);
 };
 
-const getCommentReactionBy = async (column: string, value: string | number) => {
+const getCommentReactionBy = async (column: string, value: string | number, userId?: number) => {
   const sql = `
     SELECT   
     rc.reaction_id as reactionId,
@@ -131,9 +131,9 @@ const getCommentReactionBy = async (column: string, value: string | number) => {
     LEFT JOIN (SELECT *
           FROM reaction_types
           GROUP BY reaction_type_id) as rt USING (reaction_type_id)
-  WHERE ${column} = ? AND rc.is_deleted = 0
+  WHERE ${column} = ? ${userId ? 'AND rc.user_id = ?' : ''} AND rc.is_deleted = 0
   `;
-  const result = await db.query(sql, [value]);
+  const result = await db.query(sql, [value, userId || null]);
 
   return result[0];
 };

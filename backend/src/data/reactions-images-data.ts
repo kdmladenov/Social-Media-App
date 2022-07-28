@@ -48,13 +48,14 @@ const getPostImageReaction = async (postId: number, imageId: number, userId?: nu
     LEFT JOIN (SELECT *
           FROM reaction_types
           GROUP BY reaction_type_id) as rt USING (reaction_type_id)
-  WHERE rpi.post_id = ? AND rpi.image_id = ? ${userId ? 'AND rpi.user_id = ?' : ''} AND rpi.is_deleted = 0
+  WHERE rpi.post_id = ? AND rpi.image_id = ? ${
+    userId ? 'AND rpi.user_id = ?' : ''
+  } AND rpi.is_deleted = 0
   `;
   const result = await db.query(sql, [+postId, +imageId, userId || null]);
 
   return result[0];
 };
-
 
 const getPostImageReactionBy = async (column: string, value: string | number, userId?: number) => {
   const sql = `
@@ -124,91 +125,135 @@ const deletePostImageReaction = async (reactionPostImageId: number) => {
   return await db.query(sql, [+reactionPostImageId]);
 };
 
-// const getAllCommentReactions = async (commentId: number) => {
-//   const sql = `
-//   SELECT   
-//     rc.reaction_id as reactionId,
-//     rc.comment_id as commentId,
-//     rc.user_id as userId,
-//     u.first_name as authorFirstName,
-//     u.last_name as authorLastName,
-//     rc.reaction_type_id as reactionTypeId,
-//     rt.reaction_name as reactionName,
-//     rt.reaction_code as reactionCode,
-//     rc.is_deleted as isDeleted,
-//     COUNT(*) OVER () AS totalDBItems
-//     FROM reactions_comments rc
-//     LEFT JOIN (SELECT *
-//           FROM users
-//           GROUP BY user_id) as u USING (user_id)
-//     LEFT JOIN (SELECT *
-//           FROM reaction_types
-//           GROUP BY reaction_type_id) as rt USING (reaction_type_id)
-//     WHERE rc.is_deleted = 0 AND rc.comment_id = ?  
-//     `;
-//   return db.query(sql, [+commentId]);
-// };
+const getAllPostImageCommentReactions = async (postImageCommentId: number) => {
+  const sql = `
+  SELECT   
+    rpic.reaction_post_image_comment_id as reactionPostImageCommentId,
+    rpic.post_image_comment_id as postImageCommentId,
+    rpic.user_id as userId,
+    u.first_name as authorFirstName,
+    u.last_name as authorLastName,
+    rpic.reaction_type_id as reactionTypeId,
+    rt.reaction_name as reactionName,
+    rt.reaction_code as reactionCode,
+    rpic.is_deleted as isDeleted,
+    COUNT(*) OVER () AS totalDBItems
+    FROM reactions_post_images_comments rpic
 
-// const getCommentReactionBy = async (column: string, value: string | number, userId?: number) => {
-//   const sql = `
-//     SELECT   
-//     rc.reaction_id as reactionId,
-//     rc.comment_id as commentId,
-//     rc.user_id as userId,
-//     u.first_name as authorFirstName,
-//     u.last_name as authorLastName,
-//     rc.reaction_type_id as reactionTypeId,
-//     rt.reaction_name as reactionName,
-//     rt.reaction_code as reactionCode,
-//     rc.is_deleted as isDeleted,
-//     COUNT(*) OVER () AS totalDBItems
-//     FROM reactions_comments rc
-//     LEFT JOIN (SELECT *
-//           FROM users
-//           GROUP BY user_id) as u USING (user_id)
-//     LEFT JOIN (SELECT *
-//           FROM reaction_types
-//           GROUP BY reaction_type_id) as rt USING (reaction_type_id)
-//   WHERE ${column} = ? ${userId ? 'AND rc.user_id = ?' : ''} AND rc.is_deleted = 0
-//   `;
-//   const result = await db.query(sql, [value, userId || null]);
+    LEFT JOIN (SELECT *
+          FROM users
+          GROUP BY user_id) as u USING (user_id)
+    LEFT JOIN (SELECT *
+          FROM reaction_types
+          GROUP BY reaction_type_id) as rt USING (reaction_type_id)
+    WHERE rpic.is_deleted = 0 AND rpic.post_image_comment_id = ?
+    `;
+  return db.query(sql, [+postImageCommentId]);
+};
 
-//   return result[0];
-// };
+const getPostImageCommentReaction = async (postImageCommentId: number, userId?: number) => {
+  const sql = `
+    SELECT   
+    rpic.reaction_post_image_comment_id as reactionPostImageCommentId,
+    rpic.post_image_comment_id as postImageCommentId,
+    rpic.user_id as userId,
+    u.first_name as authorFirstName,
+    u.last_name as authorLastName,
+    rpic.reaction_type_id as reactionTypeId,
+    rt.reaction_name as reactionName,
+    rt.reaction_code as reactionCode,
+    rpic.is_deleted as isDeleted,
+    COUNT(*) OVER () AS totalDBItems
+    FROM reactions_post_images_comments rpic
+    LEFT JOIN (SELECT *
+          FROM users
+          GROUP BY user_id) as u USING (user_id)
+    LEFT JOIN (SELECT *
+          FROM reaction_types
+          GROUP BY reaction_type_id) as rt USING (reaction_type_id)
+  WHERE rpic.post_image_comment_id = ? ${
+    userId ? 'AND rpic.user_id = ?' : ''
+  } AND rpic.is_deleted = 0
+  `;
+  const result = await db.query(sql, [+postImageCommentId, userId || null]);
 
-// const createCommentReaction = async (userId: number, commentId: number, reactionName: string) => {
-//   const sql = `
-//     INSERT INTO reactions_comments (
-//       user_id,
-//       comment_id,
-//       reaction_type_id
-//     )
-//     VALUES (?, ?, (SELECT reaction_type_id from reaction_types WHERE reaction_name = ?))
-//   `;
-//   const result = await db.query(sql, [+userId, +commentId, reactionName]);
+  return result[0];
+};
 
-//   return getCommentReactionBy('reaction_id', +result.insertId);
-// };
+const getPostImageCommentReactionBy = async (
+  column: string,
+  value: string | number,
+  userId?: number
+) => {
+  const sql = `
+    SELECT   
+    rpic.reaction_post_image_comment_id as reactionPostImageCommentId,
+    rpic.post_image_comment_id as postImageCommentId,
+    rpic.user_id as userId,
+    u.first_name as authorFirstName,
+    u.last_name as authorLastName,
+    rpic.reaction_type_id as reactionTypeId,
+    rt.reaction_name as reactionName,
+    rt.reaction_code as reactionCode,
+    rpic.is_deleted as isDeleted,
+    COUNT(*) OVER () AS totalDBItems
+    FROM reactions_post_images_comments rpic
+    LEFT JOIN (SELECT *
+          FROM users
+          GROUP BY user_id) as u USING (user_id)
+    LEFT JOIN (SELECT *
+          FROM reaction_types
+          GROUP BY reaction_type_id) as rt USING (reaction_type_id)
+  WHERE ${column} = ? ${userId ? 'AND rpic.user_id = ?' : ''} AND rpic.is_deleted = 0
+  `;
+  const result = await db.query(sql, [value, userId || null]);
 
-// const updateCommentReaction = async (reactionName: string, reactionId: number) => {
-//   const sql = `
-//     UPDATE reactions_comments SET
-//       reaction_type_id = (SELECT reaction_type_id from reaction_types WHERE reaction_name = ?)
-//     WHERE reaction_id = ?
-//   `;
-//   await db.query(sql, [reactionName, +reactionId]);
+  return result[0];
+};
 
-//   return getCommentReactionBy('reaction_id', +reactionId);
-// };
+const createPostImageCommentReaction = async (
+  userId: number,
+  postImageCommentId: number,
+  reactionName: string
+) => {
+  const sql = `
+    INSERT INTO reactions_post_images_comments (
+      user_id,
+      post_image_comment_id,
+      reaction_type_id
+    )
+    VALUES (?, ?, (SELECT reaction_type_id from reaction_types WHERE reaction_name = ?))
+  `;
+  const result = await db.query(sql, [+userId, +postImageCommentId, reactionName]);
 
-// const deleteCommentReaction = async (reactionId: number) => {
-//   const sql = `
-//     UPDATE reactions_comments SET
-//       is_deleted = 1
-//     WHERE reaction_id = ?
-//   `;
-//   return await db.query(sql, [+reactionId]);
-// };
+  return getPostImageCommentReactionBy('reaction_post_image_comment_id', +result.insertId);
+};
+
+const updatePostImageCommentReaction = async (
+  reactionName: string,
+  reactionPostImageCommentId: number
+) => {
+  const sql = `
+    UPDATE reactions_post_images_comments SET
+      reaction_type_id = (SELECT reaction_type_id from reaction_types WHERE reaction_name = ?)
+    WHERE reaction_post_image_comment_id = ?
+  `;
+  await db.query(sql, [reactionName, +reactionPostImageCommentId]);
+
+  return getPostImageCommentReactionBy(
+    'reaction_post_image_comment_id',
+    +reactionPostImageCommentId
+  );
+};
+
+const deletePostImageCommentReaction = async (reactionPostImageCommentId: number) => {
+  const sql = `
+    UPDATE reactions_post_images_comments SET
+      is_deleted = 1
+    WHERE reaction_post_image_comment_id = ?
+  `;
+  return await db.query(sql, [+reactionPostImageCommentId]);
+};
 
 export default {
   getAllPostImageReactions,
@@ -216,10 +261,11 @@ export default {
   getPostImageReactionBy,
   createPostImageReaction,
   updatePostImageReaction,
-  deletePostImageReaction
-  // getAllCommentReactions,
-  // getCommentReactionBy,
-  // createCommentReaction,
-  // updateCommentReaction,
-  // deleteCommentReaction
+  deletePostImageReaction,
+  getAllPostImageCommentReactions,
+  getPostImageCommentReaction,
+  getPostImageCommentReactionBy,
+  createPostImageCommentReaction,
+  updatePostImageCommentReaction,
+  deletePostImageCommentReaction
 };

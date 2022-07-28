@@ -6,6 +6,7 @@ import ReactionsData from '../models/ReactionsData.js';
 import CommentsData from '../models/CommentsData.js';
 import ImagesData from '../models/ImagesData.js';
 import ReactionsImagesData from '../models/ReactionsImagesData.js';
+import CommentsImagesData from '../models/CommentsImagesData.js';
 
 const getAllPostImageReactions =
   (reactionsImagesData: ReactionsImagesData, imagesData: ImagesData) =>
@@ -28,7 +29,7 @@ const getAllPostImageReactions =
 
 const createPostImageReaction =
   (imagesData: ImagesData, reactionsImagesData: ReactionsImagesData) =>
-  async (userId: number, postId: number, imageId:number, reactionName: string) => {
+  async (userId: number, postId: number, imageId: number, reactionName: string) => {
     const existingImage = await imagesData.getPostImage(postId, imageId);
 
     if (!existingImage) {
@@ -143,137 +144,164 @@ const deletePostImageReaction =
     };
   };
 
-// const getAllCommentReactions =
-//   (reactionsData: ReactionsData, commentsData: CommentsData) => async (commentId: number) => {
-//     const existingComment = await commentsData.getBy('comment_id', commentId);
+const getAllPostImageCommentReactions =
+  (reactionsImagesData: ReactionsImagesData, commentsImagesData: CommentsImagesData) =>
+  async (postImageCommentId: number) => {
+    const existingComment = await commentsImagesData.getBy(
+      'post_image_comment_id',
+      postImageCommentId
+    );
+    if (!existingComment) {
+      return {
+        error: errors.RECORD_NOT_FOUND,
+        postImageCommentReactions: null
+      };
+    }
 
-//     if (!existingComment) {
-//       return {
-//         error: errors.RECORD_NOT_FOUND,
-//         commentReactions: null
-//       };
-//     }
+    const postImageCommentReactions = await reactionsImagesData.getAllPostImageCommentReactions(
+      postImageCommentId
+    );
 
-//     const commentReactions = await reactionsData.getAllCommentReactions(commentId);
+    return {
+      error: null,
+      postImageCommentReactions
+    };
+  };
+const createPostImageCommentReaction =
+  (commentsImagesData: CommentsImagesData, reactionsImagesData: ReactionsImagesData) =>
+  async (userId: number, postImageCommentId: number, reactionName: string) => {
+    const existingComment = await commentsImagesData.getBy(
+      'post_image_comment_id',
+      postImageCommentId
+    );
 
-//     return {
-//       error: null,
-//       commentReactions
-//     };
-//   };
+    if (!existingComment) {
+      return {
+        error: errors.RECORD_NOT_FOUND,
+        createdPostImageCommentReaction: null
+      };
+    }
 
-// const createCommentReaction =
-//   (commentsData: CommentsData, reactionsData: ReactionsData) =>
-//   async (userId: number, commentId: number, reactionName: string) => {
-//     const existingComment = await commentsData.getBy('comment_id', commentId);
+    const existingPostImageCommentReaction = await reactionsImagesData.getPostImageCommentReaction(
+      +postImageCommentId,
+      +userId
+    );
 
-//     if (!existingComment) {
-//       return {
-//         error: errors.RECORD_NOT_FOUND,
-//         createdCommentReaction: null
-//       };
-//     }
+    if (existingPostImageCommentReaction) {
+      if (existingPostImageCommentReaction.reactionName === reactionName) {
+        return {
+          error: null,
+          createdPostImageCommentReaction: existingPostImageCommentReaction
+        };
+      }
 
-//     const existingReaction = await reactionsData.getCommentReactionBy('comment_id', +commentId, +userId);
+      if (existingPostImageCommentReaction.reactionName !== reactionName) {
+        const updatedPostImageCommentReaction =
+          await reactionsImagesData.updatePostImageCommentReaction(
+            reactionName,
+            existingPostImageCommentReaction.reactionPostImageCommentId
+          );
 
-//     if (existingReaction) {
-//       if (existingReaction.reactionName === reactionName) {
-//         return {
-//           error: null,
-//           createdCommentReaction: existingReaction
-//         };
-//       }
+        return {
+          error: null,
+          createdPostImageCommentReaction: updatedPostImageCommentReaction
+        };
+      }
+    }
 
-//       if (existingReaction.reactionName !== reactionName) {
-//         const updatedCommentReaction = await reactionsData.updateCommentReaction(
-//           reactionName,
-//           existingReaction.reactionId
-//         );
+    const createdPostImageCommentReaction =
+      await reactionsImagesData.createPostImageCommentReaction(
+        userId,
+        postImageCommentId,
+        reactionName
+      );
 
-//         return {
-//           error: null,
-//           createdCommentReaction: updatedCommentReaction
-//         };
-//       }
-//     }
+    return {
+      error: null,
+      createdPostImageCommentReaction
+    };
+  };
 
-//     const createdCommentReaction = await reactionsData.createCommentReaction(
-//       userId,
-//       commentId,
-//       reactionName
-//     );
+const updatePostImageCommentReaction =
+  (reactionsImagesData: ReactionsImagesData) =>
+  async (
+    reactionName: string,
+    reactionPostImageCommentId: number,
+    userId: number,
+    role: RolesType
+  ) => {
+    const existingPostImageCommentReaction =
+      await reactionsImagesData.getPostImageCommentReactionBy(
+        'reaction_post_image_comment_id',
+        +reactionPostImageCommentId
+      );
 
-//     return {
-//       error: null,
-//       createdCommentReaction
-//     };
-//   };
+    if (!existingPostImageCommentReaction) {
+      return {
+        error: errors.RECORD_NOT_FOUND,
+        updatedPostImageCommentReaction: null
+      };
+    }
 
-// const updateCommentReaction =
-//   (reactionsData: ReactionsData) =>
-//   async (reactionName: string, reactionId: number, userId: number, role: RolesType) => {
-//     const existingReaction = await reactionsData.getCommentReactionBy('reaction_id', +reactionId);
+    // checks if the user isProfileOwner or is admin
+    if (+existingPostImageCommentReaction.userId !== +userId && role !== rolesEnum.admin) {
+      return {
+        error: errors.OPERATION_NOT_PERMITTED,
+        updatedPostImageCommentReaction: null
+      };
+    }
 
-//     if (!existingReaction) {
-//       return {
-//         error: errors.RECORD_NOT_FOUND,
-//         updatedCommentReaction: null
-//       };
-//     }
+    const updatedPostImageCommentReaction =
+      await reactionsImagesData.updatePostImageCommentReaction(
+        reactionName,
+        reactionPostImageCommentId
+      );
 
-//     // checks if the user isProfileOwner or is admin
-//     if (+existingReaction.userId !== +userId && role !== rolesEnum.admin) {
-//       return {
-//         error: errors.OPERATION_NOT_PERMITTED,
-//         updatedCommentReaction: null
-//       };
-//     }
+    return {
+      error: null,
+      updatedPostImageCommentReaction
+    };
+  };
 
-//     const updatedCommentReaction = await reactionsData.updateCommentReaction(
-//       reactionName,
-//       reactionId
-//     );
+const deletePostImageCommentReaction =
+  (reactionsImagesData: ReactionsImagesData) =>
+  async (reactionPostImageCommentId: number, userId: number, role: RolesType) => {
+    const existingPostImageCommentReaction =
+      await reactionsImagesData.getPostImageCommentReactionBy(
+        'reaction_post_image_comment_id',
+        reactionPostImageCommentId
+      );
 
-//     return {
-//       error: null,
-//       updatedCommentReaction
-//     };
-//   };
+    if (!existingPostImageCommentReaction) {
+      return {
+        error: errors.RECORD_NOT_FOUND,
+        deletedPostImageCommentReaction: null
+      };
+    }
 
-// const deleteCommentReaction =
-//   (reactionsData: ReactionsData) => async (reactionId: number, userId: number, role: RolesType) => {
-//     const existingReaction = await reactionsData.getCommentReactionBy('reaction_id', reactionId);
+    // checks if the user isProfileOwner or is admin
+    if (+existingPostImageCommentReaction.userId !== +userId && role !== rolesEnum.admin) {
+      return {
+        error: errors.OPERATION_NOT_PERMITTED,
+        deletedPostImageCommentReaction: null
+      };
+    }
 
-//     if (!existingReaction) {
-//       return {
-//         error: errors.RECORD_NOT_FOUND,
-//         deletedCommentReaction: null
-//       };
-//     }
+    await reactionsImagesData.deletePostImageCommentReaction(reactionPostImageCommentId);
 
-//     // checks if the user isProfileOwner or is admin
-//     if (+existingReaction.userId !== +userId && role !== rolesEnum.admin) {
-//       return {
-//         error: errors.OPERATION_NOT_PERMITTED,
-//         deletedCommentReaction: null
-//       };
-//     }
-
-//     await reactionsData.deleteCommentReaction(reactionId);
-
-//     return {
-//       error: null,
-//       deletedCommentReaction: { ...existingReaction, isDeleted: true }
-//     };
-//   };
+    return {
+      error: null,
+      deletedPostImageCommentReaction: { ...existingPostImageCommentReaction, isDeleted: true }
+    };
+  };
 
 export default {
   getAllPostImageReactions,
   createPostImageReaction,
   updatePostImageReaction,
   deletePostImageReaction,
-  // getAllCommentReactions,
-  // createCommentReaction,
-  // updateCommentReaction,
-  // deleteCommentReaction
+  getAllPostImageCommentReactions,
+  createPostImageCommentReaction,
+  updatePostImageCommentReaction,
+  deletePostImageCommentReaction
 };

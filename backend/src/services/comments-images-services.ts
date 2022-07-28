@@ -6,19 +6,32 @@ import RolesType from '../models/RolesType.js';
 import ImagesData from '../models/ImagesData.js';
 import CommentsImagesData from '../models/CommentsImagesData.js';
 
-const getAllComments =
-  (commentsImagesData: CommentsImagesData, postsData: PostsData) =>
-  async (postId: number, search: string, sort: string, page: number, pageSize: number) => {
-    const existingPost = await postsData.getBy('post_id', postId);
-
-    if (!existingPost) {
+const getAllPostImageComments =
+  (commentsImagesData: CommentsImagesData, imagesData: ImagesData) =>
+  async (
+    postId: number,
+    imageId: number,
+    search: string,
+    sort: string,
+    page: number,
+    pageSize: number
+  ) => {
+    const existingPostImage = await imagesData.getPostImage(postId, imageId);
+    if (!existingPostImage) {
       return {
         error: errors.RECORD_NOT_FOUND,
         result: null
       };
     }
 
-    const comments = await commentsImagesData.getAll(postId, search, sort, page, pageSize);
+    const comments = await commentsImagesData.getAllPostImageComments(
+      postId,
+      imageId,
+      search,
+      sort,
+      page,
+      pageSize
+    );
 
     return {
       error: null,
@@ -26,7 +39,7 @@ const getAllComments =
     };
   };
 
-const createComment =
+const createPostImageComment =
   (imagesData: ImagesData, commentsImagesData: CommentsImagesData) =>
   async (
     content: string,
@@ -43,7 +56,13 @@ const createComment =
       };
     }
 
-    const comment = await commentsImagesData.create(content, authorId, postId, imageId, replyTo);
+    const comment = await commentsImagesData.createPostImageComment(
+      content,
+      authorId,
+      postId,
+      imageId,
+      replyTo
+    );
 
     return {
       error: null,
@@ -51,10 +70,10 @@ const createComment =
     };
   };
 
-const updateComment =
+const updatePostImageComment =
   (commentsImagesData: CommentsImagesData) =>
   async (content: string, postImageCommentId: number, authorId: number, role: RolesType) => {
-    const existingComment = await commentsImagesData.getBy(
+    const existingComment = await commentsImagesData.getPostImageCommentBy(
       'post_image_comment_id',
       postImageCommentId
     );
@@ -80,7 +99,7 @@ const updateComment =
       dateEdited: new Date()
     };
 
-    await commentsImagesData.update(content, postImageCommentId, authorId, role);
+    await commentsImagesData.updatePostImageComment(content, postImageCommentId, authorId, role);
 
     return {
       error: null,
@@ -88,10 +107,10 @@ const updateComment =
     };
   };
 
-const deleteComment =
+const deletePostImageComment =
   (commentsImagesData: CommentsImagesData) =>
   async (postImageCommentId: number, authorId: number, role: RolesType) => {
-    const existingComment = await commentsImagesData.getBy(
+    const existingComment = await commentsImagesData.getPostImageCommentBy(
       'post_image_comment_id',
       postImageCommentId
     );
@@ -111,7 +130,7 @@ const deleteComment =
       };
     }
 
-    await commentsImagesData.remove(postImageCommentId, authorId, role);
+    await commentsImagesData.removePostImageComment(postImageCommentId, authorId, role);
 
     return {
       error: null,
@@ -119,10 +138,9 @@ const deleteComment =
     };
   };
 
-
 export default {
-  getAllComments,
-  createComment,
-  updateComment,
-  deleteComment
+  getAllPostImageComments,
+  createPostImageComment,
+  updatePostImageComment,
+  deletePostImageComment
 };

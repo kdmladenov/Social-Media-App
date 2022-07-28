@@ -104,57 +104,9 @@ const deleteComment =
     };
   };
 
-const voteComment =
-  (commentsData: CommentsData) =>
-  async (reactionName: string, commentId: number, userId: number) => {
-    const existingCommentVote = await commentsData.getVoteBy('comment_id', commentId, userId);
-
-    if (existingCommentVote) {
-      const result = await commentsData.updateVote(reactionName, commentId, userId);
-      return {
-        error: null,
-        result
-      };
-    }
-
-    const result = await commentsData.createVote(reactionName, commentId, userId);
-    return {
-      error: null,
-      result
-    };
-  };
-
-const unVoteComment =
-  (commentsData: CommentsData) => async (commentId: number, userId: number, role: RolesType) => {
-    const existingCommentVote = await commentsData.getVoteBy('comment_id', commentId, userId);
-
-    if (!existingCommentVote) {
-      return {
-        error: errors.RECORD_NOT_FOUND,
-        result: null
-      };
-    }
-    // The user is not admin or has created the comment vote
-    if (existingCommentVote.userId !== userId && role !== rolesEnum.admin) {
-      return {
-        error: errors.OPERATION_NOT_PERMITTED,
-        result: null
-      };
-    }
-
-    await commentsData.removeVote(commentId, userId);
-
-    return {
-      error: null,
-      result: { message: `Vote was successfully removed.` }
-    };
-  };
-
 export default {
   getAllComments,
   createComment,
   updateComment,
-  deleteComment,
-  voteComment,
-  unVoteComment
+  deleteComment
 };

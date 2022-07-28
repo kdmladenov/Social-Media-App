@@ -37,7 +37,7 @@ commentsImagesController
       const { content, replyTo } = req.body;
       const { userId: authorId } = req.user;
 
-      const { error, result } = await commentsImagesServices.createComment(
+      const { error, result } = await commentsImagesServices.createPostImageComment(
         imagesData,
         commentsImagesData
       )(content, +authorId, +postId, +imageId, replyTo);
@@ -52,36 +52,41 @@ commentsImagesController
     })
   )
 
-  // @desc GET All post comments
+  // @desc GET All post images comments
   // @route GET/comments-images/:postId
   // @access Private - logged users
   .get(
-    '/:postId',
+    '/:postId/:imageId',
     authMiddleware,
     loggedUserGuard,
-    errorHandler(async (req: Request<{ postId: number }, {}, {}, RequestQuery>, res: Response) => {
-      const { postId } = req.params;
-      const { search = '', sort = 'created_at desc' } = req.query;
+    errorHandler(
+      async (
+        req: Request<{ postId: number; imageId: number }, {}, {}, RequestQuery>,
+        res: Response
+      ) => {
+        const { postId, imageId } = req.params;
+        const { search = '', sort = 'created_at desc' } = req.query;
 
-      let { pageSize = paging.DEFAULT_COMMENTS_PAGESIZE, page = paging.DEFAULT_PAGE } = req.query;
+        let { pageSize = paging.DEFAULT_COMMENTS_PAGESIZE, page = paging.DEFAULT_PAGE } = req.query;
 
-      if (+pageSize > paging.MAX_COMMENTS_PAGESIZE) pageSize = paging.MAX_COMMENTS_PAGESIZE;
-      if (+pageSize < paging.MIN_COMMENTS_PAGESIZE) pageSize = paging.MIN_COMMENTS_PAGESIZE;
-      if (page < paging.DEFAULT_PAGE) page = paging.DEFAULT_PAGE;
+        if (+pageSize > paging.MAX_COMMENTS_PAGESIZE) pageSize = paging.MAX_COMMENTS_PAGESIZE;
+        if (+pageSize < paging.MIN_COMMENTS_PAGESIZE) pageSize = paging.MIN_COMMENTS_PAGESIZE;
+        if (page < paging.DEFAULT_PAGE) page = paging.DEFAULT_PAGE;
 
-      const { error, result } = await commentsImagesServices.getAllComments(
-        commentsImagesData,
-        postsData
-      )(+postId, search, sort, +page, +pageSize);
+        const { error, result } = await commentsImagesServices.getAllPostImageComments(
+          commentsImagesData,
+          imagesData
+        )(+postId, +imageId, search, sort, +page, +pageSize);
 
-      if (error === errors.RECORD_NOT_FOUND) {
-        res.status(404).send({
-          message: 'The post is not found.'
-        });
-      } else {
-        res.status(200).send(result);
+        if (error === errors.RECORD_NOT_FOUND) {
+          res.status(404).send({
+            message: 'The post is not found.'
+          });
+        } else {
+          res.status(200).send(result);
+        }
       }
-    })
+    )
   )
 
   // @desc EDIT post comment
@@ -98,12 +103,9 @@ commentsImagesController
       const { postImageCommentId } = req.params;
       const { userId: authorId, role } = req.user;
 
-      const { error, result } = await commentsImagesServices.updateComment(commentsImagesData)(
-        content,
-        +postImageCommentId,
-        +authorId,
-        role
-      );
+      const { error, result } = await commentsImagesServices.updatePostImageComment(
+        commentsImagesData
+      )(content, +postImageCommentId, +authorId, role);
 
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
@@ -131,11 +133,9 @@ commentsImagesController
       const { userId: authorId, role } = req.user;
       const { postImageCommentId } = req.params;
 
-      const { error, result } = await commentsImagesServices.deleteComment(commentsImagesData)(
-        +postImageCommentId,
-        +authorId,
-        role
-      );
+      const { error, result } = await commentsImagesServices.deletePostImageComment(
+        commentsImagesData
+      )(+postImageCommentId, +authorId, role);
 
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({

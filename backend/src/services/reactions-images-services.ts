@@ -147,7 +147,7 @@ const deletePostImageReaction =
 const getAllPostImageCommentReactions =
   (reactionsImagesData: ReactionsImagesData, commentsImagesData: CommentsImagesData) =>
   async (postImageCommentId: number) => {
-    const existingComment = await commentsImagesData.getBy(
+    const existingComment = await commentsImagesData.getPostImageCommentBy(
       'post_image_comment_id',
       postImageCommentId
     );
@@ -170,7 +170,7 @@ const getAllPostImageCommentReactions =
 const createPostImageCommentReaction =
   (commentsImagesData: CommentsImagesData, reactionsImagesData: ReactionsImagesData) =>
   async (userId: number, postImageCommentId: number, reactionName: string) => {
-    const existingComment = await commentsImagesData.getBy(
+    const existingComment = await commentsImagesData.getPostImageCommentBy(
       'post_image_comment_id',
       postImageCommentId
     );

@@ -2,8 +2,9 @@ import db from './pool.js';
 import rolesEnum from '../constants/roles.enum.js';
 import RolesType from '../models/RolesType.js';
 
-const getAll = async (
+const getAllPostImageComments = async (
   postId: number,
+  imageId: number,
   search: string,
   sort: string,
   page: number,
@@ -37,16 +38,16 @@ const getAll = async (
     LEFT JOIN (SELECT *
           FROM users
           GROUP BY user_id) as u ON u.user_id = c.author_id
-    WHERE c.is_deleted = 0 AND c.post_id = ?  ${
+    WHERE c.is_deleted = 0 AND c.post_id = ?  AND c.image_id = ? ${
       search ? `AND CONCAT_WS(',', c.content, u.first_name, u.last_name) Like '%${search}%'` : ''
     }
     ORDER BY ${sortColumn} ${direction}
     LIMIT ? OFFSET ?
     `;
-  return db.query(sql, [+postId, +pageSize, +offset]);
+  return db.query(sql, [+postId, +imageId, +pageSize, +offset]);
 };
 
-const getBy = async (column: string, value: string | number) => {
+const getPostImageCommentBy = async (column: string, value: string | number) => {
   const sql = `
     SELECT   
     c.post_image_comment_id as postImageCommentId,
@@ -73,7 +74,7 @@ const getBy = async (column: string, value: string | number) => {
   return result[0];
 };
 
-const create = async (
+const createPostImageComment = async (
   content: string,
   authorId: number,
   postId: number,
@@ -92,10 +93,10 @@ const create = async (
   `;
   const result = await db.query(sql, [content, +authorId, +postId, +imageId, replyTo || null]);
 
-  return getBy('post_image_comment_id', +result.insertId);
+  return getPostImageCommentBy('post_image_comment_id', +result.insertId);
 };
 
-const update = async (
+const updatePostImageComment = async (
   content: string,
   postImageCommentId: number,
   authorId: number,
@@ -110,7 +111,7 @@ const update = async (
   return db.query(sql, [content, postImageCommentId, authorId]);
 };
 
-const remove = async (commentId: number, authorId: number, role: RolesType) => {
+const removePostImageComment = async (commentId: number, authorId: number, role: RolesType) => {
   const sql = `
     UPDATE post_images_comments
     SET is_deleted = true
@@ -120,9 +121,9 @@ const remove = async (commentId: number, authorId: number, role: RolesType) => {
 };
 
 export default {
-  getAll,
-  getBy,
-  create,
-  update,
-  remove
+  getAllPostImageComments,
+  getPostImageCommentBy,
+  createPostImageComment,
+  updatePostImageComment,
+  removePostImageComment
 };

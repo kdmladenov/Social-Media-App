@@ -1,5 +1,6 @@
 interface InputBoxWithAvatarProps {
   resourceId?: number;
+  subResourceId?: number;
   replyTo?: number | null;
   currentUserDetails: TODO;
   createAction: TODO;

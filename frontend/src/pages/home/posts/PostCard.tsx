@@ -54,8 +54,6 @@ const PostCard: React.FC<{ post: PostType }> = ({
     setIsModalOpen(true);
   };
 
-  // const { firstName, lastName, avatar } = author;
-
   return (
     <div className="post_card card">
       <div className="post_header">
@@ -104,7 +102,11 @@ const PostCard: React.FC<{ post: PostType }> = ({
                   classes="big"
                 />
               </div>
-              <PostCardFooter postId={postId} />
+              <PostCardFooter
+                postId={postId}
+                imageId={images[selectedPostImageIndex].imageId}
+                type="image"
+              />
             </aside>
             <div className="post_images_container">
               <Slider

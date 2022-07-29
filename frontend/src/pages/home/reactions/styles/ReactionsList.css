@@ -1,0 +1,13 @@
+.comment_card .content .reactions_list {
+  position: absolute;
+  height: fit-content;
+  bottom: -15px;
+  right: 5px;
+  padding: 0 4px;
+  gap: 5px;
+  font-size: 13px;
+}
+
+.comment_card .content .reactions_list i {
+  color: red;
+}

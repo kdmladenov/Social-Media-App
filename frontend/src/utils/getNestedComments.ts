@@ -9,6 +9,7 @@ const getNestedComments = (comments: CommentType[]) => {
   nested[-1] = {
     commentId: -1,
     postId: -1,
+    imageId: -1,
     replyTo: null,
     content: 'Fake root',
     replies: [],

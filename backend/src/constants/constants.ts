@@ -29,6 +29,9 @@ export const paging = {
   MIN_USERS_PAGESIZE: 10,
   MAX_USERS_PAGESIZE: 20,
   DEFAULT_USERS_PAGESIZE: 15,
+  MIN_FRIENDS_PAGESIZE: 10,
+  MAX_FRIENDS_PAGESIZE: 20,
+  DEFAULT_FRIENDS_PAGESIZE: 15,
   MIN_POST_PAGESIZE: 1,
   MAX_POST_PAGESIZE: 50,
   DEFAULT_POST_PAGESIZE: 20,
@@ -65,6 +68,11 @@ export const story = {
   MAX_MESSAGE_LENGTH: 10000
 };
 
+export const collection = {
+  MIN_MESSAGE_LENGTH: 1,
+  MAX_MESSAGE_LENGTH: 10000
+};
+
 export const school = {
   MIN_SCHOOL_LENGTH: 1,
   MAX_SCHOOL_LENGTH: 1000,
@@ -97,3 +105,12 @@ export const comments = {
   MIN_CONTENT_LENGTH: 2,
   MAX_CONTENT_LENGTH: 1000
 };
+
+
+export const suggestionWeights = {
+  friend: 1,
+  homeCity: 1,
+  currentCity: 1
+};
+
+export const maxSuggestionsCount = 50;

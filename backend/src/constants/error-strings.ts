@@ -4,7 +4,8 @@ import {
   comments as COMMENTS,
   locations as LOCATIONS,
   school as SCHOOL,
-  workplace as WORKPLACE
+  workplace as WORKPLACE,
+  collection
 } from './constants.js';
 import reactionsEnum from './reactions.enum.js';
 
@@ -44,11 +45,7 @@ export default {
     replyTo: `Expected a number`
   },
 
-  postReaction: {
-    reactionName: `Expected valid reaction from ${Object.keys(reactionsEnum)}]`
-  },
-
-  commentReaction: {
+  reaction: {
     reactionName: `Expected valid reaction from ${Object.keys(reactionsEnum)}]`
   },
 
@@ -69,5 +66,9 @@ export default {
     country: `Expected a string with length in the range [${LOCATIONS.MIN_COUNTRY_LENGTH}-${LOCATIONS.MAX_COUNTRY_LENGTH}]`,
     startDate: `Expected a start date from the past`,
     endDate: `Expected a end date from the past`
+  },
+
+  savedPost: {
+    collection: `Expected valid collection string with length in the range [${collection.MIN_MESSAGE_LENGTH}-${collection.MAX_MESSAGE_LENGTH}]`
   }
 };

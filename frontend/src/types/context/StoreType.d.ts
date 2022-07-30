@@ -7,6 +7,8 @@ import ReactionType from '../ReactionType';
 import SchoolType from '../SchoolType';
 import WorkplaceType from '../WorkplaceType';
 import FriendType from '../FriendType';
+import SavedPostType from '../SavedPostType';
+import CollectionType from '../CollectionType';
 
 interface StoreType {
   portalRefs;
@@ -108,6 +110,28 @@ interface StoreType {
     error?: string;
     success: boolean;
   };
+  imageCommentCreate: {
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+    imageComment: CommentType;
+  };
+  imageCommentsList: {
+    loading: boolean;
+    error?: string;
+    imageComments: { [key: string]: CommentType[] };
+  };
+  imageCommentEdit: {
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+    imageComment: CommentType;
+  };
+  imageCommentDelete: {
+    loading: boolean;
+    error?: string;
+    success: boolean;
+  };
   commentReactionCreate: {
     commentReaction: ReactionType;
     loading: boolean;
@@ -131,6 +155,54 @@ interface StoreType {
     error?: string;
     success?: boolean;
   };
+
+  postImageReactionCreate: {
+    postImageReaction: ReactionType;
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+  };
+  postImageReactionEdit: {
+    postImageReaction: ReactionType;
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+  };
+  postImageReactionsList: {
+    postImageReactions: { [key: string]: ReactionType[] };
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+  };
+  postImageReactionDelete: {
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+  };
+  commentPostImageReactionCreate: {
+    postImageCommentReaction: ReactionType;
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+  };
+  commentPostImageReactionEdit: {
+    postImageCommentReaction: ReactionType;
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+  };
+  commentPostImageReactionsList: {
+    postImageCommentReactions: { [key: number]: ReactionType[] };
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+  };
+  commentPostImageReactionDelete: {
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+  };
+
   forgottenPassword: {
     loading: boolean;
     error?: string;
@@ -211,7 +283,7 @@ interface StoreType {
   schoolList: {
     loading: boolean;
     error?: string;
-    users: SchoolType[];
+    schools: SchoolType[];
   };
   schoolDelete: {
     loading: boolean;
@@ -224,6 +296,53 @@ interface StoreType {
     success?: boolean;
     school: SchoolType;
   };
+
+  savedPostCreate: {
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+    savedPost: SavedPostType;
+  };
+  savedPostsList: {
+    loading: boolean;
+    error?: string;
+    savedPosts: SavedPostType[];
+  };
+  savedPostDelete: {
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+  };
+  savedPostUpdate: {
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+    savedPost: SavedPostType;
+  };
+
+  collectionCreate: {
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+    collection: CollectionType;
+  };
+  collectionsList: {
+    loading: boolean;
+    error?: string;
+    collections: CollectionType[];
+  };
+  collectionDelete: {
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+  };
+  collectionUpdate: {
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+    collection: CollectionType;
+  };
+
   friendRequestCreate: {
     loading: boolean;
     error?: string;

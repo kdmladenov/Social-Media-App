@@ -1,24 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Button from '../../components/Button';
-import SearchBox from '../../components/SearchBox';
 import useTypedSelector from '../../hooks/useTypedSelector';
 import defaultEndpoint from '../../data/inputs/defaultEndpoint';
 import './styles/SavedPostsPage.css';
 import {
+  createCollection,
+  deleteCollection,
   deleteSavedPost,
   listCollections,
-  listSavedPosts
+  listSavedPosts,
+  updateCollection,
+  updateSavedPost
 } from '../../context/actions/savedPostsActions';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import PostCard from '../home/posts/PostCard';
 import Modal from '../../components/Modal';
 import DropDown from '../../components/Dropdown';
+import FormComponent from '../../components/FormComponent';
+import updateCollectionInitialInputState from '../../data/inputs/createCollectionInitialInputState';
+import ConfirmMessage from '../../components/ConfirmMessage';
+import changePostCollectionInitialInputState from '../../data/inputs/changePostCollectionInitialInputState';
 
 const SavedPostsPage = () => {
   const dispatch = useDispatch();
-  const [section, setSection] = useState(null);
+  const [section, setSection] = useState('');
   const [endpoint, setEndpoint] = useState(defaultEndpoint['savedPosts']);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(<></>);
@@ -40,13 +47,91 @@ const SavedPostsPage = () => {
 
   const addCollectionHandler = () => {
     setIsModalOpen(true);
-    setModalContent(<h1>Create Collection Form</h1>);
+    setModalContent(
+      <div className="create_collection flex_col">
+        <span className="message">Create New Collection</span>
+        <FormComponent
+          inputData={updateCollectionInitialInputState}
+          createAction={createCollection}
+          mode={'create'}
+        />
+      </div>
+    );
+    collectionCreateSuccess && setIsModalOpen(false);
   };
+
+  const updateCollectionHandler = () => {
+    setIsModalOpen(true);
+    setModalContent(
+      <div className="update_collection flex_col">
+        <span className="message">Update Collection Name</span>
+        <FormComponent
+          inputData={updateCollectionInitialInputState}
+          resourceId={
+            collections?.find((collection) => collection.collection === section)?.collectionId
+          }
+          updateAction={updateCollection}
+          mode={'update'}
+        />
+      </div>
+    );
+  };
+
+  const deleteCollectionHandler = () => {
+    setIsModalOpen(true);
+    setModalContent(
+      <ConfirmMessage
+        setIsModalOpen={setIsModalOpen}
+        message={`Are your sure you want to delete this collection and all saved posts in it?`}
+        resourceId={
+          collections?.find((collection) => collection.collection === section)?.collectionId!
+        }
+        action={deleteCollection}
+      />
+    );
+    setSection('');
+  };
+
+  const changePostCollectionHandler = (postId: number) => {
+    setIsModalOpen(true);
+    setModalContent(
+      <div className="update_collection flex_col">
+        <span className="message">Move the Post to a different collection</span>
+        <FormComponent
+          inputData={changePostCollectionInitialInputState(
+            collections.map((collection) => collection.collection)
+          )}
+          resourceId={postId}
+          updateAction={updateSavedPost}
+          mode={'update'}
+        />
+      </div>
+    );
+  };
+
+  const postCardDropdown = (postId: number) => (
+    <DropDown
+      button={
+        <Button classes="icon item_btn flex">
+          <i className="fa fa-ellipsis-h"></i>
+        </Button>
+      }
+    >
+      <ul className="menu flex_col">
+        <li onClick={() => dispatch(deleteSavedPost(postId))}>Remove</li>
+        <li onClick={() => changePostCollectionHandler(postId)}>Change Collection</li>
+      </ul>
+    </DropDown>
+  );
 
   useEffect(() => {
     const { page, pageSize, sort, search } = endpoint;
     dispatch(listSavedPosts(`${page}${pageSize}${sort}${search}`));
     dispatch(listCollections());
+
+    if (collectionCreateSuccess || collectionUpdateSuccess || savedPostUpdateSuccess) {
+      setIsModalOpen(false);
+    }
   }, [
     dispatch,
     endpoint,
@@ -64,33 +149,39 @@ const SavedPostsPage = () => {
       <aside className="sidebar">
         <div className="menu">
           <div className="menu_header">
-            {section && collections?.length ? (
-              collections.map((collection) => (
+            {section &&
+              collections?.length &&
+              collections.map((_) => (
                 <>
-                  <Button classes="icon flex" onClick={() => setSection(null)}>
+                  <Button classes="icon flex" onClick={() => setSection('')}>
                     <i className="fas fa-arrow-left" />
                   </Button>
 
-                  <h5 onClick={() => setSection(null)}>{collection.collection}</h5>
+                  <h5 onClick={() => setSection('')}>All</h5>
                 </>
-              ))
-            ) : (
-              <h3>All Saved Posts</h3>
+              ))}
+            <span>{section ? section : 'All Saved Posts'}</span>
+            {section && (
+              <DropDown
+                button={
+                  <Button classes="icon item_btn flex">
+                    <i className="fa fa-ellipsis-h"></i>
+                  </Button>
+                }
+              >
+                <ul className="menu flex_col">
+                  <li className="flex" onClick={() => updateCollectionHandler()}>
+                    Rename
+                  </li>
+                  <li className="flex" onClick={() => deleteCollectionHandler()}>
+                    Remove
+                  </li>
+                </ul>
+              </DropDown>
             )}
-            {section && <span>{section}</span>}
           </div>
 
           <ul className="menu_content flex_col">
-            {/* {section === 'allFriends' && (
-              <SearchBox
-                updateQuery={(prop, value) => setEndpoint({ ...endpoint, [prop]: value })}
-                resource="friends"
-              />
-            )} */}
-            {/* <li className="button card" key={'All Saved Posts'}>
-              <i className={`fsa fa-home left`} />
-              <span>{'All Saved Posts'}</span>
-            </li> */}
             {!section && collections?.length && <h3>Collections</h3>}
             {!section &&
               collections?.length &&
@@ -106,10 +197,12 @@ const SavedPostsPage = () => {
                 </li>
               ))}
             <li>
-              <Button onClick={addCollectionHandler}>
-                <i className="fa fa-plus"></i>
-                <span>Add New Collection</span>
-              </Button>
+              {!section && (
+                <Button classes="blue_light" onClick={addCollectionHandler}>
+                  <i className="fa fa-plus"></i>
+                  <span>Create New Collection</span>
+                </Button>
+              )}
             </li>
           </ul>
         </div>
@@ -125,20 +218,11 @@ const SavedPostsPage = () => {
               .filter((post) => (section ? post.collection === section : true))
               .map((post) => (
                 <li className="saved_post_card">
-                  <DropDown
-                    button={
-                      <Button classes="icon item_btn flex">
-                        <i className="fa fa-ellipsis-h"></i>
-                      </Button>
-                    }
-                  >
-                    <ul className="menu flex_col">
-                      <li className="flex" onClick={() => dispatch(deleteSavedPost(post?.postId))}>
-                        <span>{`Remove`}</span>
-                      </li>
-                    </ul>
-                  </DropDown>
-                  <PostCard key={post.postId} post={post} />
+                  <PostCard
+                    key={post.postId}
+                    post={post}
+                    dropDown={postCardDropdown(post?.postId)}
+                  />
                 </li>
               ))}
           </ul>

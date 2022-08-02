@@ -18,30 +18,22 @@
 }
 
 .saved_post_page .sidebar .menu .menu_header {
-  height: 40px;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 30px 1fr;
-  grid-template-rows: 1fr;
-  grid-template-areas:
-    'arrow back_link'
-    'arrow label';
-  /* padding: 20px; */
-}
-
-.saved_post_page .sidebar .menu .menu_header {
   height: 70px;
   width: 100%;
   display: grid;
-  grid-template-columns: 40px 1fr;
+  grid-template-columns: 40px 1fr 40px;
   grid-template-rows: 1fr;
   grid-template-areas:
-    'arrow back_link'
-    'arrow label';
+    'arrow back_link dropdown'
+    'arrow label dropdown';
   padding: 10px 0;
   justify-content: flex-start;
   align-items: center;
   border-bottom: 1px solid var(--gray_dark);
+}
+
+.saved_post_page .sidebar .menu .menu_header .dropdown {
+  grid-area: dropdown;
 }
 
 .saved_post_page .sidebar .menu .menu_header .button_container {
@@ -151,14 +143,34 @@
   z-index: 10;
 }
 
-.saved_post_page .saved_posts_container ul li.saved_post_card > .dropdown .body li{
+
+.saved_post_page .saved_posts_container ul li.saved_post_card > .dropdown .body li {
+  width: 100%;
+  overflow: hidden;
+  white-space:nowrap;
+}
+
+
+.saved_post_page .saved_posts_container ul li.saved_post_card > .dropdown .body li {
   cursor: pointer;
 }
 
-.saved_post_page .saved_posts_container ul li.saved_post_card > .dropdown .body:before{
+.saved_post_page .dropdown .body:before {
   display: none;
 }
 
-.saved_post_page .saved_posts_container ul li.saved_post_card > .dropdown i{
+.saved_post_page .saved_posts_container ul li.saved_post_card > .dropdown i {
   font-size: 20px;
+}
+
+/* Modals */
+
+#modal .modal_container .create_collection .message,
+#modal .modal_container .update_collection .message {
+  height: 30px;
+  width: 100%;
+  border-bottom: 1px solid var(--gray-dark);
+  color: var(--gray-dark);
+  font-size: 20px;
+  padding: 0 20px;
 }

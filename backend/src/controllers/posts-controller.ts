@@ -3,7 +3,7 @@ import express, { Request, Response } from 'express';
 import postsServices from '../services/posts-services.js';
 
 import postsData from '../data/posts-data.js';
-import postsImagesData from '../data/post-images-data.js';
+import postsImagesData from '../data/images-data.js';
 
 import validateBody from '../middleware/validate-body.js';
 import validateFile from '../middleware/validate-file.js';
@@ -32,16 +32,12 @@ postsController
   // @access Private - Admin, the ProfileOwner or a Friend of the ProfileOwner
   .get(
     '/',
+    authMiddleware,
+    loggedUserGuard,
     errorHandler(async (req: Request<{}, {}, {}, RequestQuery>, res: Response) => {
-      const {
-        userId,
-        search = '',
-        filter = '',
-        sort = 'sort=price asc',
-        role = 'basic'
-      } = req.query;
+      const { userId } = req.user;
 
-      const isProfileOwner = +userId === req.user.userId;
+      const { search = '', filter = '', sort = 'sort=createdAt asc' } = req.query;
 
       let { pageSize = paging.DEFAULT_POST_PAGESIZE, page = paging.DEFAULT_PAGE } = req.query;
 
@@ -49,15 +45,13 @@ postsController
       if (+pageSize < paging.MIN_POST_PAGESIZE) pageSize = paging.MIN_POST_PAGESIZE;
       if (page < paging.DEFAULT_PAGE) page = paging.DEFAULT_PAGE;
 
-      const { error, posts } = await postsServices.getAllPosts(postsData)(
+      const { error, posts } = await postsServices.getAllMyPosts(postsData)(
         +userId,
         search,
         filter,
         sort,
         +pageSize,
-        +page,
-        role,
-        isProfileOwner
+        +page
       );
 
       if (error === errors.OPERATION_NOT_PERMITTED) {
@@ -75,6 +69,8 @@ postsController
   // @access Private - Admin, the ProfileOwner or a Friend of the ProfileOwner
   .get(
     '/:userId/:postId',
+    authMiddleware,
+    loggedUserGuard,
     errorHandler(async (req: Request, res: Response) => {
       const { postId, userId } = req.params;
       const isProfileOwner = +userId === req.user.userId;
@@ -123,7 +119,6 @@ postsController
     '/:userId/:postId',
     authMiddleware,
     loggedUserGuard,
-    roleMiddleware(rolesEnum.admin),
     validateBody('post', updatePostSchema),
     errorHandler(async (req: Request, res: Response) => {
       const { postId, userId } = req.params;
@@ -157,7 +152,7 @@ postsController
   // @route DELETE /posts/:postId
   // @access Private - Admin or the ProfileOwner
   .delete(
-    '/:userId/:postId',
+    '/:postId/:userId',
     authMiddleware,
     loggedUserGuard,
     // roleMiddleware(rolesEnum.admin),
@@ -181,117 +176,6 @@ postsController
         });
       } else {
         res.status(200).send(post);
-      }
-    })
-  )
-  // @desc UPLOAD post's image
-  // @route POST /posts/images/upload
-  // @access Private - Admin only
-  .post(
-    '/images/upload',
-    authMiddleware,
-    loggedUserGuard,
-    roleMiddleware(rolesEnum.admin),
-    uploadImage.single('image'),
-    validateFile('uploads', uploadFileSchema),
-    errorHandler(async (req: Request, res: Response) => {
-      const { path } = req.file;
-
-      res.status(201).send(path.replace(/\\/g, '/'));
-    })
-  )
-  // @desc ADD post's image
-  // @route POST /posts/:postId/image
-  // @access Private - Admin only
-  .post(
-    '/:postId/images',
-    authMiddleware,
-    loggedUserGuard,
-    roleMiddleware(rolesEnum.admin),
-    // validateBody('postImage', addPostImageSchema),
-    errorHandler(async (req: Request, res: Response) => {
-      const { postId } = req.params;
-      const { imageUrl } = req.body;
-      const { error, result } = await postsServices.addPostImage(postsImagesData, postsData)(
-        +postId,
-        imageUrl
-      );
-
-      if (error === errors.RECORD_NOT_FOUND) {
-        res.status(404).send({
-          message: 'The post is not found.'
-        });
-      } else {
-        res.status(201).send(result);
-      }
-    })
-  )
-  // @desc GET ALL post's images
-  // @route GET /posts/:postId/image
-  // @access Public
-  .get(
-    '/:postId/images',
-    errorHandler(async (req: Request, res: Response) => {
-      const { postId } = req.params;
-
-      const { error, result } = await postsServices.getAllPostImages(
-        postsImagesData,
-        postsData
-      )(+postId);
-
-      if (error === errors.RECORD_NOT_FOUND) {
-        res.status(404).send({
-          message: 'The post is not found.'
-        });
-      } else {
-        res.status(200).send(result);
-      }
-    })
-  )
-  // @desc DELETE post image
-  // @route DELETE /posts/:postImageId/images
-  // @access Private - Admin only
-  .delete(
-    '/:postImageId/images',
-    authMiddleware,
-    loggedUserGuard,
-    roleMiddleware(rolesEnum.admin),
-    errorHandler(async (req: Request, res: Response) => {
-      const { postImageId } = req.params;
-      const { error, deletedImage } = await postsServices.deletePostImage(postsImagesData)(
-        +postImageId
-      );
-      if (error === errors.RECORD_NOT_FOUND) {
-        res.status(404).send({
-          message: 'A post image with this id is not found!'
-        });
-      } else {
-        res.status(200).send(deletedImage);
-      }
-    })
-  )
-  // )
-  // @desc SET post image as main
-  // @route PUT /posts/:postImageId/images/main
-  // @access Private - Admin only
-  .put(
-    '/:postImageId/images/main',
-    authMiddleware,
-    loggedUserGuard,
-    roleMiddleware(rolesEnum.admin),
-    errorHandler(async (req: Request, res: Response) => {
-      const { postImageId } = req.params;
-
-      const { error, newMainImage } = await postsServices.setPostImageAsMain(postsImagesData)(
-        +postImageId
-      );
-
-      if (error === errors.RECORD_NOT_FOUND) {
-        res.status(404).send({
-          message: 'The post image is not found.'
-        });
-      } else {
-        res.status(200).send(newMainImage);
       }
     })
   );

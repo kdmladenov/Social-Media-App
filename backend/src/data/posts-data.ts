@@ -1,24 +1,23 @@
 import db from './pool.js';
 import rolesEnum from '../constants/roles.enum.js';
-import PostType from '../models/PostType.js';
+import PostType, { PostTypeImagesAsJson } from '../models/PostType.js';
 import filterQueryHandler from '../helpers/filterQueryHandler.js';
 import RolesType from '../models/RolesType.js';
 
-const getAllPosts = async (
+const getAllMyPosts = async (
+  userId: number,
   search: string,
   filter: string | string[],
   sort: string,
   pageSize: number,
-  page: number,
-  role: RolesType
+  page: number
 ) => {
   const sortArr = sort.split(' ');
   const direction = ['ASC', 'asc', 'DESC', 'desc'].includes(sortArr[1]) ? sortArr[1] : 'asc';
   const sortColumn = [
     'postId',
     'userId',
-    'authorId',
-    'postId',
+    'sharedPostId',
     'feelingType',
     'city',
     'country',
@@ -34,36 +33,58 @@ const getAllPosts = async (
   SELECT 
       p.post_id as postId,
       p.user_id as userId,
-      p.author_id as authorId,
+      u.first_name as userFirstName,
+      u.last_name as userLastName,
+      u.avatar as userAvatar,
+      p.shared_post_id as sharedPostId,
       p.message,
-      p.image,
       f.feeling_type_id as feelingTypeId,
       f.feeling_type as feelingType,
       l.location_id as locationId,
       l.city,
       l.country,
+      i.images,
       p.created_at as createdAt,
       p.updated_at as updatedAt,
-      p.is_deleted
+      p.is_deleted as isDeleted,
+      COUNT(*) OVER () AS totalDBItems
     FROM posts p
+    LEFT JOIN (SELECT 
+        pi.post_id,  
+        JSON_ARRAYAGG(JSON_OBJECT('image', image, 'imageId', image_id)) as images
+      FROM post_images pi
+        LEFT JOIN (SELECT image_id, image
+                  FROM images) as img using (image_id)
+                  GROUP BY post_id) as i USING (post_id)
     LEFT JOIN (SELECT location_id, city, country
         FROM locations
-        GROUP BY location_id) as l using (location_id)
+        GROUP BY location_id) as l USING (location_id)
     LEFT JOIN (SELECT feeling_type_id, feeling_type
         FROM feeling_types
-        GROUP BY feeling_type_id) as f using (feeling_type_id)
+        GROUP BY feeling_type_id) as f USING (feeling_type_id)
+    LEFT JOIN (SELECT user_id, first_name, last_name, avatar
+        FROM users
+        GROUP BY user_id) as u USING (user_id)
+    WHERE p.user_id = ? AND p.is_deleted = 0 ${filter || search ? 'AND' : ''}
         ${
-          role === rolesEnum.basic ? `WHERE p.is_deleted = 0 ${filter || search ? 'AND' : ''}` : ''
-        } ${
-    search
-      ? `CONCAT_WS(',', p.post_id, p.user_id, p.author_id, p.message, p.image, f.feeling_type_id, f.feeling_type, l.location_id, l.city, l.country, p.created_at, p.updated_at, p.is_deleted) Like '%${search}%'`
-      : ''
-  } ${filter && search && ' AND '}${Array.isArray(filter) ? filterQueryHandler(filter) : filter}
+          search
+            ? `CONCAT_WS(',', p.post_id, p.user_id, p.message, f.feeling_type_id, f.feeling_type, l.location_id, l.city, l.country, p.created_at, p.updated_at, p.is_deleted) Like '%${search}%'`
+            : ''
+        } ${filter && search && ' AND '}${
+    Array.isArray(filter) ? filterQueryHandler(filter) : filter
+  }
         ORDER BY ${sortColumn} ${direction} 
         LIMIT ? OFFSET ?
         `;
 
-  return db.query(sql, [+pageSize, +offset]);
+  const posts = (await db.query(sql, [+userId, +pageSize, +offset])) as PostTypeImagesAsJson[];
+
+  return posts.map((post) => {
+    return {
+      ...post,
+      images: JSON.parse(post.images)
+    };
+  });
 };
 
 const getBy = async (column: string, value: string | number, role: RolesType = 'basic') => {
@@ -71,18 +92,25 @@ const getBy = async (column: string, value: string | number, role: RolesType = '
     SELECT 
       p.post_id as postId,
       p.user_id as userId,
-      p.author_id as authorId,
+      p.shared_post_id as sharedPostId,
       p.message,
-      p.image,
       f.feeling_type_id as feelingTypeId,
       f.feeling_type as feelingType,
       l.location_id as locationId,
       l.city,
       l.country,
+      i.images,
       p.created_at as createdAt,
       p.updated_at as updatedAt,
-      p.is_deleted
+      p.is_deleted as isDeleted
     FROM posts p
+    LEFT JOIN (SELECT 
+        pi.post_id,  
+        JSON_ARRAYAGG(JSON_OBJECT('image', image, 'imageId', image_id)) as images
+      FROM post_images pi
+        LEFT JOIN (SELECT image_id, image
+                  FROM images) as img using (image_id)
+                  GROUP BY post_id) as i USING (post_id)
     LEFT JOIN (SELECT location_id, city, country
         FROM locations
         GROUP BY location_id) as l using (location_id)
@@ -92,17 +120,20 @@ const getBy = async (column: string, value: string | number, role: RolesType = '
     WHERE ${column} = ? ${role === rolesEnum.basic ? ' AND p.is_deleted = 0' : ''};
   `;
 
-  const result = await db.query(sql, [value]);
-  return result[0];
+  const result = (await db.query(sql, [value])) as PostTypeImagesAsJson[];
+
+  return {
+    ...result[0],
+    images: JSON.parse(result[0].images)
+  };
 };
 
 const create = async (post: PostType) => {
   const sql = `
     INSERT INTO posts (
       user_id,
-      author_id,
+      shared_post_id,
       message,
-      image,
       feeling_type_id,
       location_id
     )
@@ -110,9 +141,8 @@ const create = async (post: PostType) => {
   `;
   const result = await db.query(sql, [
     +post.userId,
-    +post.authorId,
+    +post.sharedPostId,
     post.message || null,
-    post.image || 'storage/images/defaultImage.png',
     post.feelingType || null,
     post.city || null
   ]);
@@ -125,19 +155,17 @@ const update = async (updatedPost: PostType) => {
         UPDATE posts
         SET
         user_id = ?,
-        author_id = ?,
+        shared_post_id = ?,
         message = ?,
-        image = ?,
         feeling_type_id = (SELECT feeling_type_id from feeling_types WHERE feeling_type = ?),
         location_id = (SELECT location_id from locations WHERE city = ?)
         WHERE post_id = ?
-    `; 
+    `;
 
   await db.query(sql, [
     +updatedPost.userId || null,
-    +updatedPost.authorId || null,
+    +updatedPost.sharedPostId || null,
     updatedPost.message || null,
-    updatedPost.image || 'storage/images/defaultImage.png',
     updatedPost.feelingType || null,
     updatedPost.city || null,
     +updatedPost.postId
@@ -157,7 +185,7 @@ const remove = async (postToDelete: PostType) => {
 };
 
 export default {
-  getAllPosts,
+  getAllMyPosts,
   getBy,
   create,
   update,

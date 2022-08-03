@@ -1,13 +1,12 @@
 import errors from '../constants/service-errors.js';
 import Image from '../models/Image.js';
 import PostType from '../models/PostType.js';
-import PostImagesData from '../models/PostImagesData.js';
 import PostsData from '../models/PostsData.js';
 import RolesType from '../models/RolesType.js';
 import rolesEnum from '../constants/roles.enum.js';
 import UsersData from '../models/UsersData.js';
 
-const getAllPosts =
+const getAllMyPosts =
   (postsData: PostsData) =>
   async (
     userId: number,
@@ -15,21 +14,18 @@ const getAllPosts =
     filter: string | string[],
     sort: string,
     pageSize: number,
-    page: number,
-    role: RolesType,
-    isProfileOwner: boolean
+    page: number
   ) => {
-    if (role !== rolesEnum.admin && !isProfileOwner) {
-      const isProfileOwnerFriend = true; //TODO find if user is a friend
+    const isProfileOwnerFriend = true; //TODO find if user is a friend
 
-      if (!isProfileOwnerFriend) {
-        return {
-          error: errors.OPERATION_NOT_PERMITTED,
-          post: null
-        };
-      }
+    if (!isProfileOwnerFriend) {
+      return {
+        error: errors.OPERATION_NOT_PERMITTED,
+        post: null
+      };
     }
-    const result = await postsData.getAllPosts(search, filter, sort, pageSize, page, role);
+
+    const result = await postsData.getAllMyPosts(userId, search, filter, sort, pageSize, page);
 
     return {
       error: null,
@@ -92,14 +88,10 @@ const updatePost =
     updatedData: PostType
   ) => {
     if (role !== rolesEnum.admin && !isProfileOwner) {
-      const isProfileOwnerFriend = true; //TODO find if user is a friend
-
-      if (!isProfileOwnerFriend) {
-        return {
-          error: errors.OPERATION_NOT_PERMITTED,
-          post: null
-        };
-      }
+      return {
+        error: errors.OPERATION_NOT_PERMITTED,
+        post: null
+      };
     }
 
     // create city and country
@@ -155,96 +147,11 @@ const deletePost =
     };
   };
 
-const getAllPostImages =
-  (postsImagesData: PostImagesData, postsData: PostsData) => async (postId: number) => {
-    const existingPost = await postsData.getBy('post_id', +postId, 'basic');
-
-    if (!existingPost) {
-      return {
-        error: errors.RECORD_NOT_FOUND,
-        result: null
-      };
-    }
-
-    return {
-      error: null,
-      result: await postsImagesData.getAllPostImages(+postId)
-    };
-  };
-
-const addPostImage =
-  (postsImagesData: PostImagesData, postsData: PostsData) =>
-  async (postId: number, imageUrl: string) => {
-    const existingPost = await postsData.getBy('post_id', postId, 'basic');
-
-    if (!existingPost) {
-      return {
-        error: errors.RECORD_NOT_FOUND,
-        result: null
-      };
-    }
-
-    const existingImagesList = await postsImagesData.getAllPostImages(+postId);
-
-    const isMainImage = existingImagesList.length === 0 ? 1 : 0;
-
-    return {
-      error: null,
-      result: await postsImagesData.addPostImage(+postId, imageUrl, +isMainImage)
-    };
-  };
-
-const deletePostImage = (postsImagesData: PostImagesData) => async (postImageId: number) => {
-  const postImageToDelete = await postsImagesData.getPostImageBy(
-    'post_image_id',
-    +postImageId,
-    'basic'
-  );
-
-  if (!postImageToDelete) {
-    return {
-      error: errors.RECORD_NOT_FOUND,
-      deletedImage: null
-    };
-  }
-
-  await postsImagesData.remove(+postImageId);
-
-  return {
-    error: null,
-    deletedImage: { ...postImageToDelete, isDeleted: 1 }
-  };
-};
-
-const setPostImageAsMain = (postsImagesData: PostImagesData) => async (postImageId: number) => {
-  const newMainPostImage = await postsImagesData.getPostImageBy('post_image_id', +postImageId);
-
-  if (!newMainPostImage) {
-    return {
-      error: errors.RECORD_NOT_FOUND,
-      newMainImage: null
-    };
-  }
-  const allPostImages = await postsImagesData.getAllPostImages(+newMainPostImage.postId);
-
-  const oldMainPost = allPostImages.filter((image: Image) => image.isMain)[0];
-
-  await postsImagesData.update({ ...oldMainPost, isMain: 0 });
-
-  return {
-    error: null,
-    newMainImage: await postsImagesData.update({ ...newMainPostImage, isMain: 1 })
-  };
-};
 
 export default {
-  getAllPosts,
+  getAllMyPosts,
   getPostById,
   createPost,
   updatePost,
-  deletePost,
-  addPostImage,
-  getAllPostImages,
-  deletePostImage,
-  setPostImageAsMain
+  deletePost
 };

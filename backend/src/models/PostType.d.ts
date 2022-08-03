@@ -3,9 +3,9 @@ import FeelingTypes from './FeelingTypes';
 interface PostType {
   postId: number;
   userId: number;
-  authorId: number;
+  sharedPostId: number;
   message: string;
-  image: string;
+  images: { image: string; imageId: number }[];
   feelingType: FeelingTypes;
   city: string;
   country: string;
@@ -13,3 +13,7 @@ interface PostType {
 }
 
 export default PostType;
+
+export interface PostTypeImagesAsJson extends PostType {
+  images: string;
+}

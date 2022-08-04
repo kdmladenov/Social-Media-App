@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { BASE_URL } from '../data/constants';
 import SliderType, { SliderItemType } from '../types/components/SliderTypeProps';
+import Button from './Button';
 
 import './styles/Slider.css';
 
@@ -42,15 +44,21 @@ const Slider: SliderType = ({ dots, children = [], slideIndex, setSlideIndex }) 
   );
 };
 
-const Item: SliderItemType = ({ item }) => {
+const Item: SliderItemType = ({ item, button_controls = false }) => {
+  // TO DO fullscreen
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [zoom, setZoom] = useState(1);
   return (
-    <div className="slide_container">
+    <div className={`slide_container ${isFullScreen ? 'full_screen' : ''}`}>
       <div className="image flex">
         <img
           crossOrigin="anonymous"
           src={item?.image?.startsWith('http') ? item?.image : `${BASE_URL}/${item?.image}`}
           alt="story"
           className="image"
+          style={{
+            transform: `scale(${zoom})`
+          }}
         />
       </div>
       <div
@@ -61,6 +69,22 @@ const Item: SliderItemType = ({ item }) => {
           })`
         }}
       />
+      {button_controls && (
+        <div className="button_controls flex">
+          <Button classes="icon" onClick={() => setZoom(zoom + 0.25)}>
+            <i className="fas fa-search-plus" />
+          </Button>
+          <Button classes="icon" onClick={() => setZoom(zoom - 0.25)}>
+            <i className="fas fa-search-minus" />
+          </Button>
+          <Button classes="icon">
+            <i className="fas fa-tag" />
+          </Button>
+          <Button classes="icon" onClick={() => setIsFullScreen(!isFullScreen)}>
+            <i className={`fas fa-${isFullScreen ? 'compress' : 'expand'}`} />
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

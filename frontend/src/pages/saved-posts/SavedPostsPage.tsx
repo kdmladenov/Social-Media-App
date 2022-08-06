@@ -19,9 +19,9 @@ import PostCard from '../home/posts/PostCard';
 import Modal from '../../components/Modal';
 import DropDown from '../../components/Dropdown';
 import FormComponent from '../../components/FormComponent';
-import updateCollectionInitialInputState from '../../data/inputs/createCollectionInitialInputState';
 import ConfirmMessage from '../../components/ConfirmMessage';
 import changePostCollectionInitialInputState from '../../data/inputs/changePostCollectionInitialInputState';
+import createCollectionInitialInputState from '../../data/inputs/createCollectionInitialInputState';
 
 const SavedPostsPage = () => {
   const dispatch = useDispatch();
@@ -51,7 +51,7 @@ const SavedPostsPage = () => {
       <div className="create_collection flex_col">
         <span className="message">Create New Collection</span>
         <FormComponent
-          inputData={updateCollectionInitialInputState}
+          inputData={createCollectionInitialInputState}
           createAction={createCollection}
           mode={'create'}
         />
@@ -66,7 +66,7 @@ const SavedPostsPage = () => {
       <div className="update_collection flex_col">
         <span className="message">Update Collection Name</span>
         <FormComponent
-          inputData={updateCollectionInitialInputState}
+          inputData={createCollectionInitialInputState}
           resourceId={
             collections?.find((collection) => collection.collection === section)?.collectionId
           }
@@ -222,6 +222,7 @@ const SavedPostsPage = () => {
                     key={post.postId}
                     post={post}
                     dropDown={postCardDropdown(post?.postId)}
+                    screen="saved_posts"
                   />
                 </li>
               ))}

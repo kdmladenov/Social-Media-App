@@ -39,7 +39,7 @@ import CollectionsListActionType from '../../types/context/actions/CollectionsLi
 import CollectionDeleteActionType from '../../types/context/actions/CollectionDeleteActionType';
 
 export const createSavedPost =
-  (postId: number, collection: string) =>
+  (postId: number, collection: { collection?: string } = {}) =>
   async (dispatch: Dispatch<SavedPostCreateActionType>, getState: () => StoreType) => {
     try {
       dispatch({ type: SAVED_POST_CREATE_REQUEST });
@@ -55,11 +55,7 @@ export const createSavedPost =
         }
       };
 
-      const { data } = await axios.post(
-        `${BASE_URL}/saved-posts/${postId}`,
-        { collection },
-        config
-      );
+      const { data } = await axios.post(`${BASE_URL}/saved-posts/${postId}`, collection, config);
 
       dispatch({
         type: SAVED_POST_CREATE_SUCCESS,
@@ -93,7 +89,7 @@ export const updateSavedPost =
         }
       };
 
-      const { data } = await axios.put(`${BASE_URL}/saved-posts/${postId}`, { collection }, config);
+      const { data } = await axios.put(`${BASE_URL}/saved-posts/${postId}`, collection, config);
 
       dispatch({
         type: SAVED_POST_UPDATE_SUCCESS,
@@ -150,11 +146,11 @@ export const listSavedPosts =
 export const deleteSavedPost =
   (postId: number) =>
   async (dispatch: Dispatch<SavedPostDeleteActionType>, getState: () => StoreType) => {
+
     try {
       dispatch({
         type: SAVED_POST_DELETE_REQUEST
       });
-
       const {
         userLogin: { userInfo }
       } = getState();
@@ -183,8 +179,9 @@ export const deleteSavedPost =
   };
 
 export const createCollection =
-  (collection: string) =>
+  (collection: { collection: string }) =>
   async (dispatch: Dispatch<CollectionCreateActionType>, getState: () => StoreType) => {
+
     try {
       dispatch({ type: COLLECTION_CREATE_REQUEST });
 
@@ -201,7 +198,7 @@ export const createCollection =
 
       const { data } = await axios.post(
         `${BASE_URL}/saved-posts/${userInfo?.userId}/collections`,
-        { collection },
+        collection,
         config
       );
 
@@ -219,7 +216,7 @@ export const createCollection =
   };
 
 export const updateCollection =
-  (collectionId: number, collection: string) =>
+  (collectionId: number, collection: { collection: string }) =>
   async (dispatch: Dispatch<CollectionUpdateActionType>, getState: () => StoreType) => {
     try {
       dispatch({
@@ -239,7 +236,7 @@ export const updateCollection =
 
       const { data } = await axios.put(
         `${BASE_URL}/saved-posts/${collectionId}/collections`,
-        { collection },
+        collection,
         config
       );
 

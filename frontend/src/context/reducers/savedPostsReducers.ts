@@ -73,7 +73,7 @@ export const savedPostsListReducer = (
     case SAVED_POSTS_LIST_REQUEST:
       return { loading: true };
     case SAVED_POSTS_LIST_SUCCESS:
-      return { loading: false, savedPosts: action.payload };
+      return { loading: false, savedPosts: action.payload};
     case SAVED_POSTS_LIST_FAIL:
       return { loading: false, error: action.payload };
     case SAVED_POSTS_LIST_RESET:
@@ -118,7 +118,7 @@ export const collectionUpdateReducer = (state = {}, action: CollectionUpdateActi
     case COLLECTION_UPDATE_FAIL:
       return { loading: false, error: action.payload };
     case COLLECTION_UPDATE_RESET:
-      return { collection: {} };
+      return { collection: {}, success: false };
     default:
       return state;
   }
@@ -132,7 +132,7 @@ export const collectionsListReducer = (
     case COLLECTIONS_LIST_REQUEST:
       return { loading: true };
     case COLLECTIONS_LIST_SUCCESS:
-      return { loading: false, collections: action.payload };
+      return { loading: false, collections: action.payload, success: true };
     case COLLECTIONS_LIST_FAIL:
       return { loading: false, error: action.payload };
     case COLLECTIONS_LIST_RESET:

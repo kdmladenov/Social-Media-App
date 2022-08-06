@@ -3,6 +3,8 @@ import SavedPostsData from '../models/SavedPostsData.js';
 import RolesType from '../models/RolesType.js';
 import rolesEnum from '../constants/roles.enum.js';
 import PostsData from '../models/PostsData.js';
+import SavedPostType from '../models/SavedPostType.js';
+import { DEFAULT_COLLECTION } from '../constants/constants.js';
 
 const getAllMySavedPosts =
   (savedPostsData: SavedPostsData) =>
@@ -49,18 +51,33 @@ const addSavedPost =
         post: null
       };
     }
-    const savedPost = await savedPostsData.getSavedPost(userId, postId);
+    let savedPost = await savedPostsData.getSavedPost(userId, postId);
     let existingCollection = await savedPostsData.getCollection(collection, userId);
+    if (!existingCollection?.collectionId) {
+      existingCollection = await savedPostsData.addCollection(collection, userId);
+    }
 
-    if (savedPost) {
+    if (savedPost?.isDeleted === 0) {
       return {
         error: null,
         savedPost
       };
     }
 
-    if (!existingCollection?.collectionId) {
-      existingCollection = await savedPostsData.addCollection(collection, userId);
+    if (savedPost?.isDeleted) {
+      await savedPostsData.restoreSavedPost(postId, userId);
+
+      if (savedPost.collection !== collection) {
+        savedPost = await savedPostsData.updateSavedPost(
+          postId,
+          userId,
+          existingCollection?.collectionId
+        );
+      }
+      return {
+        error: null,
+        savedPost
+      };
     }
 
     return {
@@ -107,7 +124,6 @@ const updateSavedPost =
 const deleteSavedPost =
   (savedPostsData: SavedPostsData) => async (postId: number, userId: number, role: RolesType) => {
     const savedPostToDelete = await savedPostsData.getSavedPost(userId, postId);
-
     if (!savedPostToDelete) {
       return {
         error: errors.RECORD_NOT_FOUND,
@@ -227,6 +243,24 @@ const deleteCollection =
       };
     }
 
+    // Move All saved posts in the default collection
+    let defaultCollection = await savedPostsData.getCollection(DEFAULT_COLLECTION, userId);
+
+    if (!defaultCollection?.collectionId) {
+      defaultCollection = await savedPostsData.addCollection(DEFAULT_COLLECTION, userId);
+    }
+
+    const allSavedPosts = await savedPostsData.getAllSavedPostsByCollectionId(userId, collectionId);
+    await Promise.all(
+      await allSavedPosts.map(
+        async (post: SavedPostType) =>
+          await savedPostsData.updateSavedPost(
+            post.postId,
+            post.userId,
+            defaultCollection?.collectionId
+          )
+      )
+    );
     const deletedCollection = await savedPostsData.removeCollection(
       collectionToDelete.collectionId
     );

@@ -98,7 +98,7 @@ const getAllMySavedPosts = async (
   });
 };
 
-const getSavedPost = async (userId: number, postId: number, role: RolesType = 'basic') => {
+const getSavedPost = async (userId: number, postId: number) => {
   const sql = `
     SELECT 
       sp.post_id as postId,
@@ -145,13 +145,27 @@ const getSavedPost = async (userId: number, postId: number, role: RolesType = 'b
     LEFT JOIN (SELECT user_id, first_name, last_name, avatar
         FROM users
         GROUP BY user_id) as u ON p.user_id = u.user_id
-    WHERE sp.post_id = ? AND sp.user_id = ? ${
-      role === rolesEnum.basic ? ' AND sp.is_deleted = 0' : ''
-    };
+    WHERE sp.post_id = ? AND sp.user_id = ?
   `;
 
   const result = await db.query(sql, [+postId, +userId]);
   return result[0];
+};
+
+const getAllSavedPostsByCollectionId = async (userId: number, collectionId: number) => {
+  const sql = `
+  SELECT 
+      post_id as postId,
+      user_id as userId,
+      date_created as dateCreated,
+      collection_id as collectionId,
+      is_deleted as isDeleted
+
+    FROM saved_posts
+    WHERE user_id = ? AND collection_id = ? AND is_deleted = 0 
+        `;
+
+  return await db.query(sql, [+userId, +collectionId]);
 };
 
 const addSavedPost = async (postId: number, userId: number, collectionId: number) => {
@@ -163,7 +177,7 @@ const addSavedPost = async (postId: number, userId: number, collectionId: number
     )
     VALUES (?, ?, ?)
   `;
-  const result = await db.query(sql, [+postId, +userId, +collectionId || null]);
+  await db.query(sql, [+postId, +userId, +collectionId || null]);
 
   return getSavedPost(+userId, +postId);
 };
@@ -183,6 +197,16 @@ const removeSavedPost = async (postId: number, userId: number) => {
   const sql = `
         UPDATE saved_posts 
         SET is_deleted = true
+        WHERE post_id = ? AND user_id = ?
+    `;
+
+  return db.query(sql, [+postId, +userId]);
+};
+
+const restoreSavedPost = async (postId: number, userId: number) => {
+  const sql = `
+        UPDATE saved_posts 
+        SET is_deleted = false
         WHERE post_id = ? AND user_id = ?
     `;
 
@@ -269,7 +293,7 @@ const addCollection = async (collection: string, userId: number) => {
 };
 
 const updateCollection = async (collectionId: number, collection: string) => {
-  console.log(collectionId, collection);
+
   const sql = `
         UPDATE saved_posts_collections 
         SET collection = ?
@@ -289,16 +313,18 @@ const removeCollection = async (collectionId: number) => {
     `;
 
   await db.query(sql, [+collectionId]);
-  
+
   return getCollectionById(+collectionId);
 };
 
 export default {
   getAllMySavedPosts,
   getSavedPost,
+  getAllSavedPostsByCollectionId,
   addSavedPost,
   updateSavedPost,
   removeSavedPost,
+  restoreSavedPost,
   getAllUserCollections,
   getCollection,
   getCollectionById,

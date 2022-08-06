@@ -8,9 +8,11 @@ interface SavedPostsData {
     page: number
   ) => Promise<SavedPostType[]>;
   getSavedPost: (userId: number, postId: number, role?: RolesType) => Promise<SavedPostType>;
+  getAllSavedPostsByCollectionId: (userId: number, collectionId: number) => Promise<SavedPostType>;
   addSavedPost: (postId: number, userId: number, collectionId: number) => Promise<SavedPostType>;
   updateSavedPost: (postId: number, userId: number, collectionId: number) => Promise<SavedPostType>;
   removeSavedPost: (postId: number, userId: number) => Promise<void>;
+  restoreSavedPost: (postId: number, userId: number) => Promise<void>;
   getAllUserCollections: (
     userId: number,
     search: string,

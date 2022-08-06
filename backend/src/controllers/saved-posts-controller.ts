@@ -10,7 +10,7 @@ import { authMiddleware } from '../authentication/auth.middleware.js';
 
 import errors from '../constants/service-errors.js';
 import usersData from '../data/users-data.js';
-import { paging } from '../constants/constants.js';
+import { DEFAULT_COLLECTION, paging } from '../constants/constants.js';
 import RequestQuery from '../models/RequestQuery.js';
 import validateBody from '../middleware/validate-body.js';
 import updateSavedPostSchema from '../validator/update-saved-post-schema.js';
@@ -66,7 +66,7 @@ savedPostsController
     loggedUserGuard,
     validateBody('savedPost', createSavedPostSchema),
     errorHandler(async (req: Request, res: Response) => {
-      const { collection } = req.body;
+      const { collection = DEFAULT_COLLECTION } = req.body;
       const { postId } = req.params;
       const { userId } = req.user;
       const { error, savedPost } = await savedPostsServices.addSavedPost(savedPostsData, postsData)(
@@ -80,10 +80,8 @@ savedPostsController
           message: 'A post with this id is not found!'
         });
       } else {
-        res.status(200).send(savedPost);
+        res.status(201).send(savedPost);
       }
-
-      res.status(201).send(savedPost);
     })
   )
 
@@ -118,7 +116,7 @@ savedPostsController
 
   // @desc DELETE saved post
   // @route DELETE /saved-posts/:postId
-  // @access Private - Admin or the ProfileOwner
+  // @access Private - AdminpostId or the ProfileOwner
   .delete(
     '/:postId',
     authMiddleware,
@@ -218,7 +216,7 @@ savedPostsController
 
       const { error, updatedCollection } = await savedPostsServices.updateCollection(
         savedPostsData
-      )(+collectionId, +userId,collection, role);
+      )(+collectionId, +userId, collection, role);
 
       if (error === errors.OPERATION_NOT_PERMITTED) {
         res.status(403).send({

@@ -23,7 +23,7 @@ interface FriendsType {
   requestStatus: string;
   createdAt: string | Date;
   updatedAt: string | Date;
-  friends: { friendUserId: number; firstName: string; lastName: string; avatar: string }[];
+  friends: { userId: number; firstName: string; lastName: string; avatar: string }[];
   totalDBItems: number;
 }
 

@@ -18,31 +18,25 @@ interface ReactionsImagesData {
     imageId: number,
     reactionName: string
   ) => Promise<ReactionType>;
-  updatePostImageReaction: (
-    reactionName: string,
-    reactionPostImageId: number
-  ) => Promise<ReactionType>;
-  deletePostImageReaction: (reactionPostImageId: number) => Promise<void>;
-  getAllPostImageCommentReactions: (postImageCommentId: number) => Promise<ReactionType[]>;
+  updatePostImageReaction: (reactionName: string, reactionId: number) => Promise<ReactionType>;
+  deletePostImageReaction: (reactionId: number) => Promise<void>;
+  getAllPostImageCommentReactions: (commentId: number) => Promise<ReactionType[]>;
   getPostImageCommentReactionBy: (
     column: string,
     value: string | number,
     userId?: number
   ) => Promise<ReactionsType>;
-  getPostImageCommentReaction: (
-    postImageCommentId: number,
-    userId?: number
-  ) => Promise<ReactionsType>;
+  getPostImageCommentReaction: (commentId: number, userId?: number) => Promise<ReactionsType>;
   createPostImageCommentReaction: (
     userId: number,
-    postImageCommentId: number,
+    commentId: number,
     reactionName: string
   ) => Promise<ReactionType>;
   updatePostImageCommentReaction: (
     reactionName: string,
-    reactionPostImageCommentId: number
+    reactionId: number
   ) => Promise<ReactionType>;
-  deletePostImageCommentReaction: (reactionPostImageCommentId: number) => Promise<void>;
+  deletePostImageCommentReaction: (reactionId: number) => Promise<void>;
 }
 
 export default ReactionsImagesData;

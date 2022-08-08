@@ -28,11 +28,11 @@ export interface UserType {
   currentCountry: string;
   aboutMe: string;
   friends: {
-    friendUserId: number;
+    userId: number;
     firstName: string;
     lastName: string;
     avatar: string;
-    friends: { friendUserId: number; firstName: string; lastName: string; avatar: string }[];
+    friends: { userId: number; firstName: string; lastName: string; avatar: string }[];
   }[];
 }
 

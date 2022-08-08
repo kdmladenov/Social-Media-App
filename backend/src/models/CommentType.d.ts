@@ -1,6 +1,7 @@
 interface CommentType {
   commentId: number;
   postId: number;
+  imageId: number;
   replyTo: number | null;
   authorId: number;
   authorFirstName: string;

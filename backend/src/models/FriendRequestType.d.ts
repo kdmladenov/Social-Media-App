@@ -1,4 +1,5 @@
 interface FriendRequestType {
+  userId?: number;
   sourceId: number;
   targetId: number;
   requestStatusId: number;

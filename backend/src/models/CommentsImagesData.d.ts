@@ -20,12 +20,12 @@ interface CommentsImagesData {
   getPostImageCommentBy: (column: string, value: string | number) => Promise<CommentImageType>;
   updatePostImageComment: (
     content: string,
-    postImageCommentId: number,
+    commentId: number,
     authorId: number,
     role: RolesType
   ) => Promise<CommentType>;
   removePostImageComment: (
-    postImageCommentId: number,
+    commentId: number,
     authorId: number,
     role: RolesType
   ) => Promise<CommentType>;

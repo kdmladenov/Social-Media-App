@@ -3,6 +3,7 @@ import { FriendTypeFriendsAsJson } from '../models/FriendsType.js';
 import FriendRequestType from '../models/FriendRequestType.js';
 
 const getFriendRequestBy = async (userId: number, friendUserId: number) => {
+
   const sql = `
     SELECT 
       f.source_id as sourceId, 
@@ -21,7 +22,42 @@ const getFriendRequestBy = async (userId: number, friendUserId: number) => {
 
   const result = await db.query(sql, [+userId, +friendUserId, +userId, +friendUserId]);
 
+
   return result[0];
+};
+
+const getAllFriendRequestsByUser = async (userId: number) => {
+  const sql = `
+    SELECT 
+      f.source_id as userId, 
+      f.request_status_id as requestStatusId, 
+      rs.request_status as requestStatus, 
+      f.created_at as createdAt, 
+      f.updated_at as updatedAt
+      
+    FROM friends f
+    LEFT JOIN (SELECT request_status_id, request_status
+      FROM request_statuses
+      GROUP BY request_status_id) as rs using (request_status_id)
+    WHERE f.target_id = ?
+
+    UNION 
+
+    SELECT 
+      f.target_id as userId, 
+      f.request_status_id as requestStatusId, 
+      rs.request_status as requestStatus, 
+      f.created_at as createdAt, 
+      f.updated_at as updatedAt
+      
+    FROM friends f
+    LEFT JOIN (SELECT request_status_id, request_status
+      FROM request_statuses
+      GROUP BY request_status_id) as rs using (request_status_id)
+    WHERE f.source_id = ?
+      `;
+
+  return await db.query(sql, [+userId, +userId]);
 };
 
 const getAllMyFriends = async (
@@ -87,7 +123,7 @@ const getAllMyFriends = async (
               u.last_name as lastName,
               u.avatar,
               u.cover,
-              JSON_ARRAYAGG(JSON_OBJECT('friendUserId', fr.friendUserId,'firstName', fr.firstName, 'lastName', fr.lastName, 'avatar', fr.avatar)) as friends,
+              JSON_ARRAYAGG(JSON_OBJECT('userId', fr.friendUserId,'firstName', fr.firstName, 'lastName', fr.lastName, 'avatar', fr.avatar)) as friends,
               u.about_me as aboutMe,
               u.email,
               u.phone,
@@ -340,7 +376,7 @@ const getAllFriendSuggestions = async (userId: number) => {
               u.first_name as firstName,
               u.last_name as lastName,
               u.avatar,
-              JSON_ARRAYAGG(JSON_OBJECT('friendUserId', fr.friendUserId,'firstName', fr.firstName, 'lastName', fr.lastName, 'avatar', fr.avatar, 'homeCityId', fr.home_city_id, 'currentCityId', fr.current_city_id, 'friends' , fr.friends)) as friends
+              JSON_ARRAYAGG(JSON_OBJECT('userId', fr.friendUserId,'firstName', fr.firstName, 'lastName', fr.lastName, 'avatar', fr.avatar, 'homeCityId', fr.home_city_id, 'currentCityId', fr.current_city_id, 'friends' , fr.friends)) as friends
 
         FROM users u
         INNER JOIN (
@@ -367,7 +403,7 @@ const getAllFriendSuggestions = async (userId: number) => {
                       LEFT JOIN(
                                 SELECT
                                     u.user_id,
-                                    JSON_ARRAYAGG(JSON_OBJECT('friendUserId', frr.friendUserId,'firstName', frr.firstName, 'lastName', frr.lastName, 'avatar', frr.avatar)) as friends
+                                    JSON_ARRAYAGG(JSON_OBJECT('userId', frr.friendUserId,'firstName', frr.firstName, 'lastName', frr.lastName, 'avatar', frr.avatar)) as friends
                                 FROM users u
                                 INNER JOIN (
                                       SELECT
@@ -441,7 +477,7 @@ const getAllFriendSuggestions = async (userId: number) => {
                       LEFT JOIN(
                                 SELECT
                                     u.user_id,
-                                    JSON_ARRAYAGG(JSON_OBJECT('friendUserId', frr.friendUserId,'firstName', frr.firstName, 'lastName', frr.lastName, 'avatar', frr.avatar)) as friends
+                                    JSON_ARRAYAGG(JSON_OBJECT('userId', frr.friendUserId,'firstName', frr.firstName, 'lastName', frr.lastName, 'avatar', frr.avatar)) as friends
                                 FROM users u
                                 INNER JOIN (
                                       SELECT
@@ -556,6 +592,7 @@ const unfriend = async (userId: number, friendId: number) => {
 
 export default {
   getFriendRequestBy,
+  getAllFriendRequestsByUser,
   getAllMyFriends,
   getAllMySentPendingRequests,
   getAllMyReceivedPendingRequests,

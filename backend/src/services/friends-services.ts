@@ -28,15 +28,44 @@ const getAllMyReceivedPendingFriendRequests =
 const getAllFriendSuggestions =
   (friendsData: FriendsData, usersData: UsersData) => async (userId: number) => {
     const friends = await friendsData.getAllFriendSuggestions(userId);
+    const requestsSent = await friendsData.getAllMySentPendingRequests(userId);
+    const requestsReceived = await friendsData.getAllMyReceivedPendingRequests(userId);
+    const allRequests = await friendsData.getAllFriendRequestsByUser(userId);
     const currentUser = await usersData.getBy('user_id', userId, true);
+
+    const friendsUserIdMap = friends.reduce((acc, curr) => {
+      return { ...acc, [`${curr.userId}`]: true };
+    }, {});
+    const requestsSentUserIdMap = requestsSent.reduce((acc, curr) => {
+      return { ...acc, [`${curr.userId}`]: true };
+    }, {});
+    const requestsReceivedUserIdMap = requestsReceived.reduce((acc, curr) => {
+      return { ...acc, [`${curr.userId}`]: true };
+    }, {});
+    const requestsRejectedUnfriendedUserIdMap = allRequests.reduce((acc, curr) => {
+      return {
+        ...acc,
+        [`${curr.userId}`]: curr.requestStatus === 'rejected' || curr.requestStatus === 'unfriended'
+      };
+    }, {}) as { [key: string]: boolean };
+
     const map = new Map();
     const currentCitySet = new Set();
     const homeCitySet = new Set();
+
     // TODO - Add workplace and school
     for (const friend of friends) {
       for (const potentialFriend of friend.friends) {
         const friendAsString = JSON.stringify(potentialFriend);
-        if (potentialFriend.friendUserId !== userId) {
+        // The potential friend should not be us, in our friends, sent or received requests
+        // and should not previously been rejected or unfriended by us we have not been ejected or unfriended by it
+        if (
+          potentialFriend.userId !== userId &&
+          !friendsUserIdMap[potentialFriend.userId] &&
+          !requestsSentUserIdMap[potentialFriend.userId] &&
+          !requestsReceivedUserIdMap[potentialFriend.userId] &&
+          !requestsRejectedUnfriendedUserIdMap[potentialFriend.userId]
+        ) {
           // Friend
           map.set(friendAsString, (map.get(friendAsString) || 0) + suggestionWeights.friend);
           // Current city

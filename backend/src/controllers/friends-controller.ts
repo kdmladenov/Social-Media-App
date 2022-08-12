@@ -119,8 +119,7 @@ friendsController
     '/suggestions',
     authMiddleware,
     loggedUserGuard,
-    // errorHandler(
-      async (req: Request, res: Response) => {
+    errorHandler(async (req: Request, res: Response) => {
       const { userId } = req.user;
 
       const suggestions = await friendsServices.getAllFriendSuggestions(
@@ -130,7 +129,7 @@ friendsController
 
       res.status(200).send(suggestions);
     })
-  // )
+  )
   // @desc Accept or reject a friend request
 
   // @route PUT /friends/:sourceUserId:/:requestStatusId

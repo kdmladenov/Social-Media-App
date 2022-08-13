@@ -1,4 +1,4 @@
-import { USER } from '../constants/constants';
+import { USER } from '../constants';
 
 const userRegisterInitialInputState = {
   firstName: {

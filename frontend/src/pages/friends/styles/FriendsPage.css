@@ -1,23 +1,23 @@
-.friend_screen {
+.friend_page {
   position: relative;
   display: grid;
   grid-template-columns: 360px 1fr;
   grid-template-areas: 'sidebar friends_container';
 }
 
-.friend_screen .sidebar {
+.friend_page .sidebar {
   grid-area: sidebar;
   background-color: var(--white);
   box-shadow: var(--box_shadow_angle);
   padding: 10px;
 }
 
-.friend_screen .sidebar .menu {
+.friend_page .sidebar .menu {
   height: fit-content;
   width: 100%;
 }
 
-.friend_screen .sidebar .menu .menu_header {
+.friend_page .sidebar .menu .menu_header {
   height: 40px;
   width: 100%;
   display: grid;
@@ -29,7 +29,7 @@
   /* padding: 20px; */
 }
 
-.friend_screen .sidebar .menu .menu_header {
+.friend_page .sidebar .menu .menu_header {
   height: 70px;
   width: 100%;
   display: grid;
@@ -44,46 +44,47 @@
   border-bottom: 1px solid var(--gray_dark);
 }
 
-.friend_screen .sidebar .menu .menu_header .button_container {
+.friend_page .sidebar .menu .menu_header .button_container {
   grid-area: arrow;
   width: 30px;
   height: 30px;
   border-radius: 50%;
   background-color: transparent;
   padding: 0;
-
 }
 
-.friend_screen .sidebar .menu .menu_header .button_container:hover {
+.friend_page .sidebar .menu .menu_header .button_container:hover {
   background-color: var(--gray);
 }
-.friend_screen .sidebar .menu .menu_header h5 {
+.friend_page .sidebar .menu .menu_header h5 {
   grid-area: back_link;
   width: fit-content;
   cursor: pointer;
   border-bottom: 1px solid transparent;
   font-weight: 500;
 }
-.friend_screen .sidebar .menu .menu_header h5:hover {
+.friend_page .sidebar .menu .menu_header h5:hover {
   border-color: var(--black);
 }
-.friend_screen .sidebar .menu .menu_header span {
+.friend_page .sidebar .menu .menu_header span {
   grid-area: label;
   font-size: 23px;
 }
 
-
 /* Menu Body */
 
-.friend_screen .sidebar .menu > ul.menu_content {
+.friend_page .sidebar .menu > ul.menu_content {
   height: fit-content;
   width: 100%;
   gap: 10px;
   padding: 20px 0;
 }
 
+.friend_page .sidebar .menu > ul.menu_content li:first-child {
+  pointer-events: none;
+}
 
-.friend_screen .sidebar .menu > ul.menu_content > li.button  {
+.friend_page .sidebar .menu > ul.menu_content > li.button {
   display: flex;
   flex-direction: row;
   justify-content: left;
@@ -95,8 +96,7 @@
   position: relative;
 }
 
-
-.friend_screen .sidebar .menu > ul.menu_content > li.button i {
+.friend_page .sidebar .menu > ul.menu_content > li.button i {
   position: relative;
   display: flex;
   justify-content: center;
@@ -106,15 +106,14 @@
   color: var(--gray_dark);
 }
 
-
-.friend_screen .sidebar .menu > ul.menu_content > li.button i.left{
+.friend_page .sidebar .menu > ul.menu_content > li.button i.left {
   background: var(--gray);
   border-radius: 50%;
   color: var(--gray_dark);
   /* box-shadow: var(--box_shadow_angle); */
 }
 
-.friend_screen .sidebar .menu > ul.menu_content > li.button i.chevron {
+.friend_page .sidebar .menu > ul.menu_content > li.button i.chevron {
   position: absolute;
   right: 25px;
   width: 20px;
@@ -123,21 +122,25 @@
   font-size: 25px;
 }
 
-.friend_screen .sidebar .menu > ul.menu_content > li.button:hover,
-.friend_screen .sidebar .menu > ul.menu_content > li.button i.left:hover{
+.friend_page .sidebar .menu > ul.menu_content > li.button:hover,
+.friend_page .sidebar .menu > ul.menu_content > li.button i.left:hover {
   cursor: pointer;
   box-shadow: var(--box_shadow_angle);
 }
 
 /* Container */
-.friend_screen .friends_container {
+.friend_page .friends_container {
   padding: 10px 40px;
   justify-content: flex-start;
   align-items: flex-start;
 }
 
-.friend_screen .friends_container .container {
+.friend_page .friends_container .container,
+.friend_page .friends_container > div {
   justify-content: flex-start;
   align-items: flex-start;
+}
+
+.friend_page .friends_container .container {
   gap: 20px;
 }

@@ -1,10 +1,10 @@
-import FriendRequestCreateActionType from '../../models/state/actions/FriendRequestCreateActionType';
-import FriendRequestStatusUpdateActionType from '../../models/state/actions/FriendRequestStatusUpdateActionType';
-import FriendsListActionType from '../../models/state/actions/FriendsListActionType';
-import FriendsRequestsReceivedListActionType from '../../models/state/actions/FriendsRequestsReceivedListActionType';
-import FriendsRequestsSentListActionType from '../../models/state/actions/FriendsRequestsSentListActionType';
-import FriendsSuggestionsListActionType from '../../models/state/actions/FriendsSuggestionsListActionType';
-import FriendUnfriendActionType from '../../models/state/actions/FriendUnfriendActionType';
+import FriendRequestCreateActionType from '../../types/context/actions/FriendRequestCreateActionType';
+import FriendRequestStatusUpdateActionType from '../../types/context/actions/FriendRequestStatusUpdateActionType';
+import FriendsListActionType from '../../types/context/actions/FriendsListActionType';
+import FriendsRequestsReceivedListActionType from '../../types/context/actions/FriendsRequestsReceivedListActionType';
+import FriendsRequestsSentListActionType from '../../types/context/actions/FriendsRequestsSentListActionType';
+import FriendsSuggestionsListActionType from '../../types/context/actions/FriendsSuggestionsListActionType';
+import FriendUnfriendActionType from '../../types/context/actions/FriendUnfriendActionType';
 import {
   FRIENDS_LIST_FAIL,
   FRIENDS_LIST_REQUEST,

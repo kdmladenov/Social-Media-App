@@ -1,0 +1,168 @@
+.friend_request_card {
+  width: 200px;
+  height: 350px;
+  display: grid;
+  grid-template-rows: 200px 150px;
+  grid-template-areas:
+    'avatar'
+    'info';
+  overflow: clip;
+  overflow: visible;
+}
+
+.friend_request_card.horizontal {
+  width: 340px;
+  height: 110px;
+  grid-template-rows: 110px;
+  grid-template-columns: 110px 1fr;
+  grid-template-areas: 'avatar info';
+}
+
+.friend_request_card .avatar {
+  grid-area: avatar;
+  width: 100%;
+  height: 100%;
+}
+
+.friend_request_card .info {
+  grid-area: info;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 30px 22px 90px;
+  grid-template-areas:
+    'name'
+    'connections'
+    'buttons';
+  padding: 5px 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.friend_request_card.horizontal .info {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 30px 22px 50px;
+  grid-template-areas:
+    'name'
+    'connections'
+    'buttons';
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+/* Mutual connections */
+.friend_request_card .info .connections {
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+.friend_request_card .info .connections h4 {
+  color: var(--gray_dark);
+  font-weight: 500;
+}
+
+/* Small avatars */
+.friend_request_card .info .connections .friends_avatars .popover .avatar {
+  justify-content: center;
+  align-items: center;
+  margin-right: -5px;
+  flex-direction: row-reverse;
+  min-width: 22px;
+}
+
+.friend_request_card .info .connections .popover .avatar:last-child {
+  margin-right: 0px;
+}
+
+/* hidden popover */
+.friend_request_card .info .connections .popover .body {
+  display: grid;
+  width: 300px;
+  height: 160px;
+  grid-template-columns: 80px 200px;
+  grid-template-rows: 100px 40px;
+  grid-template-areas:
+    'avatar info'
+    'button button';
+  z-index: 1000;
+  padding: 10px;
+}
+
+.friend_request_card .info .connections .popover .body  .avatar_container{
+  grid-area: avatar;
+  align-items: flex-start;
+  padding: 20px 0;
+}
+
+.friend_request_card .info .connections .popover .body.top:after {
+  z-index: 1;
+  right: calc(50% - 14px);
+}
+
+.friend_request_card .info .connections .popover .body .popover_info {
+  width: 100%;
+  height: 100%;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.friend_request_card .info .connections .popover .body .popover_info .mutual_friends {
+  width: 100%;
+  height: fit-content;
+  align-items: flex-start;
+  gap: 10px;
+}
+.friend_request_card .info .connections .popover .body .popover_info .mutual_friends i {
+  margin-top: 10px;
+}
+
+.friend_request_card .info .connections .popover .body .popover_info .mutual_friends p {
+  margin: 0;
+}
+
+.friend_request_card .info .connections .popover .body .popover_info .mutual_friends p {
+  margin: 0;
+}
+
+.friend_request_card .info .connections .popover .body .button_group {
+  grid-area: button;
+  justify-content: center;
+  width: 100%;
+  z-index: 10;
+}
+
+/* Buttons */
+.friend_request_card .info .button_group {
+  width: 100%;
+  height: 100%;
+  gap: 10px;
+  justify-content: center;
+}
+
+.friend_request_card.horizontal .info .button_group {
+  flex-direction: row;
+}
+
+.friend_request_card .info .button_group .button_container:first-child {
+  background-color: var(--blue);
+  color: var(--white);
+  padding: 0;
+}
+
+.friend_request_card .info .button_group .button_container:last-child {
+  background-color: var(--gray);
+  color: var(--black);
+  padding: 0;
+}
+
+.friend_request_card .info .button_group .button_container {
+  width: 100%;
+  margin: 0;
+}
+.friend_request_card .info .button_group .button_container {
+  /* width: 50px;
+  min-width: 50px; */
+}

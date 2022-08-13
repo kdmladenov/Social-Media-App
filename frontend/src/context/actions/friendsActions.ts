@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { Dispatch } from 'redux';
 
-import { BASE_URL } from '../../constants/constants';
-import StateType from '../../models/state/StateType';
+import { BASE_URL } from '../../data/constants';
+import StoreType from '../../types/context/StoreType';
 import {
   FRIENDS_LIST_FAIL,
   FRIENDS_LIST_REQUEST,
@@ -26,17 +26,17 @@ import {
   FRIEND_UNFRIEND_REQUEST,
   FRIEND_UNFRIEND_SUCCESS
 } from '../constants/friendConstants';
-import FriendRequestCreateActionType from '../../models/state/actions/FriendRequestCreateActionType';
-import FriendsListActionType from '../../models/state/actions/FriendsListActionType';
-import FriendsRequestsSentListActionType from '../../models/state/actions/FriendsRequestsSentListActionType';
-import FriendsRequestsReceivedListActionType from '../../models/state/actions/FriendsRequestsReceivedListActionType';
-import FriendRequestStatusUpdateActionType from '../../models/state/actions/FriendRequestStatusUpdateActionType';
-import FriendUnfriendActionType from '../../models/state/actions/FriendUnfriendActionType';
-import FriendsSuggestionsListActionType from '../../models/state/actions/FriendsSuggestionsListActionType';
+import FriendRequestCreateActionType from '../../types/context/actions/FriendRequestCreateActionType';
+import FriendsListActionType from '../../types/context/actions/FriendsListActionType';
+import FriendsRequestsSentListActionType from '../../types/context/actions/FriendsRequestsSentListActionType';
+import FriendsRequestsReceivedListActionType from '../../types/context/actions/FriendsRequestsReceivedListActionType';
+import FriendRequestStatusUpdateActionType from '../../types/context/actions/FriendRequestStatusUpdateActionType';
+import FriendUnfriendActionType from '../../types/context/actions/FriendUnfriendActionType';
+import FriendsSuggestionsListActionType from '../../types/context/actions/FriendsSuggestionsListActionType';
 
 export const createFriendRequest =
   (requestorId: number) =>
-  async (dispatch: Dispatch<FriendRequestCreateActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<FriendRequestCreateActionType>, getState: () => StoreType) => {
     try {
       dispatch({ type: FRIEND_REQUEST_CREATE_REQUEST });
 
@@ -67,7 +67,7 @@ export const createFriendRequest =
 
 export const listFriends =
   (endpoint = '') =>
-  async (dispatch: Dispatch<FriendsListActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<FriendsListActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: FRIENDS_LIST_REQUEST
@@ -102,7 +102,7 @@ export const listFriends =
   };
 
 export const listFriendsSuggestions =
-  () => async (dispatch: Dispatch<FriendsSuggestionsListActionType>, getState: () => StateType) => {
+  () => async (dispatch: Dispatch<FriendsSuggestionsListActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: FRIENDS_SUGGESTIONS_LIST_REQUEST
@@ -138,7 +138,7 @@ export const listFriendsSuggestions =
 
 export const listFriendsRequestsSent =
   () =>
-  async (dispatch: Dispatch<FriendsRequestsSentListActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<FriendsRequestsSentListActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: FRIENDS_REQUESTS_SENT_REQUEST
@@ -174,7 +174,7 @@ export const listFriendsRequestsSent =
 
 export const listFriendsRequestsReceived =
   () =>
-  async (dispatch: Dispatch<FriendsRequestsReceivedListActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<FriendsRequestsReceivedListActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: FRIENDS_REQUESTS_RECEIVED_REQUEST
@@ -210,7 +210,7 @@ export const listFriendsRequestsReceived =
 
 export const updateFriendRequestStatus =
   (requestorId: number, requestStatus: 'approved' | 'pending' | 'rejected' | 'unfriended') =>
-  async (dispatch: Dispatch<FriendRequestStatusUpdateActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<FriendRequestStatusUpdateActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: FRIEND_REQUEST_STATUS_UPDATE_REQUEST
@@ -250,7 +250,7 @@ export const updateFriendRequestStatus =
 
 export const unfriendFriend =
   (friendId: number) =>
-  async (dispatch: Dispatch<FriendUnfriendActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<FriendUnfriendActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: FRIEND_UNFRIEND_REQUEST

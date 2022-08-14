@@ -1,0 +1,17 @@
+.profile_posts {
+  display: grid;
+  grid-template-columns: 490px 680px;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+.profile_posts .sidebar {
+  height: fit-content;
+  gap: 20px;
+  position: sticky;
+  top: 80px;
+}
+
+.profile_posts .posts {
+  gap: 20px;
+}

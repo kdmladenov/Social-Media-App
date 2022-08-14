@@ -1,14 +1,14 @@
-import ForgottenPasswordActionType from '../../models/state/actions/ForgottenPasswordActionType';
-import PasswordResetActionType from '../../models/state/actions/PasswordResetActionType';
-import UserAvatarDeleteActionType from '../../models/state/actions/UserAvatarDeleteActionType';
-import UserAvatarUpdateActionType from '../../models/state/actions/UserAvatarUpdateActionType';
-import UserDeleteActionType from '../../models/state/actions/UserDeleteActionType';
-import UserDetailsActionType from '../../models/state/actions/UserDetailsActionType';
-import UserListActionType from '../../models/state/actions/UserListActionType';
-import UserLoginActionType from '../../models/state/actions/UserLoginActionType';
-import UserRegisterActionType from '../../models/state/actions/UserRegisterActionType';
-import UserRestoreActionType from '../../models/state/actions/UserRestoreActionType';
-import UserUpdateProfileActionType from '../../models/state/actions/UserUpdateProfileActionType';
+import ForgottenPasswordActionType from '../../types/context/actions/ForgottenPasswordActionType';
+import PasswordResetActionType from '../../types/context/actions/PasswordResetActionType';
+import UserAvatarDeleteActionType from '../../types/context/actions/UserAvatarDeleteActionType';
+import UserAvatarUpdateActionType from '../../types/context/actions/UserAvatarUpdateActionType';
+import UserDeleteActionType from '../../types/context/actions/UserDeleteActionType';
+import UserDetailsActionType from '../../types/context/actions/UserDetailsActionType';
+import UserListActionType from '../../types/context/actions/UserListActionType';
+import UserLoginActionType from '../../types/context/actions/UserLoginActionType';
+import UserRegisterActionType from '../../types/context/actions/UserRegisterActionType';
+import UserRestoreActionType from '../../types/context/actions/UserRestoreActionType';
+import UserUpdateProfileActionType from '../../types/context/actions/UserUpdateProfileActionType';
 import {
   FORGOTTEN_PASSWORD_FAIL,
   FORGOTTEN_PASSWORD_REQUEST,

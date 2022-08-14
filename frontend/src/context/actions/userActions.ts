@@ -1,20 +1,20 @@
 import axios from 'axios';
 import { Dispatch } from 'redux';
 
-import { BASE_URL } from '../../constants/constants';
-import ForgottenPasswordActionType from '../../models/state/actions/ForgottenPasswordActionType';
-import PasswordResetActionType from '../../models/state/actions/PasswordResetActionType';
-import UserAvatarDeleteActionType from '../../models/state/actions/UserAvatarDeleteActionType';
-import UserAvatarUpdateActionType from '../../models/state/actions/UserAvatarUpdateActionType';
-import UserDeleteActionType from '../../models/state/actions/UserDeleteActionType';
-import UserDetailsActionType from '../../models/state/actions/UserDetailsActionType';
-import UserListActionType from '../../models/state/actions/UserListActionType';
-import UserLoginActionType from '../../models/state/actions/UserLoginActionType';
-import UserRegisterActionType from '../../models/state/actions/UserRegisterActionType';
-import UserRestoreActionType from '../../models/state/actions/UserRestoreActionType';
-import UserUpdateProfileActionType from '../../models/state/actions/UserUpdateProfileActionType';
-import StateType from '../../models/state/StateType';
-import UserType from '../../models/UserType';
+import { BASE_URL } from '../../data/constants';
+import ForgottenPasswordActionType from '../../types/context/actions/ForgottenPasswordActionType';
+import PasswordResetActionType from '../../types/context/actions/PasswordResetActionType';
+import UserAvatarDeleteActionType from '../../types/context/actions/UserAvatarDeleteActionType';
+import UserAvatarUpdateActionType from '../../types/context/actions/UserAvatarUpdateActionType';
+import UserDeleteActionType from '../../types/context/actions/UserDeleteActionType';
+import UserDetailsActionType from '../../types/context/actions/UserDetailsActionType';
+import UserListActionType from '../../types/context/actions/UserListActionType';
+import UserLoginActionType from '../../types/context/actions/UserLoginActionType';
+import UserRegisterActionType from '../../types/context/actions/UserRegisterActionType';
+import UserRestoreActionType from '../../types/context/actions/UserRestoreActionType';
+import UserUpdateProfileActionType from '../../types/context/actions/UserUpdateProfileActionType';
+import StoreType from '../../types/context/StoreType';
+import UserType from '../../types/UserType';
 import {
   FORGOTTEN_PASSWORD_FAIL,
   FORGOTTEN_PASSWORD_REQUEST,
@@ -139,7 +139,7 @@ export const register =
 
 export const getUserDetails =
   (userId: number) =>
-  async (dispatch: Dispatch<UserDetailsActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<UserDetailsActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: USER_DETAILS_REQUEST
@@ -176,8 +176,7 @@ export const getUserDetails =
 
 export const updateUserProfile =
   (userId: number, updatedUserData: UserType) =>
-  async (dispatch: Dispatch<UserUpdateProfileActionType>, getState: () => StateType) => {
-    console.log(userId, updatedUserData, 'updateUserProfile');
+  async (dispatch: Dispatch<UserUpdateProfileActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: USER_UPDATE_PROFILE_REQUEST
@@ -214,7 +213,7 @@ export const updateUserProfile =
 
 export const listUsers =
   (endpoint = '') =>
-  async (dispatch: Dispatch<UserListActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<UserListActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: USER_LIST_REQUEST
@@ -250,7 +249,7 @@ export const listUsers =
 
 export const deleteUser =
   (userId: number) =>
-  async (dispatch: Dispatch<UserDeleteActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<UserDeleteActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: USER_DELETE_REQUEST
@@ -285,7 +284,7 @@ export const deleteUser =
 
 export const restoreUser =
   (userId: number) =>
-  async (dispatch: Dispatch<UserRestoreActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<UserRestoreActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: USER_RESTORE_REQUEST
@@ -318,7 +317,7 @@ export const restoreUser =
     }
   };
 
-export const updateUserAvatarReducer =
+export const updateUserAvatar =
   (
     userId: number,
     mode: string,
@@ -329,7 +328,7 @@ export const updateUserAvatarReducer =
       | React.DragEvent<HTMLDivElement>,
     imageAddress?: string
   ) =>
-  async (dispatch: Dispatch<UserAvatarUpdateActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<UserAvatarUpdateActionType>, getState: () => StoreType) => {
     // mode: 'file_upload' or 'add_image_url'
     let imageUrl = imageAddress || '';
 
@@ -397,7 +396,7 @@ export const updateUserAvatarReducer =
 
 export const deleteUserAvatar =
   (userId: number) =>
-  async (dispatch: Dispatch<UserAvatarDeleteActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<UserAvatarDeleteActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: USER_DELETE_AVATAR_REQUEST

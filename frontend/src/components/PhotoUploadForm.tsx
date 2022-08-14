@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { updateUserAvatarReducer } from '../context/actions/userActions';
+import { updateUserAvatar } from '../context/actions/userActions';
 import { IMAGE } from '../data/constants';
 import UserType from '../types/UserType';
 import Button from './Button';
@@ -19,7 +19,7 @@ const PhotoUploadForm: React.FC<{ user: UserType; multiple?: boolean }> = ({
   const isUrlValid = IMAGE.IMAGE_URL_REGEX.test(imageURL);
 
   const uploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(updateUserAvatarReducer(user?.userId, 'file_upload', e));
+    dispatch(updateUserAvatar(user?.userId, 'file_upload', e));
   };
 
   const handleDrag = (e: React.DragEvent<HTMLFormElement> | React.DragEvent<HTMLDivElement>) => {
@@ -37,7 +37,7 @@ const PhotoUploadForm: React.FC<{ user: UserType; multiple?: boolean }> = ({
     e.stopPropagation();
     setDragActive(false);
     if (e?.dataTransfer?.files?.[0]) {
-      dispatch(updateUserAvatarReducer(user?.userId, 'file_upload', e));
+      dispatch(updateUserAvatar(user?.userId, 'file_upload', e));
       setImageURL('');
     }
   };
@@ -45,7 +45,7 @@ const PhotoUploadForm: React.FC<{ user: UserType; multiple?: boolean }> = ({
   const addImageUrlHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
 
-    dispatch(updateUserAvatarReducer(user?.userId, 'add_image_url', e, imageURL));
+    dispatch(updateUserAvatar(user?.userId, 'add_image_url', e, imageURL));
     setImageURL('');
   };
 
@@ -53,7 +53,7 @@ const PhotoUploadForm: React.FC<{ user: UserType; multiple?: boolean }> = ({
     e.preventDefault();
 
     if (e.key === 'Enter') {
-      dispatch(updateUserAvatarReducer(user?.userId, 'add_image_url', e, imageURL));
+      dispatch(updateUserAvatar(user?.userId, 'add_image_url', e, imageURL));
       setImageURL('');
     }
   };

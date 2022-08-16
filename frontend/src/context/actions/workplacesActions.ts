@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { Dispatch } from 'redux';
 
-import { BASE_URL } from '../../constants/constants';
-import WorkplaceDeleteActionType from '../../models/state/actions/WorkplaceDeleteActionType';
-import WorkplaceDetailsActionType from '../../models/state/actions/WorkplaceDetailsActionType';
-import WorkplaceListActionType from '../../models/state/actions/WorkplaceListActionType';
-import WorkplaceCreateActionType from '../../models/state/actions/WorkplaceCreateActionType';
-import WorkplaceUpdateActionType from '../../models/state/actions/WorkplaceUpdateActionType';
-import StateType from '../../models/state/StateType';
-import WorkplaceType from '../../models/WorkplaceType';
+import { BASE_URL } from '../../data/constants';
+import WorkplaceDeleteActionType from '../../types/context/actions/WorkplaceDeleteActionType';
+import WorkplaceDetailsActionType from '../../types/context/actions/WorkplaceDetailsActionType';
+import WorkplaceListActionType from '../../types/context/actions/WorkplaceListActionType';
+import WorkplaceCreateActionType from '../../types/context/actions/WorkplaceCreateActionType';
+import WorkplaceUpdateActionType from '../../types/context/actions/WorkplaceUpdateActionType';
+import StoreType from '../../types/context/StoreType';
+import WorkplaceType from '../../types/WorkplaceType';
 import {
   WORKPLACE_DELETE_FAIL,
   WORKPLACE_DELETE_REQUEST,
@@ -29,7 +29,7 @@ import {
 
 export const createWorkplace =
   ( createData: WorkplaceType) =>
-  async (dispatch: Dispatch<WorkplaceCreateActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<WorkplaceCreateActionType>, getState: () => StoreType) => {
     try {
       dispatch({ type: WORKPLACE_CREATE_REQUEST });
 
@@ -62,7 +62,7 @@ export const createWorkplace =
 
 export const getWorkplaceDetails =
   (workplaceId: number) =>
-  async (dispatch: Dispatch<WorkplaceDetailsActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<WorkplaceDetailsActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: WORKPLACE_DETAILS_REQUEST
@@ -99,8 +99,7 @@ export const getWorkplaceDetails =
 
 export const updateWorkplace =
   (workplaceId: number, updatedWorkplaceData: WorkplaceType) =>
-  async (dispatch: Dispatch<WorkplaceUpdateActionType>, getState: () => StateType) => {
-    console.log(workplaceId, updatedWorkplaceData, 'updateWorkplaceAction');
+  async (dispatch: Dispatch<WorkplaceUpdateActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: WORKPLACE_UPDATE_REQUEST
@@ -141,7 +140,7 @@ export const updateWorkplace =
 
 export const listWorkplaces =
   (endpoint = '') =>
-  async (dispatch: Dispatch<WorkplaceListActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<WorkplaceListActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: WORKPLACE_LIST_REQUEST
@@ -177,7 +176,7 @@ export const listWorkplaces =
 
 export const deleteWorkplace =
   (workplaceId: number) =>
-  async (dispatch: Dispatch<WorkplaceDeleteActionType>, getState: () => StateType) => {
+  async (dispatch: Dispatch<WorkplaceDeleteActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: WORKPLACE_DELETE_REQUEST

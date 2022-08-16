@@ -1,9 +1,9 @@
 
-import WorkplaceCreateActionType from '../../models/state/actions/WorkplaceCreateActionType';
-import WorkplaceDeleteActionType from '../../models/state/actions/WorkplaceDeleteActionType';
-import WorkplaceDetailsActionType from '../../models/state/actions/WorkplaceDetailsActionType';
-import WorkplaceListActionType from '../../models/state/actions/WorkplaceListActionType';
-import WorkplaceUpdateActionType from '../../models/state/actions/WorkplaceUpdateActionType';
+import WorkplaceCreateActionType from '../../types/context/actions/WorkplaceCreateActionType';
+import WorkplaceDeleteActionType from '../../types/context/actions/WorkplaceDeleteActionType';
+import WorkplaceDetailsActionType from '../../types/context/actions/WorkplaceDetailsActionType';
+import WorkplaceListActionType from '../../types/context/actions/WorkplaceListActionType';
+import WorkplaceUpdateActionType from '../../types/context/actions/WorkplaceUpdateActionType';
 import {
   WORKPLACE_DELETE_FAIL,
   WORKPLACE_DELETE_REQUEST,

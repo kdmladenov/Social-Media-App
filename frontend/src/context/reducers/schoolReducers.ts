@@ -1,9 +1,9 @@
 
-import SchoolCreateActionType from '../../models/state/actions/SchoolCreateActionType';
-import SchoolDeleteActionType from '../../models/state/actions/SchoolDeleteActionType';
-import SchoolDetailsActionType from '../../models/state/actions/SchoolDetailsActionType';
-import SchoolListActionType from '../../models/state/actions/SchoolListActionType';
-import SchoolUpdateActionType from '../../models/state/actions/SchoolUpdateActionType';
+import SchoolCreateActionType from '../../types/context/actions/SchoolCreateActionType';
+import SchoolDeleteActionType from '../../types/context/actions/SchoolDeleteActionType';
+import SchoolDetailsActionType from '../../types/context/actions/SchoolDetailsActionType';
+import SchoolListActionType from '../../types/context/actions/SchoolListActionType';
+import SchoolUpdateActionType from '../../types/context/actions/SchoolUpdateActionType';
 import {
   SCHOOL_DELETE_FAIL,
   SCHOOL_DELETE_REQUEST,

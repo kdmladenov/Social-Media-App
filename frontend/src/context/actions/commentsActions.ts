@@ -249,7 +249,7 @@ export const deleteComment =
     };
 
   export const editImageComment =
-    (postImageCommentId: number, content: string) =>
+    (commentId: number, content: string) =>
     async (dispatch: Dispatch<ImageCommentEditActionType>, getState: () => StoreType) => {
       try {
         dispatch({ type: IMAGE_COMMENT_EDIT_REQUEST });
@@ -266,7 +266,7 @@ export const deleteComment =
         };
 
         const { data } = await axios.put(
-          `${BASE_URL}/comments-images/${postImageCommentId}`,
+          `${BASE_URL}/comments-images/${commentId}`,
           { content },
           config
         );
@@ -285,7 +285,7 @@ export const deleteComment =
     };
 
   export const deleteImageComment =
-    (postImageCommentId: number) =>
+    (commentId: number) =>
     async (dispatch: Dispatch<ImageCommentDeleteActionType>, getState: () => StoreType) => {
       try {
         dispatch({ type: IMAGE_COMMENT_DELETE_REQUEST });
@@ -300,10 +300,7 @@ export const deleteComment =
           }
         };
 
-        const { data } = await axios.delete(
-          `${BASE_URL}/comments-images/${postImageCommentId}`,
-          config
-        );
+        const { data } = await axios.delete(`${BASE_URL}/comments-images/${commentId}`, config);
 
         dispatch({ type: IMAGE_COMMENT_DELETE_SUCCESS, payload: data });
       } catch (error) {

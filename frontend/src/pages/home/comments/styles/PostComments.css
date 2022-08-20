@@ -1,0 +1,16 @@
+.post_comments {
+  padding: 20px 0;
+  border-top: 1px solid var(--gray);
+}
+
+.post_comments .button_container.comments_count {
+  height: 20px;
+}
+
+.post_comments .comments_container {
+  position: relative;
+  align-items: flex-start;
+  width: 100%;
+  height: fit-content;
+  gap: 10px;
+}

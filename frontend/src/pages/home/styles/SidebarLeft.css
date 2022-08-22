@@ -1,0 +1,101 @@
+.sidebar_left {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 20px 0;
+}
+
+.sidebar_left .accordion {
+  border-radius: 0 10px 10px 0;
+  overflow-x: clip;
+}
+
+.sidebar_left .accordion .accordion_item {
+  background-color: transparent;
+}
+
+.sidebar_left .accordion .accordion_item.show {
+  margin: 0;
+}
+
+.sidebar_left .accordion .accordion_header {
+  background-color: var(--white);
+}
+
+/* Profile card */
+.sidebar_left .accordion .profile_card {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: flex-start; */
+  align-items: center;
+  gap: 10px;
+  background-color: var(--white);
+  position: relative;
+  border-radius: 10px;
+  border: 1px solid var(--gray);
+  overflow-x: clip;
+  padding-bottom: 20px;
+}
+
+.sidebar_left .accordion .profile_card .cover {
+  height: 200px;
+  width: 100%;
+  margin-bottom: 70px;
+}
+
+.sidebar_left .accordion .profile_card .cover img {
+  object-fit: cover;
+}
+
+.sidebar_left .accordion .profile_card .avatar.current_user {
+  position: absolute;
+  top: 160px;
+}
+
+.sidebar_left .accordion .profile_card .avatar.current_user,
+.sidebar_left .accordion .profile_card .avatar.current_user .image,
+.sidebar_left .accordion .profile_card .avatar.current_user .image img,
+.sidebar_left .accordion .profile_card .avatar.current_user .image .initials {
+  height: 100px;
+  width: 100px;
+  max-height: 100px;
+  border-radius: 50%;
+}
+
+.sidebar_left .accordion .profile_card .info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+
+/* Mutual connections */
+.sidebar_left .accordion .profile_card .info  .connections {
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+.sidebar_left .accordion .profile_card .info  .connections h4{
+  color: var(--gray_dark);
+  font-weight: 700;
+}
+
+.sidebar_left .accordion .profile_card .info  .connections .friends_avatars{
+  margin-right: -5px;
+  flex-direction: row-reverse;
+  min-width: 22px;
+}
+
+.sidebar_left .accordion .profile_card .info  .connections .avatar:last-child .friends_avatars{
+  margin-right: 0px;
+  flex-direction: row-reverse;
+}
+
+/* Title */
+
+.section_title{
+  justify-content: flex-start;
+  gap: 30px;
+  padding: 0 10px
+}

@@ -1,0 +1,21 @@
+.home_page {
+  max-width: 1920px;
+  width: 100%;
+  background: var(--gray_background);
+  margin: 0 auto;
+  display: grid;
+  gap: 80px;
+  grid-template-columns: 1fr 680px 1fr;
+  grid-template-areas:
+    'left_sidebar'
+    'posts'
+    'right_sidebar';
+  height: fit-content;
+}
+
+.home_page .home_content {
+  max-width: 100% ;
+  height: fit-content;
+  gap: 20px;
+  padding: 20px 0;
+}

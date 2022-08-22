@@ -5,7 +5,7 @@
 }
 
 .popover .body {
-  visibility: hidden;
+  visibility: visible;
   position: absolute;
   height: fit-content;
   width: fit-content;

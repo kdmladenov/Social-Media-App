@@ -161,20 +161,20 @@ const FormComponent: React.FC<FormComponentProps> = ({
         ? authorizationAction(data)
         : screen === 'resetPassword'
         ? authorizationAction({ ...data, userId: resourceId, token: resetPasswordToken })
-        : mode === 'create'
+        : mode === 'update'
+        ? updateAction(subResourceId || resourceId, {
+            ...data
+          })
+        : mode === 'create' && (resourceId || subResourceId)
         ? createAction(resourceId || subResourceId, {
             ...data
           })
-        : updateAction(subResourceId || resourceId, {
+        : createAction({
             ...data
           })
     );
 
-    // screen === 'shipping' && dispatch(saveShippingAddress({ ...data }));
-
     setIsResourceUpdated(true);
-
-    // screen === 'shipping' && navigate('/payment');
   };
 
   useEffect(() => {

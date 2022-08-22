@@ -9,6 +9,7 @@ import InputBoxWithAvatarProps from '../types/components/InputBoxWithAvatarProps
 
 const InputBoxWithAvatar: React.FC<InputBoxWithAvatarProps> = ({
   resourceId,
+  subResourceId,
   replyTo,
   currentUserDetails,
   createAction,
@@ -37,7 +38,9 @@ const InputBoxWithAvatar: React.FC<InputBoxWithAvatarProps> = ({
     e.preventDefault();
 
     if (e.key === 'Enter' && isValid) {
-      dispatch(createAction(resourceId, content, replyTo && replyTo));
+      !subResourceId
+        ? dispatch(createAction(resourceId, content, replyTo && replyTo))
+        : dispatch(createAction(resourceId, subResourceId, content, replyTo && replyTo));
       setContent('');
     }
   };

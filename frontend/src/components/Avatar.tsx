@@ -7,8 +7,13 @@ import AvatarProps from '../types/components/AvatarProps';
 
 // classes: image_only, name_only, small
 
-const Avatar: React.FC<AvatarProps> = ({ classes, imageUrl, firstName='', lastName='' }) => {
-
+const Avatar: React.FC<AvatarProps> = ({
+  classes,
+  imageUrl,
+  firstName = '',
+  lastName = '',
+  additionalInfo = ''
+}) => {
   const initials = `${firstName?.[0]}${lastName?.[0] || ''}`;
 
   const backgroundColors = ['peeps', 'watermelon', 'mimosa', 'kiwi', 'hendrix', 'thanos'];
@@ -37,9 +42,14 @@ const Avatar: React.FC<AvatarProps> = ({ classes, imageUrl, firstName='', lastNa
           <i className="fa fa-user" />
         )}
       </div>
+
       {firstName && !classes?.includes('large') && (
-        <div className="name">
-          {classes?.includes('header') ? firstName : `${firstName} ${lastName}`}
+        <div className="info flex_col">
+          <div className="name">
+            {classes?.includes('header') ? firstName : `${firstName} ${lastName}`}
+          </div>
+
+          {additionalInfo && <h4>{additionalInfo}</h4>}
         </div>
       )}
     </div>

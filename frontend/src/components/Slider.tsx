@@ -13,6 +13,7 @@ const Slider: SliderType = ({ dots, children = [], slideIndex, setSlideIndex }) 
   const nextSlideHandler = () => {
     setSlideIndex(slideIndex !== children.length - 1 ? slideIndex + 1 : 0);
   };
+  console.log('next');
   return (
     <div className="slider_container">
       <ul className="slides_list">

@@ -114,3 +114,5 @@ export const suggestionWeights = {
 };
 
 export const maxSuggestionsCount = 50;
+
+export const DEFAULT_COLLECTION = 'For later';

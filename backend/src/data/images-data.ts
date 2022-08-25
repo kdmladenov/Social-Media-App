@@ -1,6 +1,5 @@
 import db from './pool.js';
 import rolesEnum from '../constants/roles.enum.js';
-import Image from '../models/Image.js';
 import RolesType from '../models/RolesType.js';
 
 const getPostImage = async (postId: number, imageId: number, role: RolesType = 'basic') => {
@@ -28,6 +27,44 @@ const getPostImage = async (postId: number, imageId: number, role: RolesType = '
   return result[0];
 };
 
+const getImage = async (imageId: number) => {
+  const sql = `
+      SELECT 
+      image_id as imageId,
+      image,
+      created_at as createdAt
+      FROM images
+      WHERE image_id = ? `;
+
+  const result = await db.query(sql, [+imageId]);
+  return result[0];
+};
+
+const getImageByURL = async (image: string) => {
+  const sql = `
+      SELECT 
+      image_id as imageId,
+      image,
+      created_at as createdAt
+      FROM images
+      WHERE image = ? `;
+
+  const result = await db.query(sql, [image]);
+  return result[0];
+};
+
+const uploadImage = async (imageUrl: string) => {
+  const sql = `
+    INSERT INTO images (
+      image
+    )
+    VALUES (?)
+  `;
+  const result = await db.query(sql, [imageUrl]);
+
+  return await getImage(+result.insertId);
+};
+
 const addPostImage = async (postId: number, imageId: number) => {
   const sql = `
     INSERT INTO post_images (
@@ -36,31 +73,31 @@ const addPostImage = async (postId: number, imageId: number) => {
     )
     VALUES (?, ?)
   `;
-  const result = await db.query(sql, [+postId, +imageId]);
+  await db.query(sql, [+postId, +imageId]);
 
-  return { postId, imageId };
+  return await await getPostImage(+postId, +imageId);
 };
 
-// const getAllPostImages = async (postId: number) => {
-//   const sql = `
-//       SELECT 
-//         pi.post_id as postId,
-//         pi.image_id as imageId,
-//         i.image,
-//         pi.is_delete as isDeleted
-        
-//       FROM post_images pi
-//       LEFT JOIN (SELECT image_id, image
-//           FROM post_images
-//           LEFT JOIN(SELECT image_id, image
-//               FROM images
-//               GROUP BY image_id) i USING (image_id)
-//           GROUP BY image_id) as i using (image_id)
-//       WHERE pi.post_id = ? AND pi.is_deleted = 0
-//       `;
+const getAllPostImages = async (postId: number) => {
+  const sql = `
+      SELECT
+        pi.post_id as postId,
+        pi.image_id as imageId,
+        i.image,
+        pi.is_delete as isDeleted
 
-//   return db.query(sql, [+postId]);
-// };
+      FROM post_images pi
+      LEFT JOIN (SELECT image_id, image
+          FROM post_images
+          LEFT JOIN(SELECT image_id, image
+              FROM images
+              GROUP BY image_id) i USING (image_id)
+          GROUP BY image_id) as i using (image_id)
+      WHERE pi.post_id = ? AND pi.is_deleted = 0
+      `;
+
+  return db.query(sql, [+postId]);
+};
 
 const remove = async (postId: number, imageId: number) => {
   const sql = `
@@ -94,7 +131,10 @@ const remove = async (postId: number, imageId: number) => {
 
 export default {
   getPostImage,
+  getImage,
+  getImageByURL,
+  uploadImage,
   addPostImage,
-  // getAllPostImages,
+  getAllPostImages,
   remove
 };

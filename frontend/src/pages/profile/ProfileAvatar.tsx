@@ -4,7 +4,7 @@ import Button from '../../components/Button';
 import ConfirmMessage from '../../components/ConfirmMessage';
 import Modal from '../../components/Modal';
 import PhotoUploadForm from '../../components/PhotoUploadForm';
-import { deleteUserAvatar } from '../../context/actions/userActions';
+import { deleteUserAvatar, updateUserAvatar } from '../../context/actions/userActions';
 import UserType from '../../types/UserType';
 import './styles/ProfileAvatar.css';
 
@@ -44,7 +44,7 @@ const ProfileAvatar: React.FC<{ user: UserType }> = ({ user }) => {
       </div>
       {showImageUrlForm && (
         <Modal classes="image" setIsOpenModal={setShowImageUrlForm}>
-          <PhotoUploadForm user={user} />
+          <PhotoUploadForm resourceId={user?.userId} updateAction={updateUserAvatar}/>
         </Modal>
       )}
       {showDeleteAvatarModal && (

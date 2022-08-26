@@ -2,6 +2,7 @@ import ForgottenPasswordActionType from '../../types/context/actions/ForgottenPa
 import PasswordResetActionType from '../../types/context/actions/PasswordResetActionType';
 import UserAvatarDeleteActionType from '../../types/context/actions/UserAvatarDeleteActionType';
 import UserAvatarUpdateActionType from '../../types/context/actions/UserAvatarUpdateActionType';
+import UserCoverUpdateActionType from '../../types/context/actions/UserCoverUpdateActionType';
 import UserDeleteActionType from '../../types/context/actions/UserDeleteActionType';
 import UserDetailsActionType from '../../types/context/actions/UserDetailsActionType';
 import UserListActionType from '../../types/context/actions/UserListActionType';
@@ -44,6 +45,9 @@ import {
   USER_UPDATE_AVATAR_FAIL,
   USER_UPDATE_AVATAR_REQUEST,
   USER_UPDATE_AVATAR_SUCCESS,
+  USER_UPDATE_COVER_FAIL,
+  USER_UPDATE_COVER_REQUEST,
+  USER_UPDATE_COVER_SUCCESS,
   USER_UPDATE_PROFILE_FAIL,
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_RESET,
@@ -169,6 +173,19 @@ export const userAvatarDeleteReducer = (state = {}, action: UserAvatarDeleteActi
     case USER_DELETE_AVATAR_SUCCESS:
       return { loading: false, success: true };
     case USER_DELETE_AVATAR_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const userCoverUpdateReducer = (state = {}, action: UserCoverUpdateActionType) => {
+  switch (action.type) {
+    case USER_UPDATE_COVER_REQUEST:
+      return { loading: true };
+    case USER_UPDATE_COVER_SUCCESS:
+      return { loading: false, user: action.payload, success: true };
+    case USER_UPDATE_COVER_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

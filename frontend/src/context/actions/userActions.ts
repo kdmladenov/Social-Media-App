@@ -6,6 +6,7 @@ import ForgottenPasswordActionType from '../../types/context/actions/ForgottenPa
 import PasswordResetActionType from '../../types/context/actions/PasswordResetActionType';
 import UserAvatarDeleteActionType from '../../types/context/actions/UserAvatarDeleteActionType';
 import UserAvatarUpdateActionType from '../../types/context/actions/UserAvatarUpdateActionType';
+import UserCoverUpdateActionType from '../../types/context/actions/UserCoverUpdateActionType';
 import UserDeleteActionType from '../../types/context/actions/UserDeleteActionType';
 import UserDetailsActionType from '../../types/context/actions/UserDetailsActionType';
 import UserListActionType from '../../types/context/actions/UserListActionType';
@@ -49,6 +50,9 @@ import {
   USER_UPDATE_AVATAR_FAIL,
   USER_UPDATE_AVATAR_REQUEST,
   USER_UPDATE_AVATAR_SUCCESS,
+  USER_UPDATE_COVER_FAIL,
+  USER_UPDATE_COVER_REQUEST,
+  USER_UPDATE_COVER_SUCCESS,
   USER_UPDATE_PROFILE_FAIL,
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS
@@ -356,13 +360,9 @@ export const updateUserAvatar =
           }
         };
 
-        const uploadedImageURL = await axios.post(
-          `${BASE_URL}/users/avatars/upload`,
-          formData,
-          config
-        );
+        const { data } = await axios.post(`${BASE_URL}/images/avatars/upload`, formData, config);
 
-        imageUrl = uploadedImageURL.data;
+        imageUrl = data?.image;
       }
 
       const config = {
@@ -373,7 +373,7 @@ export const updateUserAvatar =
       };
 
       const { data } = await axios.post(
-        `${BASE_URL}/users/${userId}/avatars`,
+        `${BASE_URL}/images/${userId}/avatars`,
         { imageUrl },
         config
       );
@@ -412,7 +412,7 @@ export const deleteUserAvatar =
         }
       };
 
-      await axios.delete(`${BASE_URL}/users/${userId}/avatars`, config);
+      await axios.delete(`${BASE_URL}/images/${userId}/avatars`, config);
 
       dispatch({
         type: USER_DELETE_AVATAR_SUCCESS
@@ -421,6 +421,79 @@ export const deleteUserAvatar =
       axios.isAxiosError(error) &&
         dispatch({
           type: USER_DELETE_AVATAR_FAIL,
+          payload:
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message
+        });
+    }
+  };
+
+export const updateUserCover =
+  (
+    userId: number,
+    mode: string,
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.MouseEvent<HTMLButtonElement>
+      | React.KeyboardEvent<HTMLInputElement>
+      | React.DragEvent<HTMLDivElement>,
+    imageAddress?: string
+  ) =>
+  async (dispatch: Dispatch<UserCoverUpdateActionType>, getState: () => StoreType) => {
+    // mode: 'file_upload' or 'add_image_url'
+    let imageUrl = imageAddress || '';
+
+    try {
+      dispatch({
+        type: USER_UPDATE_COVER_REQUEST
+      });
+
+      const {
+        userLogin: { userInfo }
+      } = getState();
+
+      if (mode === 'file_upload') {
+        // Case file upload
+        const file =
+          (event.target as HTMLInputElement).files?.[0] ||
+          (event as React.DragEvent<HTMLDivElement>).dataTransfer.files?.[0];
+        const formData = new FormData();
+        formData.append('cover', file);
+
+        const config = {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${userInfo.token}`
+          }
+        };
+
+        const { data } = await axios.post(`${BASE_URL}/images/covers/upload`, formData, config);
+
+        imageUrl = data?.image;
+      }
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      };
+
+      const { data } = await axios.post(
+        `${BASE_URL}/images/${userId}/covers`,
+        { imageUrl },
+        config
+      );
+
+      dispatch({
+        type: USER_UPDATE_COVER_SUCCESS,
+        payload: data
+      });
+    } catch (error) {
+      axios.isAxiosError(error) &&
+        dispatch({
+          type: USER_UPDATE_COVER_FAIL,
           payload:
             error.response && error.response.data.message
               ? error.response.data.message

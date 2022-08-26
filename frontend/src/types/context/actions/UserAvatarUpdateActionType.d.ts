@@ -1,3 +1,4 @@
+import UserType from '../../UserType';
 
 interface UserAvatarUpdateActionRequest {
   type: 'USER_UPDATE_AVATAR_REQUEST';

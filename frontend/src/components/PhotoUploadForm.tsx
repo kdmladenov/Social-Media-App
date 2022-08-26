@@ -1,17 +1,32 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { updateUserAvatar } from '../context/actions/userActions';
+import { Dispatch } from 'redux';
 import { IMAGE } from '../data/constants';
-import UserType from '../types/UserType';
+import UserAvatarUpdateActionType from '../types/context/actions/UserAvatarUpdateActionType';
+import UserCoverUpdateActionType from '../types/context/actions/UserCoverUpdateActionType';
+import StoreType from '../types/context/StoreType';
 import Button from './Button';
 import Divider from './Divider';
 
 import './styles/PhotoUploadForm.css';
 
-const PhotoUploadForm: React.FC<{ user: UserType; multiple?: boolean }> = ({
-  user,
-  multiple = false
-}) => {
+const PhotoUploadForm: React.FC<{
+  resourceId: number;
+  multiple?: boolean;
+  updateAction: (
+    userId: number,
+    mode: string,
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.MouseEvent<HTMLButtonElement>
+      | React.KeyboardEvent<HTMLInputElement>
+      | React.DragEvent<HTMLDivElement>,
+    imageAddress?: string
+  ) => (
+    dispatch: Dispatch<UserAvatarUpdateActionType | UserCoverUpdateActionType>,
+    getState: () => StoreType
+  ) => Promise<void>;
+}> = ({ resourceId, multiple = false, updateAction }) => {
   const dispatch = useDispatch();
   const [imageURL, setImageURL] = useState('');
   const [dragActive, setDragActive] = useState(false);
@@ -19,7 +34,7 @@ const PhotoUploadForm: React.FC<{ user: UserType; multiple?: boolean }> = ({
   const isUrlValid = IMAGE.IMAGE_URL_REGEX.test(imageURL);
 
   const uploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(updateUserAvatar(user?.userId, 'file_upload', e));
+    dispatch(updateAction(resourceId, 'file_upload', e));
   };
 
   const handleDrag = (e: React.DragEvent<HTMLFormElement> | React.DragEvent<HTMLDivElement>) => {
@@ -37,7 +52,7 @@ const PhotoUploadForm: React.FC<{ user: UserType; multiple?: boolean }> = ({
     e.stopPropagation();
     setDragActive(false);
     if (e?.dataTransfer?.files?.[0]) {
-      dispatch(updateUserAvatar(user?.userId, 'file_upload', e));
+      dispatch(updateAction(resourceId, 'file_upload', e));
       setImageURL('');
     }
   };
@@ -45,7 +60,7 @@ const PhotoUploadForm: React.FC<{ user: UserType; multiple?: boolean }> = ({
   const addImageUrlHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
 
-    dispatch(updateUserAvatar(user?.userId, 'add_image_url', e, imageURL));
+    dispatch(updateAction(resourceId, 'add_image_url', e, imageURL));
     setImageURL('');
   };
 
@@ -53,7 +68,7 @@ const PhotoUploadForm: React.FC<{ user: UserType; multiple?: boolean }> = ({
     e.preventDefault();
 
     if (e.key === 'Enter') {
-      dispatch(updateUserAvatar(user?.userId, 'add_image_url', e, imageURL));
+      dispatch(updateAction(resourceId, 'add_image_url', e, imageURL));
       setImageURL('');
     }
   };

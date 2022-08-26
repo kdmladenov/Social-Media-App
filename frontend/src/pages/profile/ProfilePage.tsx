@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import './styles/ProfilePage.css';
-import { getUserDetails } from '../../context/actions/userActions';
+import { getUserDetails, updateUserCover } from '../../context/actions/userActions';
 import useTypedSelector from '../../hooks/useTypedSelector';
 
 import Loader from '../../components/Loader';
@@ -19,10 +19,14 @@ import ProfilePosts from './ProfilePosts';
 import ProfileAbout from './ProfileAbout';
 import ProfileFriends from './ProfileFriends';
 import ProfilePhotos from './ProfilePhotos';
+import Modal from '../../components/Modal';
+import PhotoUploadForm from '../../components/PhotoUploadForm';
 
 const ProfilePage: React.FC = () => {
   const dispatch = useDispatch();
   const { section } = useParams();
+
+  const [showImageUrlForm, setShowImageUrlForm] = useState(false);
 
   const { userInfo } = useTypedSelector((state) => state.userLogin);
 
@@ -35,14 +39,16 @@ const ProfilePage: React.FC = () => {
   } = useTypedSelector((state) => state.userDetails);
 
   const { success: successUpdateAvatar } = useTypedSelector((state) => state.userAvatarUpdate);
-
   const { success: successDeleteAvatar } = useTypedSelector((state) => state.userAvatarDelete);
 
+  const { success: successUpdateCover } = useTypedSelector((state) => state.userCoverUpdate);
+
   useEffect(() => {
-    if (!user?.email || successUpdateAvatar || successDeleteAvatar) {
+    if (!user?.email || successUpdateAvatar || successDeleteAvatar || successUpdateCover) {
       dispatch(getUserDetails(userInfo?.userId));
+      setShowImageUrlForm(false)
     }
-  }, [dispatch, userInfo, successUpdateAvatar, successDeleteAvatar, section]);
+  }, [dispatch, userInfo, successUpdateAvatar, successDeleteAvatar, successUpdateCover, section]);
 
   return loadingUser ? (
     <Loader />
@@ -61,11 +67,19 @@ const ProfilePage: React.FC = () => {
         />
         <div className="container flex_col">
           <div className="cover">
-            <img
-              src={user?.cover?.startsWith('http') ? user?.cover : `${BASE_URL}/${user?.cover}`}
-              alt={`${user?.firstName} ${user?.lastName}`}
-              crossOrigin="anonymous"
-            />
+            {user?.cover ? (
+              <img
+                src={user?.cover?.startsWith('http') ? user?.cover : `${BASE_URL}/${user?.cover}`}
+                alt={`${user?.firstName} ${user?.lastName}`}
+                crossOrigin="anonymous"
+              />
+            ) : (
+              <></>
+            )}
+            <Button classes="white" onClick={() => setShowImageUrlForm(!showImageUrlForm)}>
+              <i className="fa fa-camera"></i>
+              <span> Edit cover photo</span>
+            </Button>
           </div>
           <div className="info flex">
             <div className="avatar_name flex">
@@ -104,6 +118,11 @@ const ProfilePage: React.FC = () => {
           <ProfilePhotos />
         )}
       </section>
+      {showImageUrlForm && (
+        <Modal classes="image" setIsOpenModal={setShowImageUrlForm}>
+          <PhotoUploadForm resourceId={user?.userId} updateAction={updateUserCover} />
+        </Modal>
+      )}
     </main>
   );
 };

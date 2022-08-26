@@ -10,6 +10,7 @@ export interface UserType {
   reenteredPassword: string;
   phone: string;
   avatar: string;
+  cover: string;
   homeCity: string;
   homeCountry: string;
   currentCity: string;

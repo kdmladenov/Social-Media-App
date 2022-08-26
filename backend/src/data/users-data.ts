@@ -20,12 +20,12 @@ const getBy = async (
       u.last_name as lastName,
       u.avatar,
       u.cover,
+      f.friends,
       u.about_me as aboutMe
       ${
         role === 'admin' || isProfileOwner || isProfileOwnerFriend // TODO or friend
           ? `,u.email,
               u.phone,
-              f.friends,
               u.date_of_birth as dateOfBirth,
               u.home_city_id as homeCityId,
               hc.city as homeCity,
@@ -57,7 +57,7 @@ const getBy = async (
     LEFT JOIN(
           SELECT 
               u.user_id,
-              JSON_ARRAYAGG(JSON_OBJECT('friendUserId', fr.friendUserId,'firstName', fr.firstName, 'lastName', fr.lastName, 'avatar', fr.avatar, 'friends' , fr.friends)) as friends
+              JSON_ARRAYAGG(JSON_OBJECT('userId', fr.friendUserId,'firstName', fr.firstName, 'lastName', fr.lastName, 'avatar', fr.avatar, 'friends' , fr.friends)) as friends
 
           FROM users u
 
@@ -86,7 +86,7 @@ const getBy = async (
                       LEFT JOIN(
                                 SELECT 
                                     u.user_id,
-                                    JSON_ARRAYAGG(JSON_OBJECT('friendUserId', frr.friendUserId,'firstName', frr.firstName, 'lastName', frr.lastName, 'avatar', frr.avatar)) as friends
+                                    JSON_ARRAYAGG(JSON_OBJECT('userId', frr.friendUserId,'firstName', frr.firstName, 'lastName', frr.lastName, 'avatar', frr.avatar)) as friends
 
                                 FROM users u
                                 INNER JOIN (
@@ -165,7 +165,7 @@ const getBy = async (
                       LEFT JOIN(
                                 SELECT 
                                     u.user_id,
-                                    JSON_ARRAYAGG(JSON_OBJECT('friendUserId', frr.friendUserId,'firstName', frr.firstName, 'lastName', frr.lastName, 'avatar', frr.avatar)) as friends
+                                    JSON_ARRAYAGG(JSON_OBJECT('userId', frr.friendUserId,'firstName', frr.firstName, 'lastName', frr.lastName, 'avatar', frr.avatar)) as friends
 
                                 FROM users u
                                 INNER JOIN (
@@ -228,7 +228,7 @@ const getBy = async (
 
   return {
     ...users[0],
-    friends: JSON.parse(users[0]?.friends).map((friendsOfFriend: UserTypeFriendsAsJson) => {
+    friends: JSON.parse(users[0]?.friends)?.map((friendsOfFriend: UserTypeFriendsAsJson) => {
       return { ...friendsOfFriend, friends: JSON.parse(friendsOfFriend.friends) };
     })
   };
@@ -295,7 +295,7 @@ const getAll = async (
     LEFT JOIN(
           SELECT 
               u.user_id,
-              JSON_ARRAYAGG(JSON_OBJECT('friendUserId', fr.friendUserId,'firstName', fr.firstName, 'lastName', fr.lastName, 'avatar', fr.avatar, 'friends' , fr.friends)) as friends
+              JSON_ARRAYAGG(JSON_OBJECT('userId', fr.friendUserId,'firstName', fr.firstName, 'lastName', fr.lastName, 'avatar', fr.avatar, 'friends' , fr.friends)) as friends
 
           FROM users u
 
@@ -324,7 +324,7 @@ const getAll = async (
                       LEFT JOIN(
                                 SELECT 
                                     u.user_id,
-                                    JSON_ARRAYAGG(JSON_OBJECT('friendUserId', frr.friendUserId,'firstName', frr.firstName, 'lastName', frr.lastName, 'avatar', frr.avatar)) as friends
+                                    JSON_ARRAYAGG(JSON_OBJECT('userId', frr.friendUserId,'firstName', frr.firstName, 'lastName', frr.lastName, 'avatar', frr.avatar)) as friends
 
                                 FROM users u
                                 INNER JOIN (
@@ -403,7 +403,7 @@ const getAll = async (
                       LEFT JOIN(
                                 SELECT 
                                     u.user_id,
-                                    JSON_ARRAYAGG(JSON_OBJECT('friendUserId', frr.friendUserId,'firstName', frr.firstName, 'lastName', frr.lastName, 'avatar', frr.avatar)) as friends
+                                    JSON_ARRAYAGG(JSON_OBJECT('userId', frr.friendUserId,'firstName', frr.firstName, 'lastName', frr.lastName, 'avatar', frr.avatar)) as friends
 
                                 FROM users u
                                 INNER JOIN (
@@ -515,6 +515,7 @@ const updateUser = async (user: UserType) => {
       last_name = ?,
       email = ?,
       avatar = ?,
+      cover = ?,
       phone = ?,
       date_of_birth = ?,
       role = ?,
@@ -531,6 +532,7 @@ const updateUser = async (user: UserType) => {
     user.lastName || null,
     user.email || null,
     user.avatar || null,
+    user.cover || null,
     user.phone || null,
     user.dateOfBirth || null,
     user.role || null,

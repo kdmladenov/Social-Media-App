@@ -6,7 +6,7 @@ import { user as userConstants } from '../constants/constants.js';
 import Image from '../models/Image.js';
 
 const uploadImage = (imagesData: ImagesData) => async (imageUrl: string) => {
-  const existingImage = imagesData.getImageByURL(imageUrl);
+  const existingImage = await imagesData.getImageByURL(imageUrl);
 
   if (existingImage) {
     return {
@@ -108,11 +108,31 @@ const deleteUserAvatar = (usersData: UsersData) => async (userId: number) => {
   };
 };
 
+const addUserCover = (usersData: UsersData) => async (userId: number, imageUrl: string) => {
+  const existingUser = await usersData.getBy('user_id', userId, false, 'admin');
+
+  if (!existingUser) {
+    return {
+      error: errors.RECORD_NOT_FOUND,
+      result: null
+    };
+  }
+
+  const updatedUser = { ...existingUser, cover: imageUrl };
+  await usersData.updateUser(updatedUser);
+
+  return {
+    error: null,
+    result: updatedUser
+  };
+};
+
 export default {
   uploadImage,
   addPostImage,
   getAllPostImages,
   deletePostImage,
   addUserAvatar,
-  deleteUserAvatar
+  deleteUserAvatar,
+  addUserCover
 };

@@ -19,6 +19,8 @@ import errors from '../constants/service-errors.js';
 import rolesEnum from '../constants/roles.enum.js';
 import usersServices from '../services/users-services.js';
 import usersData from '../data/users-data.js';
+import uploadCover from '../middleware/upload-cover.js';
+import validateBody from '../middleware/validate-body.js';
 
 const imagesController = express.Router();
 
@@ -64,7 +66,7 @@ imagesController
     })
   )
   // @desc GET ALL post's images
-  
+
   // @route GET /posts/:postId/image
   // @access Public
   .get(
@@ -105,7 +107,8 @@ imagesController
         res.status(200).send(deletedImage);
       }
     })
-  )// @desc UPLOAD user's avatar
+  )
+  // @desc UPLOAD user's avatar
   // @route POST /users/avatars/upload
   // @access Private - Admin only
   .post(
@@ -117,11 +120,7 @@ imagesController
     errorHandler(async (req: Request, res: Response) => {
       const { path } = req.file;
 
-      const { image } = await imagesServices.uploadImage(imagesData)(
-        path.replace(/\\/g, '/')
-      );
-
-      console.log(image, 'imgctrl');
+      const { image } = await imagesServices.uploadImage(imagesData)(path.replace(/\\/g, '/'));
 
       res.status(201).send(image);
     })
@@ -141,6 +140,48 @@ imagesController
       const userId = role === rolesEnum.admin ? req.params.userId : req.user.userId;
 
       const { error, result } = await imagesServices.addUserAvatar(usersData)(+userId, imageUrl);
+
+      if (error === errors.RECORD_NOT_FOUND) {
+        res.status(404).send({
+          message: 'The user is not found.'
+        });
+      } else {
+        res.status(201).send(result);
+      }
+    })
+  )
+  // @desc UPLOAD user's avatar
+  // @route POST /users/avatars/upload
+  // @access Private - Admin only
+  
+  // TODO - ValidateFile not working properly
+  .post(
+    '/covers/upload',
+    authMiddleware,
+    loggedUserGuard,
+    uploadCover.single('cover'),
+    // validateFile('uploads', uploadFileSchema),
+    errorHandler(async (req: Request, res: Response) => {
+      const { path } = req.file;
+
+      const { image } = await imagesServices.uploadImage(imagesData)(path.replace(/\\/g, '/'));
+      res.status(201).send(image);
+    })
+  )
+  // @desc ADD user's avatar
+  // @route POST /users/:userId/image
+  // @access Private - Admin or User Owner(change user avatar irrelevant of the userId entered)
+  .post(
+    '/:userId/covers',
+    authMiddleware,
+    loggedUserGuard,
+    errorHandler(async (req: Request, res: Response) => {
+      const { role } = req.user;
+      const { imageUrl } = req.body;
+
+      const userId = role === rolesEnum.admin ? req.params.userId : req.user.userId;
+
+      const { error, result } = await imagesServices.addUserCover(usersData)(+userId, imageUrl);
 
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({

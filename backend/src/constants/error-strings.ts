@@ -17,6 +17,7 @@ export default {
     newEmail: `Expected valid e-mail a string with length in the range [${USER.MIN_EMAIL_LENGTH}-${USER.MAX_EMAIL_LENGTH}]`,
     reenteredNewEmail: `Expected valid e-mail a string with length in the range [${USER.MIN_EMAIL_LENGTH}-${USER.MAX_EMAIL_LENGTH}]`,
     avatar: `Expected a string path`,
+    cover: `Expected a string path`,
     phone: `Expected a valid phone number`,
     homeCity: `Expected a string with length in the range [${LOCATIONS.MIN_CITY_LENGTH}-${LOCATIONS.MAX_CITY_LENGTH}]`,
     homeCountry: `Expected a string with length in the range [${LOCATIONS.MIN_COUNTRY_LENGTH}-${LOCATIONS.MAX_COUNTRY_LENGTH}]`,

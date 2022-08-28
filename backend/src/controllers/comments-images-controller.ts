@@ -90,22 +90,22 @@ commentsImagesController
   )
 
   // @desc EDIT post comment
-  // @route PUT /comments-images/:postImageCommentId
+  // @route PUT /comments-images/:commentId
   // @access Private - logged users who have created the comment or Admin
   .put(
-    '/:postImageCommentId',
+    '/:commentId',
     authMiddleware,
     loggedUserGuard,
     validateBody('comment', updateCommentSchema),
     // errorHandler(
     async (req: Request, res: Response) => {
       const { content } = req.body;
-      const { postImageCommentId } = req.params;
+      const { commentId } = req.params;
       const { userId: authorId, role } = req.user;
 
       const { error, result } = await commentsImagesServices.updatePostImageComment(
         commentsImagesData
-      )(content, +postImageCommentId, +authorId, role);
+      )(content, +commentId, +authorId, role);
 
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
@@ -123,19 +123,19 @@ commentsImagesController
   // )
 
   // @desc DELETE post comment
-  // @route DELETE/comments-images/:postImageCommentId
+  // @route DELETE/comments-images/:commentId
   // @access Private - logged users who have created the comment or Admin
   .delete(
-    '/:postImageCommentId',
+    '/:commentId',
     authMiddleware,
     loggedUserGuard,
     errorHandler(async (req: Request, res: Response) => {
       const { userId: authorId, role } = req.user;
-      const { postImageCommentId } = req.params;
+      const { commentId } = req.params;
 
       const { error, result } = await commentsImagesServices.deletePostImageComment(
         commentsImagesData
-      )(+postImageCommentId, +authorId, role);
+      )(+commentId, +authorId, role);
 
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({

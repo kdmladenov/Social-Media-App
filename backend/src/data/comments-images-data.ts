@@ -21,7 +21,7 @@ const getAllPostImageComments = async (
 
   const sql = `
   SELECT   
-    c.post_image_comment_id as postImageCommentId,
+    c.post_image_comment_id as commentId,
     c.post_id as postId,
     c.image_id as imageId,
     c.reply_to as replyTo,
@@ -50,7 +50,7 @@ const getAllPostImageComments = async (
 const getPostImageCommentBy = async (column: string, value: string | number) => {
   const sql = `
     SELECT   
-    c.post_image_comment_id as postImageCommentId,
+    c.post_image_comment_id as commentId,
     c.post_id as postId,
     c.image_id as imageId,
     c.reply_to as replyTo,
@@ -98,7 +98,7 @@ const createPostImageComment = async (
 
 const updatePostImageComment = async (
   content: string,
-  postImageCommentId: number,
+  commentId: number,
   authorId: number,
   role: RolesType
 ) => {
@@ -108,7 +108,7 @@ const updatePostImageComment = async (
       updated_at = CURRENT_TIMESTAMP()
     WHERE post_image_comment_id = ? ${role === rolesEnum.basic ? 'AND author_id = ?' : ''}
   `;
-  return db.query(sql, [content, postImageCommentId, authorId]);
+  return db.query(sql, [content, commentId, authorId]);
 };
 
 const removePostImageComment = async (commentId: number, authorId: number, role: RolesType) => {

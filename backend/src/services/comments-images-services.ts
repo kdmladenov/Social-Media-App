@@ -72,10 +72,10 @@ const createPostImageComment =
 
 const updatePostImageComment =
   (commentsImagesData: CommentsImagesData) =>
-  async (content: string, postImageCommentId: number, authorId: number, role: RolesType) => {
+  async (content: string, commentId: number, authorId: number, role: RolesType) => {
     const existingComment = await commentsImagesData.getPostImageCommentBy(
       'post_image_comment_id',
-      postImageCommentId
+      commentId
     );
 
     if (!existingComment) {
@@ -99,7 +99,7 @@ const updatePostImageComment =
       dateEdited: new Date()
     };
 
-    await commentsImagesData.updatePostImageComment(content, postImageCommentId, authorId, role);
+    await commentsImagesData.updatePostImageComment(content, commentId, authorId, role);
 
     return {
       error: null,
@@ -109,10 +109,10 @@ const updatePostImageComment =
 
 const deletePostImageComment =
   (commentsImagesData: CommentsImagesData) =>
-  async (postImageCommentId: number, authorId: number, role: RolesType) => {
+  async (commentId: number, authorId: number, role: RolesType) => {
     const existingComment = await commentsImagesData.getPostImageCommentBy(
       'post_image_comment_id',
-      postImageCommentId
+      commentId
     );
 
     if (!existingComment) {
@@ -130,7 +130,7 @@ const deletePostImageComment =
       };
     }
 
-    await commentsImagesData.removePostImageComment(postImageCommentId, authorId, role);
+    await commentsImagesData.removePostImageComment(commentId, authorId, role);
 
     return {
       error: null,

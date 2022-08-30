@@ -23,6 +23,7 @@
 .stories_my .carousel_container li,
 .stories_my .carousel_container li .story_image {
   height: 200px;
+  height: 200px;
   min-width: 130px;
   width: 130px;
 }
@@ -131,6 +132,7 @@
   padding: 50px 20px;
   align-items: flex-start;
   justify-content: flex-start;
+  overflow-y: scroll;
 }
 #modal .modal_container.story .stories_sidebar ul {
   width: 100%;

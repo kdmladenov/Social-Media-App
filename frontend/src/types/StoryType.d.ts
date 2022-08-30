@@ -1,6 +1,7 @@
 interface StoryType {
   storyId: number;
-  image: string;
+  image?: string;
+  imageId?: number;
   message?: string;
   userId: number;
   userFirstName: string;

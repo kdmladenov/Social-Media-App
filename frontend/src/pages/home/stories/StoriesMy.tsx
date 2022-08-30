@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
 import Avatar from '../../../components/Avatar';
 import Button from '../../../components/Button';
 import Carousel from '../../../components/Carousel';
@@ -8,11 +7,12 @@ import Loader from '../../../components/Loader';
 import Message from '../../../components/Message';
 import Modal from '../../../components/Modal';
 import Slider from '../../../components/Slider';
-import { listMyStories } from '../../../context/actions/storyActions';
+import {  listMyStories } from '../../../context/actions/storyActions';
 import { BASE_URL } from '../../../data/constants';
 import defaultEndpoint from '../../../data/inputs/defaultEndpoint';
 import useTypedSelector from '../../../hooks/useTypedSelector';
 import getTimeDuration from '../../../utils/getTimeDuration';
+import StoryCreateCard from './StoryCreateCard';
 import './styles/StoriesMy.css';
 
 const StoriesMy = () => {
@@ -37,8 +37,11 @@ const StoriesMy = () => {
     // if (successCreate) {
     //   navigate(`/admin/products/${createdStory.storyId}/edit/details`);
     // } else {
-    const { page, pageSize, sort, search } = endpoint;
-    dispatch(listMyStories(`${page}${pageSize}${sort}${search}`));
+
+ 
+      const { page, pageSize, sort, search } = endpoint;
+      dispatch(listMyStories(`${page}${pageSize}${sort}${search}`));
+    
     // }
   }, [
     dispatch,
@@ -46,7 +49,7 @@ const StoriesMy = () => {
     // userInfo,
     // successDelete,
     // successRestore,
-    // successCreate,
+
     // createdPost,
     endpoint
   ]);
@@ -67,6 +70,7 @@ const StoriesMy = () => {
       ) : stories?.length > 0 ? (
         <Carousel>
           <ul>
+            <StoryCreateCard />
             {stories.map((story) => (
               <li
                 className="story_card card"
@@ -102,7 +106,7 @@ const StoriesMy = () => {
               <div className="add_story">
                 <h4>Your Story</h4>
                 <Button classes="icon">
-                  <i className="fa fas-plus"></i>
+                  <i className="fa fa-plus"></i>
                 </Button>
               </div>
               <h4>All Stories</h4>
@@ -117,6 +121,7 @@ const StoriesMy = () => {
                     }
                   >
                     <Avatar
+                      classes="big"
                       imageUrl={story?.userAvatar}
                       firstName={story?.userFirstName}
                       lastName={story?.userLastName}

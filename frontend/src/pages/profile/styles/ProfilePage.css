@@ -31,8 +31,16 @@
 }
 
 .profile_page .profile_header .cover {
+  position: relative;
   height: 400px;
   width: 1240px;
+  background: var(--white);
+}
+
+.profile_page .profile_header .cover .button_container{
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
 }
 
 .profile_page .profile_header .cover img {

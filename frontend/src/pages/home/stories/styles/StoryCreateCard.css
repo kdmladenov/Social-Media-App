@@ -23,3 +23,101 @@
   font-weight: 700;
   font-size: 16px;
 }
+
+/* Full Screen Modal */
+#modal .modal_container.story_create {
+  height: fit-content;
+  max-height: 900px;
+  width: 500px;
+  padding: 20px;
+}
+
+/* #modal .modal_container.story_create button.close_modal_btn {
+  height: 40px;
+  width: 40px;
+  font-size: 25px;
+  position: absolute;
+  top: 10px;
+  left: auto;
+  right: 10px;
+} */
+
+/* Header  */
+#modal .modal_container.story_create .story_create_header {
+  height: 70px;
+  width: 100%;
+  padding: 0 20px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  z-index: 10000;
+}
+#modal .modal_container.story_create .slider_container{
+  height: 830px;
+  width: 100%;
+}
+
+#modal .modal_container.story_create .story_container {
+  height: fit-content;
+  width: 500px;
+}
+#modal .modal_container.story_create .story_container .image_upload_form {
+  margin: 0;
+}
+
+#modal .modal_container.story_create .story_container .slider_container .slide,
+#modal .modal_container.story_create .story_container .slider_container ul,
+#modal .modal_container.story_create .story_container .slider_container ul li,
+#modal .modal_container.story_create .story_container .slider_container ul li .slide_container {
+  width: 500px;
+  height: 900px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  overflow: clip;
+}
+
+#modal .modal_container.story_create .story_container .slider_container ul li .slide_container {
+  position: relative;
+}
+
+#modal
+  .modal_container.story_create
+  .story_container
+  .slider_container
+  ul
+  li
+  .slide_container
+  .image {
+  z-index: 100;
+}
+#modal
+  .modal_container.story_create
+  .story_container
+  .slider_container
+  li
+  .slide_container
+  .image
+  img {
+  object-fit: contain;
+}
+
+#modal .modal_container.story_create .story_container .slider_container ul li .blurred_background {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(20px);
+  z-index: 10;
+}
+
+
+#modal .modal_container.story_create .message{
+  position: absolute;
+  top: 40px;
+  z-index: 1000;
+}

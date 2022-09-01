@@ -140,7 +140,7 @@ const StoriesMy = () => {
                 setSlideIndex={setSelectedStoryIndex}
               >
                 {stories?.map((story) => (
-                  <Slider.Item item={story} />
+                  <Slider.Item item={story}/>
                 ))}
               </Slider>
             </div>

@@ -9,6 +9,7 @@ import WorkplaceType from '../WorkplaceType';
 import FriendType from '../FriendType';
 import SavedPostType from '../SavedPostType';
 import CollectionType from '../CollectionType';
+import StoryType from '../StoryType';
 
 interface StoreType {
   portalRefs;
@@ -219,6 +220,18 @@ interface StoreType {
     error?: string;
     stories: StoriesType[];
   };
+  storyCreate: {
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+    story: StoryType;
+  };
+  storyUpdate: {
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+    story: StoryType;
+  };
   userLogin: {
     loading: boolean;
     error?: string;
@@ -267,6 +280,12 @@ interface StoreType {
     loading: boolean;
     error?: string;
     success?: boolean;
+  };
+  userCoverUpdate: {
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+    user: UserType;
   };
   schoolCreate: {
     loading: boolean;
@@ -330,6 +349,7 @@ interface StoreType {
     loading: boolean;
     error?: string;
     collections: CollectionType[];
+    success: boolean;
   };
   collectionDelete: {
     loading: boolean;

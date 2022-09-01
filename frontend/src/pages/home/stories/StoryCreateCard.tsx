@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Avatar from '../../../components/Avatar';
 import Button from '../../../components/Button';
+import FormComponent from '../../../components/FormComponent';
 import Modal from '../../../components/Modal';
 import PhotoUploadForm from '../../../components/PhotoUploadForm';
 import Slider from '../../../components/Slider';
-import { createStory } from '../../../context/actions/storyActions';
+import { createStory, updateStory } from '../../../context/actions/storyActions';
 import { BASE_URL } from '../../../data/constants';
+import addStoryMessageInitialInputState from '../../../data/inputs/addPostMessageInitialInputState';
 import useTypedSelector from '../../../hooks/useTypedSelector';
 import StoryType from '../../../types/StoryType';
 import './styles/StoryCreateCard.css';
@@ -52,30 +54,43 @@ const StoryCreateCard = () => {
       </li>
 
       {isModalOpen && (
-        <Modal classes="story" setIsOpenModal={setIsModalOpen}>
-          <>
-            <aside className="stories_sidebar flex_col">
-              <h1>Your Story</h1>
-              <Avatar
-                classes="big"
-                imageUrl={user?.avatar}
-                firstName={user?.firstName}
-                lastName={user?.lastName}
+        <Modal classes="story_create flex_col" setIsOpenModal={setIsModalOpen}>
+          <div className="story_create_header flex">
+            <Avatar
+              classes="big"
+              imageUrl={user?.avatar}
+              firstName={user?.firstName}
+              lastName={user?.lastName}
+            />
+            {newStory?.image ? (
+              <Button onClick={() => setEditStoryMode('add_message')}>Add text</Button>
+            ) : (
+              <></>
+            )}
+          </div>
+          {editStoryMode === 'add_message' ? (
+            <div className="message">
+              <FormComponent
+                inputData={addStoryMessageInitialInputState}
+                resourceId={newStory?.storyId}
+                updateAction={updateStory}
+                mode={'update'}
               />
-              {newStory?.image ? (
-                <Button onClick={() => setEditStoryMode('add_message')}>Add text</Button>
-              ) : (
-                <></>
-              )}
-            </aside>
-            <div className="stories_container">
-              {newStory?.image ? (
-                <Slider>{[<Slider.Item item={newStory} mode={editStoryMode} />]}</Slider>
-              ) : (
-                <PhotoUploadForm resourceId={user?.userId} updateAction={createStory} />
-              )}
             </div>
-          </>
+          ) : (
+            <></>
+          )}
+          <div className="story_container">
+            {newStory?.image ? (
+              <Slider>{[<Slider.Item item={newStory} key="new" />]}</Slider>
+            ) : (
+              <PhotoUploadForm
+                resourceId={user?.userId}
+                updateAction={createStory}
+                title="Select a story image"
+              />
+            )}
+          </div>
         </Modal>
       )}
     </>

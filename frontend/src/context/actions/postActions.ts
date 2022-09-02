@@ -192,16 +192,96 @@ export const restorePost =
     }
   };
 
+// export const createPost =
+//   (_: number, postData: PostType) =>
+//   async (dispatch: Dispatch<PostCreateActionType>, getState: () => StoreType) => {
+//     try {
+//       dispatch({
+//         type: POST_CREATE_REQUEST
+//       });
+//       const {
+//         userLogin: { userInfo }
+//       } = getState();
+
+//       const config = {
+//         headers: {
+//           'Content-Type': 'application/json',
+//           Authorization: `Bearer ${userInfo.token}`
+//         }
+//       };
+
+//       const { data } = await axios.post(`${BASE_URL}/posts`, postData, config);
+
+//       dispatch({
+//         type: POST_CREATE_SUCCESS,
+//         payload: data
+//       });
+//       // for Sidebar input map
+//       const { data: allPostList } = await axios.get(
+//         `${BASE_URL}/posts?pageSize=${localStorage.getItem('totalMyPostCount')}`
+//       );
+//       localStorage.setItem('allPostsList', JSON.stringify(allPostList));
+//     } catch (error) {
+//       axios.isAxiosError(error) &&
+//         dispatch({
+//           type: POST_CREATE_FAIL,
+//           payload:
+//             error.response && error.response.data.message
+//               ? error.response.data.message
+//               : error.message
+//         });
+//     }
+//   };
+
 export const createPost =
-  (_: number, postData: PostType) =>
+  (
+    userId: number,
+    mode: string,
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.MouseEvent<HTMLButtonElement>
+      | React.KeyboardEvent<HTMLInputElement>
+      | React.DragEvent<HTMLDivElement>,
+    imageAddress?: string
+  ) =>
   async (dispatch: Dispatch<PostCreateActionType>, getState: () => StoreType) => {
+    // mode: 'file_upload' or 'add_image_url'
+    let image = imageAddress || '';
+    
     try {
       dispatch({
         type: POST_CREATE_REQUEST
       });
+      
       const {
         userLogin: { userInfo }
       } = getState();
+      
+      if (mode === 'file_upload') {
+        // Case file upload
+        
+        const files =
+          (event.target as HTMLInputElement).files ||
+          (event as React.DragEvent<HTMLDivElement>).dataTransfer.files;
+        const formData = new FormData();
+        if (files.length !== 0) {
+        for (const single_file of files) {
+            formData.append('postImages', single_file);
+        }
+    }
+console.log(files, 'file');
+        const config = {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${userInfo.token}`
+          }
+        };
+
+        const { data } = await axios.post(`${BASE_URL}/images/posts/upload`, formData, config);
+
+        console.log(data)
+        image = data?.image;
+      }
 
       const config = {
         headers: {
@@ -210,17 +290,12 @@ export const createPost =
         }
       };
 
-      const { data } = await axios.post(`${BASE_URL}/posts`, postData, config);
+      const { data } = await axios.post(`${BASE_URL}/posts`, { image }, config);
 
       dispatch({
         type: POST_CREATE_SUCCESS,
         payload: data
       });
-      // for Sidebar input map
-      const { data: allPostList } = await axios.get(
-        `${BASE_URL}/posts?pageSize=${localStorage.getItem('totalMyPostCount')}`
-      );
-      localStorage.setItem('allPostsList', JSON.stringify(allPostList));
     } catch (error) {
       axios.isAxiosError(error) &&
         dispatch({
@@ -232,6 +307,58 @@ export const createPost =
         });
     }
   };
+
+
+
+// export const updatePost =
+//   (postId: number, updatedPost: PostType) =>
+//   async (
+//     dispatch: Dispatch<PostUpdateActionType | PostDetailsActionType>,
+//     getState: () => StoreType
+//   ) => {
+//     try {
+//       dispatch({
+//         type: POST_UPDATE_REQUEST
+//       });
+
+//       const {
+//         userLogin: { userInfo }
+//       } = getState();
+
+//       const config = {
+//         headers: {
+//           'Content-Type': 'application/json',
+//           Authorization: `Bearer ${userInfo.token}`
+//         }
+//       };
+
+//       const { data } = await axios.put(`${BASE_URL}/posts/${postId}`, updatedPost, config);
+
+//       dispatch({
+//         type: POST_UPDATE_SUCCESS,
+//         payload: data
+//       });
+//       // // update the state everywhere
+//       dispatch({
+//         type: POST_DETAILS_SUCCESS,
+//         payload: data
+//       });
+//       // for Sidebar input map
+//       const { data: allPostList } = await axios.get(
+//         `${BASE_URL}/posts?pageSize=${localStorage.getItem('totalMyPostCount')}`
+//       );
+//       localStorage.setItem('allPostsList', JSON.stringify(allPostList));
+//     } catch (error) {
+//       axios.isAxiosError(error) &&
+//         dispatch({
+//           type: POST_UPDATE_FAIL,
+//           payload:
+//             error.response && error.response.data.message
+//               ? error.response.data.message
+//               : error.message
+//         });
+//     }
+//   };
 
 export const updatePost =
   (postId: number, updatedPost: PostType) =>
@@ -255,7 +382,12 @@ export const updatePost =
         }
       };
 
-      const { data } = await axios.put(`${BASE_URL}/posts/${postId}`, updatedPost, config);
+
+      const { data } = await axios.put(
+        `${BASE_URL}/posts/${userInfo?.userId}/${postId}`,
+        updatedPost,
+        config
+      );
 
       dispatch({
         type: POST_UPDATE_SUCCESS,
@@ -266,11 +398,7 @@ export const updatePost =
         type: POST_DETAILS_SUCCESS,
         payload: data
       });
-      // for Sidebar input map
-      const { data: allPostList } = await axios.get(
-        `${BASE_URL}/posts?pageSize=${localStorage.getItem('totalMyPostCount')}`
-      );
-      localStorage.setItem('allPostsList', JSON.stringify(allPostList));
+
     } catch (error) {
       axios.isAxiosError(error) &&
         dispatch({

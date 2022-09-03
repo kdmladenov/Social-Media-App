@@ -27,6 +27,8 @@ const getPostImage = async (postId: number, imageId: number, role: RolesType = '
   return result[0];
 };
 
+
+
 const getImage = async (imageId: number) => {
   const sql = `
       SELECT 
@@ -65,17 +67,15 @@ const uploadImage = async (imageUrl: string) => {
   return await getImage(+result.insertId);
 };
 
-const addPostImage = async (postId: number, imageId: number) => {
+const addPostImage = async (postId: number, image: string) => {
   const sql = `
     INSERT INTO post_images (
       post_id,
       image_id
     )
-    VALUES (?, ?)
+    VALUES (?, (SELECT image_id from images WHERE image like '%${image}%'))
   `;
-  await db.query(sql, [+postId, +imageId]);
-
-  return await await getPostImage(+postId, +imageId);
+  return db.query(sql, [+postId]);
 };
 
 const getAllPostImages = async (postId: number) => {
@@ -84,7 +84,7 @@ const getAllPostImages = async (postId: number) => {
         pi.post_id as postId,
         pi.image_id as imageId,
         i.image,
-        pi.is_delete as isDeleted
+        pi.is_deleted as isDeleted
 
       FROM post_images pi
       LEFT JOIN (SELECT image_id, image
@@ -131,10 +131,10 @@ const remove = async (postId: number, imageId: number) => {
 
 export default {
   getPostImage,
+  getAllPostImages,
+  addPostImage,
   getImage,
   getImageByURL,
   uploadImage,
-  addPostImage,
-  getAllPostImages,
   remove
 };

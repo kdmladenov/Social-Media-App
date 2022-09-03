@@ -128,24 +128,14 @@ const getBy = async (column: string, value: string | number, role: RolesType = '
   };
 };
 
-const create = async (post: PostType) => {
+const create = async ( userId: number) => {
   const sql = `
     INSERT INTO posts (
-      user_id,
-      shared_post_id,
-      message,
-      feeling_type_id,
-      location_id
+      user_id
     )
-    VALUES (?, ?, ?, ?, (SELECT feeling_type_id from feeling_types WHERE feeling_type = ?), (SELECT location_id from locations WHERE city = ?))
+    VALUES (?)
   `;
-  const result = await db.query(sql, [
-    +post.userId,
-    +post.sharedPostId,
-    post.message || null,
-    post.feelingType || null,
-    post.city || null
-  ]);
+  const result = await db.query(sql, [+userId]);
 
   return getBy('post_id', +result.insertId);
 };

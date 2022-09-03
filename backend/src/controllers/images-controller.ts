@@ -21,25 +21,55 @@ import usersServices from '../services/users-services.js';
 import usersData from '../data/users-data.js';
 import uploadCover from '../middleware/upload-cover.js';
 import validateBody from '../middleware/validate-body.js';
+import uploadStory from '../middleware/upload-story.js';
+import updatePasswordSchema from '../validator/update-password-schema.js';
+import uploadPostImages from '../middleware/upload-post-images.js';
+import multer from 'multer';
+import addPostImagesSchema from '../validator/add-post-images-schema.js';
 
 const imagesController = express.Router();
 
 imagesController
   // @desc UPLOAD post's image
-  // @route POST /posts/images/upload
+  // @route POST /images/posts/upload
   // @access Private - Admin only
   .post(
     '/posts/upload',
     authMiddleware,
     loggedUserGuard,
-    uploadImage.single('image'),
-    validateFile('uploads', uploadFileSchema),
-    errorHandler(async (req: Request, res: Response) => {
-      const { path } = req.file;
-
-      res.status(201).send(path.replace(/\\/g, '/'));
-    })
+    // validateFile('uploads', uploadFileSchema),
+    // errorHandler(
+    async (req: Request, res: Response) => {
+      // to move to middleware
+      uploadPostImages(req, res, function (err) {
+        if (err instanceof multer.MulterError) {
+          // A Multer error occurred when uploading.
+          res
+            .status(500)
+            .send({ error: { message: `Multer uploading error: ${err.message}` } })
+            .end();
+          return;
+        } else if (err) {
+          // An unknown error occurred when uploading.
+          if (err.name == 'ExtensionError') {
+            res
+              .status(413)
+              .send({ error: { message: err.message } })
+              .end();
+          } else {
+            res
+              .status(500)
+              .send({ error: { message: `unknown uploading error: ${err.message}` } })
+              .end();
+          }
+          return;
+        }
+        
+        res.status(200).send(req.files);
+      });
+    }
   )
+  // )
   // @desc ADD post's image
   // @route POST /posts/:postId/image
   // @access Private - logged user only
@@ -47,13 +77,13 @@ imagesController
     '/:postId/posts',
     authMiddleware,
     loggedUserGuard,
-    // validateBody('postImage', addPostImageSchema),
+    validateBody('postImages', addPostImagesSchema),
     errorHandler(async (req: Request, res: Response) => {
       const { postId } = req.params;
-      const { image } = req.body;
-      const { error, result } = await imagesServices.addPostImage(imagesData, postsData)(
+      const { images } = req.body;
+      const { error, result } = await imagesServices.addPostImages(imagesData, postsData)(
         +postId,
-        image
+        images
       );
 
       if (error === errors.RECORD_NOT_FOUND) {
@@ -150,10 +180,32 @@ imagesController
       }
     })
   )
+  // @desc DELETE user's avatar
+  // @route DELETE /users/:userId/avatar
+  // @access Private - Admin or User Owner(change user avatar irrelevant of the userId entered)
+  .delete(
+    '/:userId/avatars',
+    authMiddleware,
+    loggedUserGuard,
+    errorHandler(async (req: Request, res: Response) => {
+      const { role } = req.user;
+      const id = role === rolesEnum.admin ? req.params.userId : req.user.userId;
+
+      const { error, result } = await imagesServices.deleteUserAvatar(usersData)(+id);
+
+      if (error === errors.RECORD_NOT_FOUND) {
+        res.status(404).send({
+          message: `User ${id} is not found.`
+        });
+      } else {
+        res.status(200).send(result);
+      }
+    })
+  )
   // @desc UPLOAD user's avatar
   // @route POST /users/avatars/upload
   // @access Private - Admin only
-  
+
   // TODO - ValidateFile not working properly
   .post(
     '/covers/upload',
@@ -191,28 +243,50 @@ imagesController
         res.status(201).send(result);
       }
     })
-  )
-  // @desc DELETE user's avatar
-  // @route DELETE /users/:userId/avatar
-  // @access Private - Admin or User Owner(change user avatar irrelevant of the userId entered)
-  .delete(
-    '/:userId/avatars',
+  ) // @desc UPLOAD user's story image
+  // @route POST /users/avatars/upload
+  // @access Private - Admin only
+
+  // TODO - ValidateFile not working properly
+  .post(
+    '/stories/upload',
     authMiddleware,
     loggedUserGuard,
-    errorHandler(async (req: Request, res: Response) => {
-      const { role } = req.user;
-      const id = role === rolesEnum.admin ? req.params.userId : req.user.userId;
+    uploadStory.single('story'),
+    // validateFile('uploads', uploadFileSchema),
+    // errorHandler(
+    async (req: Request, res: Response) => {
+      const { path } = req.file;
 
-      const { error, result } = await imagesServices.deleteUserAvatar(usersData)(+id);
+      const { image } = await imagesServices.uploadImage(imagesData)(path.replace(/\\/g, '/'));
 
-      if (error === errors.RECORD_NOT_FOUND) {
-        res.status(404).send({
-          message: `User ${id} is not found.`
-        });
-      } else {
-        res.status(200).send(result);
-      }
-    })
+      res.status(201).send(image);
+    }
   );
+// )
+// @desc ADD user's avatar
+// @route POST /users/:userId/image
+// @access Private - Admin or User Owner(change user avatar irrelevant of the userId entered)
+// .post(
+//   '/:userId/stories',
+//   authMiddleware,
+//   loggedUserGuard,
+//   errorHandler(async (req: Request, res: Response) => {
+//     const { role } = req.user;
+//     const { imageUrl } = req.body;
+
+//     const userId = role === rolesEnum.admin ? req.params.userId : req.user.userId;
+
+//     const { error, result } = await imagesServices.addUserCover(usersData)(+userId, imageUrl);
+
+//     if (error === errors.RECORD_NOT_FOUND) {
+//       res.status(404).send({
+//         message: 'The user is not found.'
+//       });
+//     } else {
+//       res.status(201).send(result);
+//     }
+//   })
+// )
 
 export default imagesController;

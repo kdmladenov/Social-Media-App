@@ -15,7 +15,7 @@ import { authMiddleware, roleMiddleware } from '../authentication/auth.middlewar
 
 import updatePostSchema from '../validator/update-post-schema.js';
 import uploadFileSchema from '../validator/upload-file-schema.js';
-import createPostSchema from '../validator/create-post-schema.js';
+import createPostSchema from '../validator/add-post-images-schema.js';
 
 import errors from '../constants/service-errors.js';
 import { paging } from '../constants/constants.js';
@@ -104,10 +104,11 @@ postsController
     '/',
     authMiddleware,
     loggedUserGuard,
-    validateBody('post', createPostSchema),
+    // validateBody('post', createPostSchema),
     errorHandler(async (req: Request, res: Response) => {
-      const data = req.body;
-      const { post } = await postsServices.createPost(postsData, usersData)(data);
+      // const {images} = req.body;
+      const { userId } = req.user;
+      const { post } = await postsServices.createPost(postsData)(userId);
 
       res.status(201).send(post);
     })

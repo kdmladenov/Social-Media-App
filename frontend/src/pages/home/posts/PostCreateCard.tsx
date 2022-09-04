@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import Avatar from '../../../components/Avatar';
 import Button from '../../../components/Button';
+import DropDown from '../../../components/Dropdown';
 import FormComponent from '../../../components/FormComponent';
 import InputBoxWithAvatar from '../../../components/InputBoxWithAvatar';
 import Modal from '../../../components/Modal';
 import PhotoUploadForm from '../../../components/PhotoUploadForm';
 import Slider from '../../../components/Slider';
+import Tooltip from '../../../components/Tooltip';
 import { createPost, updatePost } from '../../../context/actions/postActions';
-import { POST } from '../../../data/constants';
+import { BASE_URL, POST } from '../../../data/constants';
 import addPostMessageInitialInputState from '../../../data/inputs/addPostMessageInitialInputState';
 import usersDummyData from '../../../data/inputs/dummyInputs/usersDummyData';
 import useTypedSelector from '../../../hooks/useTypedSelector';
 import PostType from '../../../types/PostType';
+import getPostImagesClass from '../../../utils/getPostImagesClass';
 
-import './styles/PostCreate.css';
+import './styles/PostCreateCard.css';
 
 const currentUser = usersDummyData[0];
 
 const PostCreateCard: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newPost, setNewPost] = useState<PostType>();
-  const [editPostMode, setEditPostMode] = useState<string>('');
+  const [modalScreen, setModalScreen] = useState<string>('main');
 
   const { user } = useTypedSelector((state) => state.userDetails);
 
@@ -38,6 +41,8 @@ const PostCreateCard: React.FC = () => {
       setNewPost(updatedPost);
     }
   }, [updatedPost, createdPost, successCreate, successUpdate]);
+
+  console.log(newPost, 'newPost');
 
   return (
     <div className="post_create_card card">
@@ -61,44 +66,85 @@ const PostCreateCard: React.FC = () => {
       </div>
       {isModalOpen && (
         <Modal classes="post_create flex_col" setIsOpenModal={setIsModalOpen}>
-          <div className="story_create_header flex">
-            <Avatar
-              classes="big"
-              imageUrl={user?.avatar}
-              firstName={user?.firstName}
-              lastName={user?.lastName}
-            />
-            {newPost?.images?.length ? (
-              <Button onClick={() => setEditPostMode('add_message')}>Add text</Button>
-            ) : (
-              <></>
-            )}
-          </div>
-          {editPostMode === 'add_message' ? (
-            <div className="message">
-              <FormComponent
-                inputData={addPostMessageInitialInputState}
-                resourceId={newPost?.postId}
-                updateAction={updatePost}
-                mode={'update'}
-              />
-            </div>
+          {modalScreen === 'main' ? (
+            <>
+              <div className="title flex">
+                <span>Create post</span>
+              </div>
+              <div className="post_create_header flex">
+                <Avatar
+                  classes="big"
+                  imageUrl={user?.avatar}
+                  firstName={user?.firstName}
+                  lastName={user?.lastName}
+                />
+              </div>
+
+              {newPost?.images?.length ? (
+                <>
+                  <div className="post_create_message flex">Text</div>
+                  <ul className="post_create_action_list flex">
+                    <span>Add to your post</span>
+                    <ul className="button_group flex">
+                      <Tooltip direction="top" text="Tag people">
+                        <i
+                          className="fas fa-user-tag"
+                          onClick={() => setModalScreen('tag_people')}
+                        ></i>
+                      </Tooltip>
+                      <Tooltip direction="top" text="Add Feeling">
+                        <i className="fa fa-smile" onClick={() => setModalScreen('feelings')}></i>
+                      </Tooltip>
+                      <Tooltip direction="top" text="Add location">
+                        <i className="fa fa-map" onClick={() => setModalScreen('add_location')}></i>
+                      </Tooltip>
+                    </ul>
+                  </ul>
+                  <div className="images_container">
+                    <ul className={`images ${getPostImagesClass(newPost?.images)}`}>
+                      {newPost?.images.map((image, index) => (
+                        <li className={`image${index + 1}`}>
+                          <img
+                            crossOrigin="anonymous"
+                            src={
+                              image?.image?.startsWith('http')
+                                ? image?.image
+                                : `${BASE_URL}/${image?.image}`
+                            }
+                            alt="post"
+                          />
+                          {newPost?.images?.length > 4 && (
+                            <span>{`+${newPost?.images.length - 4} more`}</span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              ) : (
+                <PhotoUploadForm
+                  resourceId={user?.userId}
+                  updateAction={createPost}
+                  multiple={true}
+                  name="postImages"
+                />
+              )}
+            </>
+          ) : modalScreen === 'feelings' ? (
+            <>
+              <span>Feelings</span>
+            </>
+          ) : modalScreen === 'tag_people' ? (
+            <>
+              <span>People tags</span>
+            </>
+          ) : modalScreen === 'add_location' ? (
+            <>
+              <span>Add location</span>
+            </>
           ) : (
             <></>
           )}
-          <div className="story_container">
-            {newPost?.images?.length ? (
-              <Slider>{[<Slider.Item item={newPost} key="new" />]}</Slider>
-            ) : (
-              <PhotoUploadForm
-                resourceId={user?.userId}
-                updateAction={createPost}
-                title="Select post images"
-                multiple={true}
-                name="postImages"
-              />
-            )}
-          </div>
         </Modal>
       )}
     </div>

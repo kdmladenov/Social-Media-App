@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Avatar from '../../../components/Avatar';
 import Button from '../../../components/Button';
 import DropDown from '../../../components/Dropdown';
@@ -6,14 +7,22 @@ import FormComponent from '../../../components/FormComponent';
 import InputBoxWithAvatar from '../../../components/InputBoxWithAvatar';
 import Modal from '../../../components/Modal';
 import PhotoUploadForm from '../../../components/PhotoUploadForm';
+import SearchBox from '../../../components/SearchBox';
 import Slider from '../../../components/Slider';
 import Tooltip from '../../../components/Tooltip';
-import { createPost, updatePost } from '../../../context/actions/postActions';
+import { listFriends } from '../../../context/actions/friendsActions';
+import { listAllLocations } from '../../../context/actions/locationActions';
+import { createPost, updatePost, uploadPostImages } from '../../../context/actions/postActions';
 import { BASE_URL, POST } from '../../../data/constants';
 import addPostMessageInitialInputState from '../../../data/inputs/addPostMessageInitialInputState';
+import defaultEndpoint from '../../../data/inputs/defaultEndpoint';
 import usersDummyData from '../../../data/inputs/dummyInputs/usersDummyData';
+import feelingsList from '../../../data/inputs/feelingsList';
+import { postInitialState } from '../../../data/inputs/postInitialState';
 import useTypedSelector from '../../../hooks/useTypedSelector';
+import NewPostType from '../../../types/NewPostType';
 import PostType from '../../../types/PostType';
+import UserType from '../../../types/UserType';
 import getPostImagesClass from '../../../utils/getPostImagesClass';
 
 import './styles/PostCreateCard.css';
@@ -21,9 +30,15 @@ import './styles/PostCreateCard.css';
 const currentUser = usersDummyData[0];
 
 const PostCreateCard: React.FC = () => {
+  const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newPost, setNewPost] = useState<PostType>();
-  const [modalScreen, setModalScreen] = useState<string>('main');
+  const [newPost, setNewPost] = useState<NewPostType>();
+  const [section, setSection] = useState<string>('main');
+  const [locationEndpoint, setLocationEndpoint] = useState(defaultEndpoint['locations']);
+  const [taggedFriendsEndpoint, setTaggedFriendsEndpoint] = useState(
+    defaultEndpoint['friendsList']
+  );
+  const [taggedFriendsList, setTaggedFriendsList] = useState<UserType[]>([]);
 
   const { user } = useTypedSelector((state) => state.userDetails);
 
@@ -33,16 +48,58 @@ const PostCreateCard: React.FC = () => {
   const { success: successUpdate, post: updatedPost } = useTypedSelector(
     (state) => state.postUpdate
   );
+  const { success: successImagesUpload, postImages: uploadedPostImages } = useTypedSelector(
+    (state) => state.postImagesUpload
+  );
+
+  const { locations } = useTypedSelector((state) => state.locationsList);
+  const { friends } = useTypedSelector((state) => state.friendsList);
+
+  const addLocationHandler = (location: { city: string; country: string }) => {
+    setNewPost({ ...newPost, city: location.city, country: location.country });
+    setSection('main');
+  };
+
+  const addFeelingHandler = (feeling: { icon: string; feeling: string }) => {
+    setNewPost({ ...newPost, feelingType: feeling.feeling });
+    setSection('main');
+  };
+
+  const tagFriendHandler = (friend: UserType) => {
+    setTaggedFriendsList([...taggedFriendsList, friend]);
+    setNewPost({ ...newPost, taggedFriends: taggedFriendsList });
+  };
+  console.log(taggedFriendsList, 'taggedFriendsList');
+  console.log(newPost, 'newPost');
 
   useEffect(() => {
     if (successCreate) {
       setNewPost(createdPost);
     } else if (successUpdate) {
       setNewPost(updatedPost);
+    } else if (successImagesUpload) {
+      setNewPost({ ...newPost, images: uploadedPostImages });
     }
-  }, [updatedPost, createdPost, successCreate, successUpdate]);
+  }, [
+    updatedPost,
+    createdPost,
+    successCreate,
+    successUpdate,
+    uploadedPostImages,
+    successImagesUpload
+  ]);
 
-  console.log(newPost, 'newPost');
+  console.log(section, 'section');
+  console.log(locationEndpoint, 'locationEndpoint');
+  useEffect(() => {
+    if (section === 'locations') {
+      const { page, pageSize, sort, search } = locationEndpoint;
+      dispatch(listAllLocations(`${page}${pageSize}${sort}${search}`));
+    } else if (section === 'tag_friends') {
+      const { page, pageSize, sort, search } = taggedFriendsEndpoint;
+      dispatch(listFriends(`${page}${pageSize}${sort}${search}`));
+    }
+  }, [dispatch, locationEndpoint, taggedFriendsEndpoint, section]);
 
   return (
     <div className="post_create_card card">
@@ -66,11 +123,21 @@ const PostCreateCard: React.FC = () => {
       </div>
       {isModalOpen && (
         <Modal classes="post_create flex_col" setIsOpenModal={setIsModalOpen}>
-          {modalScreen === 'main' ? (
+          <div className="title flex">
+            <span>
+              {section === 'main'
+                ? 'Create post'
+                : section === 'feelings'
+                ? 'How are you feeling?'
+                : section === 'tag_friends'
+                ? 'Tag friends'
+                : section === 'locations'
+                ? 'Search for location'
+                : ''}
+            </span>
+          </div>
+          {section === 'main' ? (
             <>
-              <div className="title flex">
-                <span>Create post</span>
-              </div>
               <div className="post_create_header flex">
                 <Avatar
                   classes="big"
@@ -78,6 +145,16 @@ const PostCreateCard: React.FC = () => {
                   firstName={user?.firstName}
                   lastName={user?.lastName}
                 />
+                {(newPost?.city || newPost?.feelingType || newPost?.taggedFriends?.length) && (
+                  <span>{` is `}</span>
+                )}
+                {newPost?.feelingType ? <span>{` feeling ${newPost?.feelingType}`}</span> : <></>}
+                {newPost?.city ? <span>{` in ${newPost.city}, ${newPost.country}`}</span> : <></>}
+                {newPost?.taggedFriends?.length ? (
+                  <span>{`  with ${newPost?.taggedFriends?.[0].firstName} ${newPost?.taggedFriends?.[0].lastName}`}</span>
+                ) : (
+                  <></>
+                )}
               </div>
 
               {newPost?.images?.length ? (
@@ -86,17 +163,17 @@ const PostCreateCard: React.FC = () => {
                   <ul className="post_create_action_list flex">
                     <span>Add to your post</span>
                     <ul className="button_group flex">
-                      <Tooltip direction="top" text="Tag people">
+                      <Tooltip direction="top" text="Tag friends">
                         <i
                           className="fas fa-user-tag"
-                          onClick={() => setModalScreen('tag_people')}
+                          onClick={() => setSection('tag_friends')}
                         ></i>
                       </Tooltip>
                       <Tooltip direction="top" text="Add Feeling">
-                        <i className="fa fa-smile" onClick={() => setModalScreen('feelings')}></i>
+                        <i className="fa fa-smile" onClick={() => setSection('feelings')}></i>
                       </Tooltip>
                       <Tooltip direction="top" text="Add location">
-                        <i className="fa fa-map" onClick={() => setModalScreen('add_location')}></i>
+                        <i className="fa fa-map" onClick={() => setSection('locations')}></i>
                       </Tooltip>
                     </ul>
                   </ul>
@@ -109,12 +186,12 @@ const PostCreateCard: React.FC = () => {
                             src={
                               image?.image?.startsWith('http')
                                 ? image?.image
-                                : `${BASE_URL}/${image?.image}`
+                                : `${BASE_URL}/${image}`
                             }
                             alt="post"
                           />
-                          {newPost?.images?.length > 4 && (
-                            <span>{`+${newPost?.images.length - 4} more`}</span>
+                          {newPost?.images?.length! > 4 && (
+                            <span>{`+${newPost?.images?.length! - 4} more`}</span>
                           )}
                         </li>
                       ))}
@@ -124,26 +201,86 @@ const PostCreateCard: React.FC = () => {
               ) : (
                 <PhotoUploadForm
                   resourceId={user?.userId}
-                  updateAction={createPost}
+                  updateAction={uploadPostImages}
                   multiple={true}
                   name="postImages"
                 />
               )}
             </>
-          ) : modalScreen === 'feelings' ? (
-            <>
-              <span>Feelings</span>
-            </>
-          ) : modalScreen === 'tag_people' ? (
-            <>
-              <span>People tags</span>
-            </>
-          ) : modalScreen === 'add_location' ? (
-            <>
-              <span>Add location</span>
-            </>
+          ) : section === 'feelings' ? (
+            <ul className="post_create_feelings flex_col">
+              {feelingsList.map((feeling) => (
+                <li className="feeling flex" onClick={() => addFeelingHandler(feeling)}>
+                  <div className="icon flex">
+                    <i className={feeling.icon}></i>
+                  </div>
+
+                  <div className="details flex_col">
+                    <div className="feeling_type">{feeling.feeling}</div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : section === 'tag_friends' ? (
+            <div className="post_create_friends_tag flex_col">
+              <SearchBox
+                updateQuery={(prop, value) =>
+                  setTaggedFriendsEndpoint({ ...taggedFriendsEndpoint, [prop]: value })
+                }
+                resource="friends"
+              />
+              <ul className="friends_tag flex_col">
+                {friends?.length ? (
+                  friends.map((friend) => (
+                    <li className="friend flex" onClick={() => tagFriendHandler(friend)}>
+                      <Avatar
+                        classes="big"
+                        imageUrl={friend?.avatar}
+                        firstName={friend?.firstName}
+                        lastName={friend?.lastName}
+                      />
+                    </li>
+                  ))
+                ) : (
+                  <></>
+                )}
+              </ul>
+            </div>
+          ) : section === 'locations' ? (
+            <div className="post_create_location flex_col">
+              <SearchBox
+                updateQuery={(prop, value) =>
+                  setLocationEndpoint({ ...locationEndpoint, [prop]: value })
+                }
+                resource="locations"
+              />
+              <ul className="locations flex_col">
+                {locations?.length ? (
+                  locations.map((location) => (
+                    <li className="location flex" onClick={() => addLocationHandler(location)}>
+                      <div className="icon flex">
+                        {/* <i className="fa fa-map"></i> */}
+                        <i className="i _1f600"></i>
+                      </div>
+
+                      <div className="details flex_col">
+                        <div className="city">{location.city}</div>
+                        <div className="info">{`${location.city}, ${location.country}`}</div>
+                      </div>
+                    </li>
+                  ))
+                ) : (
+                  <></>
+                )}
+              </ul>
+            </div>
           ) : (
             <></>
+          )}
+          {section !== 'main' && (
+            <Button classes="icon back_button" onClick={() => setSection('main')}>
+              <i className="fa fa-arrow-left"></i>
+            </Button>
           )}
         </Modal>
       )}

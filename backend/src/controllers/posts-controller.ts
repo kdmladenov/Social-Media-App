@@ -15,13 +15,16 @@ import { authMiddleware, roleMiddleware } from '../authentication/auth.middlewar
 
 import updatePostSchema from '../validator/update-post-schema.js';
 import uploadFileSchema from '../validator/upload-file-schema.js';
-import createPostSchema from '../validator/add-post-images-schema.js';
 
 import errors from '../constants/service-errors.js';
 import { paging } from '../constants/constants.js';
 import rolesEnum from '../constants/roles.enum.js';
 import RequestQuery from '../models/RequestQuery.js';
 import usersData from '../data/users-data.js';
+import locationsData from '../data/locations-data.js';
+import imagesData from '../data/images-data.js';
+import createSavedPostSchema from '../validator/create-saved-post-schema.js';
+import createPostSchema from '../validator/create-post-schema.js';
 
 const postsController = express.Router();
 
@@ -104,15 +107,21 @@ postsController
     '/',
     authMiddleware,
     loggedUserGuard,
-    // validateBody('post', createPostSchema),
-    errorHandler(async (req: Request, res: Response) => {
-      // const {images} = req.body;
+    validateBody('post', createPostSchema),
+    // errorHandler(
+      async (req: Request, res: Response) => {
+      const  postData  = req.body;
       const { userId } = req.user;
-      const { post } = await postsServices.createPost(postsData)(userId);
+      console.log(postData, 'postData');
+      const { post } = await postsServices.createPost(
+        postsData,
+        locationsData,
+        imagesData
+      )(+userId, postData);
 
       res.status(201).send(post);
     })
-  )
+  // )
   // @desc EDIT posts by ID
   // @route PUT /posts/:postId
   // @access Private - Admin or Profile Owner
@@ -127,7 +136,7 @@ postsController
       const { role } = req.user;
       const isProfileOwner = +userId === req.user.userId;
       const data = req.body;
-      const { error, result } = await postsServices.updatePost(postsData, usersData)(
+      const { error, result } = await postsServices.updatePost(postsData, usersData, locationsData)(
         +postId,
         +userId,
         isProfileOwner,

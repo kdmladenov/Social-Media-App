@@ -1,10 +1,14 @@
 import errors from '../constants/service-errors.js';
 import Image from '../models/Image.js';
-import PostType from '../models/PostType.js';
+import PostType, { newPostType } from '../models/PostType.js';
 import PostsData from '../models/PostsData.js';
 import RolesType from '../models/RolesType.js';
 import rolesEnum from '../constants/roles.enum.js';
 import UsersData from '../models/UsersData.js';
+import LocationsData from '../models/LocationsData.js';
+import UserType from '../models/UserType.js';
+import ImagesData from '../models/ImagesData.js';
+import imagesServices from '../services/images-services.js';
 
 const getAllMyPosts =
   (postsData: PostsData) =>
@@ -62,24 +66,47 @@ const getPostById =
     };
   };
 
-const createPost = (postsData: PostsData, usersData: UsersData) => async (data: PostType) => {
-  // create city and country
-  if (data.city && data.country) {
-    let existingCity = await usersData.getLocation(data.city);
+const createPost =
+  (postsData: PostsData, locationsData: LocationsData, imagesData: ImagesData) =>
+  async (userId: number, createData: newPostType) => {
+    // create city and country
+    if (createData?.city && createData?.country) {
+      let existingCity = await locationsData.getLocation(createData.city);
 
-    if (!existingCity) {
-      existingCity = await usersData.createLocation(data.city, data.country);
+      if (!existingCity) {
+        existingCity = await locationsData.createLocation(createData.city, createData.country);
+      }
+    }  
+    console.log(createData, 'createData');
+
+    const newPost = await postsData.create(userId, createData);
+    console.log(newPost, 'newPost');
+
+    if (createData?.taggedFriends) {
+      await Promise.all(
+        createData.taggedFriends.map((taggedFriend: UserType) =>
+          postsData.tagFriendToPost(taggedFriend.userId, newPost.postId)
+        )
+      );
     }
-  }
+    console.log('tagged');
+    await Promise.all(createData.images.map((image) => imagesData.uploadImage(image)));
+    console.log('uploaded');
+    await Promise.all(
+      createData.images.map((image) => imagesData.addPostImage(+newPost.postId, image))
+    );
+    console.log('addPostImage');
+    const finalPost = await postsData.getBy('post_id', newPost.postId);
+    console.log(finalPost, 'finalPost');
 
-  return {
-    error: null,
-    post: await postsData.create(data)
+    return {
+      error: null,
+      post: finalPost
+    };
   };
-};
 
 const updatePost =
-  (postsData: PostsData, usersData: UsersData) =>
+  (postsData: PostsData, usersData: UsersData, locationsData: LocationsData) =>
   async (
     postId: number,
     userId: number,
@@ -96,10 +123,10 @@ const updatePost =
 
     // create city and country
     if (updatedData.city && updatedData.country) {
-      let existingCity = await usersData.getLocation(updatedData.city);
+      let existingCity = await locationsData.getLocation(updatedData.city);
 
       if (!existingCity) {
-        existingCity = await usersData.createLocation(updatedData.city, updatedData.country);
+        existingCity = await locationsData.createLocation(updatedData.city, updatedData.country);
       }
     }
 
@@ -146,7 +173,6 @@ const deletePost =
       post: { ...postToDelete, isDeleted: 1 }
     };
   };
-
 
 export default {
   getAllMyPosts,

@@ -1,5 +1,5 @@
 import PostImageType from './PostImageType.js';
-import PostType from './PostType.js';
+import PostType, { newPostType } from './PostType.js';
 
 interface PostsData {
   getAllMyPosts: (
@@ -11,7 +11,8 @@ interface PostsData {
     page: number
   ) => Promise<PostType[]>;
   getBy: (column: string, value: string | number, role?: RolesType) => Promise<PostType>;
-  create: (post: PostType) => Promise<PostType>;
+  create: (userId: number, createData: newPostType) => Promise<PostType>;
+  tagFriendToPost: (userId: number, postId: number) => Promise<any>;
   update: (updatedPost: PostType) => Promise<PostType>;
   remove: (postToDelete: PostType) => Promise<any>;
 }

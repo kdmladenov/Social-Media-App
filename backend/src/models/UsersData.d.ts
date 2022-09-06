@@ -26,8 +26,6 @@ interface UsersData {
   logoutUser: (token: string) => Promise<void>;
   getPasswordBy: (column: string, value: string | number) => Promise<{ password: string }>;
   updatePassword: (userId: number, password: string) => Promise<{ password: string }>;
-  getLocation: (city: string) => Promise<LocationType>;
-  createLocation: (city: string, country: string) => Promise<LocationType>;
 }
 
 export default UsersData;

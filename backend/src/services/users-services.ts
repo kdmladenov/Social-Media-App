@@ -6,14 +6,19 @@ import { DB_CONFIG, PRIVATE_KEY } from '../../config.js';
 
 import errors from '../constants/service-errors.js';
 import rolesEnum from '../constants/roles.enum.js';
-import { user as userConstants } from '../constants/constants.js';
 import { forgotPassword } from '../constants/constants.js';
 import UsersData from '../models/UsersData.js';
 import UserType from '../models/UserType.js';
 import RolesType from '../models/RolesType.js';
+import schoolsServices from './schools-services.js';
+import WorkplacesData from '../models/WorkplacesData.js';
+import SchoolsData from '../models/SchoolsData.js';
+import workplacesServices from './workplaces-services.js';
+import LocationsData from '../models/LocationsData.js';
 
 const getUser =
-  (usersData: UsersData) => async (userId: number, isProfileOwner: boolean, role: RolesType) => {
+  (usersData: UsersData, workplacesData: WorkplacesData, schoolsData: SchoolsData) =>
+  async (userId: number, isProfileOwner: boolean, role: RolesType) => {
     let isProfileOwnerFriend = false;
 
     if (role !== rolesEnum.admin && !isProfileOwner) {
@@ -35,9 +40,12 @@ const getUser =
       };
     }
 
+    const { schools } = await schoolsServices.getAllMySchools(schoolsData)(+userId);
+    const { workplaces } = await workplacesServices.getAllMyWorkplaces(workplacesData)(+userId);
+
     return {
       error: null,
-      result: user
+      result: { ...user, schools: schools, workplaces: workplaces }
     };
   };
 
@@ -132,7 +140,7 @@ const changePassword =
 
 // update profile
 const update =
-  (usersData: UsersData) =>
+  (usersData: UsersData, locationsData: LocationsData) =>
   async (userUpdate: UserType, userId: number, role: RolesType, isProfileOwner: boolean) => {
     let existingUser = await usersData.getBy('user_id', userId, true);
     if (!existingUser) {
@@ -161,10 +169,13 @@ const update =
 
     // update home city and country
     if (userUpdate.homeCity && userUpdate.homeCountry) {
-      let existingCity = await usersData.getLocation(userUpdate.homeCity);
+      let existingCity = await locationsData.getLocation(userUpdate.homeCity);
 
       if (!existingCity) {
-        existingCity = await usersData.createLocation(userUpdate.homeCity, userUpdate.homeCountry);
+        existingCity = await locationsData.createLocation(
+          userUpdate.homeCity,
+          userUpdate.homeCountry
+        );
       }
 
       if (existingCity.city !== existingUser.homeCity) {
@@ -174,10 +185,10 @@ const update =
 
     // update current city and country
     if (userUpdate.currentCity && userUpdate.currentCountry) {
-      let existingCity = await usersData.getLocation(userUpdate.currentCity);
+      let existingCity = await locationsData.getLocation(userUpdate.currentCity);
 
       if (!existingCity) {
-        existingCity = await usersData.createLocation(
+        existingCity = await locationsData.createLocation(
           userUpdate.currentCity,
           userUpdate.currentCountry
         );
@@ -240,12 +251,12 @@ const restoreUser =
       };
     }
 
-        if (role !== rolesEnum.admin && !isProfileOwner) {
-          return {
-            error: errors.OPERATION_NOT_PERMITTED,
-            post: null
-          };
-        }
+    if (role !== rolesEnum.admin && !isProfileOwner) {
+      return {
+        error: errors.OPERATION_NOT_PERMITTED,
+        post: null
+      };
+    }
 
     await usersData.restore(deletedUserId);
 
@@ -365,43 +376,7 @@ const resetPassword =
     };
   };
 
-const addUserAvatar = (usersData: UsersData) => async (userId: number, imageUrl: string) => {
-  const existingUser = await usersData.getBy('user_id', userId, false, 'admin');
 
-  if (!existingUser) {
-    return {
-      error: errors.RECORD_NOT_FOUND,
-      result: null
-    };
-  }
-
-  const updatedUser = { ...existingUser, avatar: imageUrl };
-  await usersData.updateUser(updatedUser);
-
-  return {
-    error: null,
-    result: updatedUser
-  };
-};
-
-const deleteUserAvatar = (usersData: UsersData) => async (userId: number) => {
-  const existingUser = await usersData.getBy('user_id', userId, false, 'admin');
-
-  if (!existingUser) {
-    return {
-      error: errors.RECORD_NOT_FOUND,
-      result: null
-    };
-  }
-
-  const updatedUser = { ...existingUser, avatar: userConstants.DEFAULT_AVATAR };
-  await usersData.updateUser(updatedUser);
-
-  return {
-    error: null,
-    result: updatedUser.avatar
-  };
-};
 
 export default {
   getUser,
@@ -414,7 +389,5 @@ export default {
   restoreUser,
   logout,
   forgottenPassword,
-  resetPassword,
-  addUserAvatar,
-  deleteUserAvatar
+  resetPassword
 };

@@ -23,6 +23,7 @@ import rolesEnum from '../constants/roles.enum.js';
 import { paging } from '../constants/constants.js';
 import errors from '../constants/service-errors.js';
 import RequestQuery from '../models/RequestQuery.js';
+import locationsData from '../data/locations-data.js';
 
 const usersController = express.Router();
 
@@ -123,7 +124,7 @@ usersController
 
       const update = req.body;
 
-      const { error, result } = await usersServices.update(usersData)(
+      const { error, result } = await usersServices.update(usersData, locationsData)(
         update,
         +userId,
         role,
@@ -294,7 +295,6 @@ usersController
         res.status(200).send(result);
       }
     })
-  )
-  
+  );
 
 export default usersController;

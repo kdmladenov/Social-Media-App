@@ -545,33 +545,6 @@ const updateUser = async (user: UserType) => {
   ]);
 };
 
-const getLocation = async (city: string) => {
-  const sql = `
-    SELECT 
-      location_id as locationId,
-      city,
-      country
-    FROM locations
-    WHERE city = ?
-  `;
-  const result = await db.query(sql, [city]);
-  return result[0] as LocationType;
-};
-
-const createLocation = async (city: string, country: string) => {
-  const sql = `
-    INSERT INTO locations (
-      city,
-      country
-    )
-    VALUES (?, ?)
-  `;
-
-  await db.query(sql, [city, country]);
-
-  return getLocation(city);
-};
-
 const getPasswordBy = async (column: string, value: string | number) => {
   const sql = `
     SELECT password
@@ -646,8 +619,6 @@ export default {
   restore,
   loginUser,
   logoutUser,
-  getLocation,
-  createLocation,
   getPasswordBy,
   updatePassword
 };

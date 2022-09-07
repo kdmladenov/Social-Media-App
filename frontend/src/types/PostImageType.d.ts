@@ -1,5 +1,5 @@
 interface PostImageType {
-  postImageId: number;
+  imageId: number;
   postId: number;
   image: string;
   isDeleted: number | boolean;

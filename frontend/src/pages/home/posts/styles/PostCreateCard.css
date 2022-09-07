@@ -47,6 +47,26 @@
   justify-content: flex-start;
   padding: 0 10px;
 }
+
+/* Input */
+#modal .modal_container.post_create .textarea {
+  border: none;
+  padding: 5px 6px;
+  font-size: 18px;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  resize: both;
+  min-height: 40px;
+  line-height: 20px;
+}
+
+#modal .modal_container.post_create .textarea[contentEditable]:empty::before {
+  content: "What is in your mind?";
+  color: gray;
+  font-size: 25px;
+}
+
 #modal .modal_container.post_create .post_create_action_list {
   width: 100%;
   height: 50px;
@@ -71,10 +91,10 @@
   color: var(--blue);
 }
 #modal .modal_container.post_create .post_create_action_list .button_group .fa-smile {
-  color: var(--yellow);
+  color: var(--canary);
 }
 #modal .modal_container.post_create .post_create_action_list .button_group .fa-map {
-  color: var(--red);
+  color: var(--kiwi);
 }
 
 #modal .modal_container.post_create .post_create_message {
@@ -87,7 +107,7 @@
 }
 
 /* Image section */
-#modal .modal_container.post_create .images_container .image_upload_form{
+#modal .modal_container.post_create .images_container .image_upload_form {
   width: 100%;
 }
 #modal .modal_container.post_create .images {
@@ -164,4 +184,176 @@
   transform: translate(-50%, -50%);
   font-weight: 800;
   font-size: 25px;
+}
+
+/* Header buttons */
+#modal .modal_container.post_create button.back_button,
+#modal .modal_container.post_create button.close_modal_btn {
+  height: 30px;
+  width: 30px;
+  font-size: 20px;
+  position: absolute;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--black);
+  background: var(--gray);
+  padding: 0;
+}
+
+#modal .modal_container.post_create button.back_button {
+  top: 10px;
+  left: 10px;
+}
+
+#modal .modal_container.post_create button.close_modal_btn {
+  top: 10px;
+  right: 10px;
+}
+
+/* Locations and Feelings*/
+#modal .modal_container.post_create .post_create_location,
+#modal .modal_container.post_create .post_create_feelings {
+  width: 100%;
+  height: fit-content;
+  gap: 20px;
+}
+
+#modal .modal_container.post_create .post_create_location .locations {
+  width: 100%;
+  gap: 10px;
+  height: fit-content;
+  max-height: 500px;
+  overflow-y: scroll;
+}
+
+#modal .modal_container.post_create .post_create_location .location,
+#modal .modal_container.post_create .post_create_feelings .feeling {
+  width: 100%;
+  height: 55px;
+  justify-content: flex-start;
+  padding: 10px;
+  gap: 20px;
+}
+#modal .modal_container.post_create .post_create_location .location:hover,
+#modal .modal_container.post_create .post_create_feelings .feeling:hover {
+  background: var(--gray);
+  border-radius: 10px;
+}
+
+#modal .modal_container.post_create .post_create_location .location .icon,
+#modal .modal_container.post_create .post_create_feelings .feeling .icon {
+  height: 45px;
+  width: 45px;
+  background-color: var(--gray_background);
+  font-size: 25px;
+  font-weight: 600;
+  color: var(--kiwi);
+  border-radius: 10px;
+}
+#modal .modal_container.post_create .post_create_location .location .details {
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+#modal .modal_container.post_create .post_create_location .location .details .city,
+#modal .modal_container.post_create .post_create_feelings .feeling .details .feeling_type {
+  font-size: 20px;
+  font-weight: 600;
+}
+#modal .modal_container.post_create .post_create_location .location .details .info {
+  font-size: 16px;
+  font-weight: 300;
+}
+
+/* Feelings specific */
+#modal .modal_container.post_create .post_create_feelings {
+  overflow-y: scroll;
+}
+
+#modal .modal_container.post_create .post_create_feelings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 60px;
+  padding: 0 20px;
+}
+
+#modal .modal_container.post_create .post_create_feelings .feeling .icon {
+  height: 35px;
+  width: 35px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--white);
+  border-radius: 50%;
+}
+#modal .modal_container.post_create .post_create_feelings .feeling .icon {
+  height: 35px;
+  width: 35px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--white);
+  border-radius: 50%;
+}
+
+#modal .modal_container.post_create .post_create_feelings .feeling .icon i.fa-heart {
+  color: var(--red);
+}
+#modal .modal_container.post_create .post_create_feelings .feeling .icon i.fa-smile,
+#modal .modal_container.post_create .post_create_feelings .feeling .icon i.fa-laugh {
+  color: var(--canary);
+}
+
+#modal .modal_container.post_create .post_create_feelings .feeling .icon i.fa-sad-tear {
+  color: var(--cheetos);
+}
+
+#modal .modal_container.post_create .post_create_feelings .feeling .icon i.fa-angry {
+  color: var(--malibu);
+}
+
+/* Friends tag */
+#modal .modal_container.post_create .post_create_friends_tag {
+  width: 100%;
+  height: fit-content;
+  max-height: 500px;
+  gap: 20px;
+}
+#modal .modal_container.post_create .post_create_friends_tag .search_box_container,
+#modal .modal_container.post_create .post_create_friends_tag .search_box_container input {
+  width: 500px;
+  height: 30px;
+}
+
+#modal .modal_container.post_create .post_create_friends_tag .tagged_friends_list,
+#modal .modal_container.post_create .post_create_friends_tag .friends_tag {
+  width: 100%;
+  align-items: flex-start;
+  padding: 0 20px;
+  gap: 10px;
+}
+#modal .modal_container.post_create .post_create_friends_tag .friends_tag {
+  height: fit-content;
+  max-height: 500px;
+  overflow-y: scroll;
+}
+
+#modal .modal_container.post_create .post_create_friends_tag .tagged_friends_list ul {
+  width: 100%;
+  height: fit-content;
+  flex-wrap: wrap;
+  min-height: 50px;
+  border: 2px solid var(--gray);
+  border-radius: 10px;
+  padding: 10px;
+  justify-content: flex-start;
+  gap: 5px 10px;
+}
+#modal .modal_container.post_create .post_create_friends_tag .tagged_friends_list ul li {
+  width: fit-content;
+  height: 30px;
+  background: var(--blue_light);
+  color: var(--dory);
+  border-radius: 5px;
+  padding: 0 10px;
+  justify-content: space-between;
 }

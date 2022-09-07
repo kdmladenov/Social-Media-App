@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
 import { IMAGE } from '../data/constants';
+import PostCreateActionType from '../types/context/actions/PostCreateActionType';
+import PostImagesUploadActionType from '../types/context/actions/PostImagesUploadActionType';
+import StoryCreateActionType from '../types/context/actions/StoryCreateActionType';
 import UserAvatarUpdateActionType from '../types/context/actions/UserAvatarUpdateActionType';
 import UserCoverUpdateActionType from '../types/context/actions/UserCoverUpdateActionType';
 import StoreType from '../types/context/StoreType';
@@ -13,6 +16,8 @@ import './styles/PhotoUploadForm.css';
 const PhotoUploadForm: React.FC<{
   resourceId: number;
   multiple?: boolean;
+  name?: string;
+  title?: string;
   updateAction: (
     userId: number,
     mode: string,
@@ -23,10 +28,16 @@ const PhotoUploadForm: React.FC<{
       | React.DragEvent<HTMLDivElement>,
     imageAddress?: string
   ) => (
-    dispatch: Dispatch<UserAvatarUpdateActionType | UserCoverUpdateActionType>,
+    dispatch: Dispatch<
+      | UserAvatarUpdateActionType
+      | UserCoverUpdateActionType
+      | StoryCreateActionType
+      | PostCreateActionType
+      | PostImagesUploadActionType
+    >,
     getState: () => StoreType
   ) => Promise<void>;
-}> = ({ resourceId, multiple = false, updateAction }) => {
+}> = ({ resourceId, multiple = false, name = '', updateAction, title }) => {
   const dispatch = useDispatch();
   const [imageURL, setImageURL] = useState('');
   const [dragActive, setDragActive] = useState(false);
@@ -75,9 +86,11 @@ const PhotoUploadForm: React.FC<{
 
   return (
     <section className="image_upload_form flex_col">
-      <div className="header flex">
-        <h4>Change avatar</h4>
-      </div>
+      {title && (
+        <div className="header flex">
+          <h4>{title}</h4>
+        </div>
+      )}
       <div className="input_group flex_col">
         <form
           className="file_upload flex"
@@ -94,6 +107,7 @@ const PhotoUploadForm: React.FC<{
             id="upload"
             type="file"
             multiple={multiple}
+            name={name}
             onChange={uploadImage}
             accept={'image/jpeg, image/jpg, image/png'}
           />

@@ -23,12 +23,12 @@
   background: var(--black);
   color: var(--white);
 }
-/* 
+
 .tooltip:hover .tooltip_body,
 .tooltip .tooltip_body:hover {
   visibility: visible;
   opacity: 1;
-} */
+}
 
 /* Bottom-default */
 .tooltip .tooltip_body.bottom {

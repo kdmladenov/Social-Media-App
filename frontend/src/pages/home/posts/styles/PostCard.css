@@ -177,7 +177,9 @@
   .slide_container
   .image {
   z-index: 100;
+  overflow: scroll;
 }
+
 #modal
   .modal_container.post_images
   .post_images_container

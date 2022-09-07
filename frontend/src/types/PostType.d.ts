@@ -1,4 +1,6 @@
 import CommentType from './CommentType';
+import PostImageType from './PostImageType';
+import UserType from './UserType';
 
 interface PostType {
   postId: number;
@@ -11,8 +13,9 @@ interface PostType {
   authorLastName: string;
   authorAvatar: string;
   message: string;
-  images: { image: string; imageId: number }[];
+  images: PostImageType[];
   comments?: CommentType[];
+  taggedFriends: UserType[];
   feelingTypeId: number;
   feelingType: string;
   locationId: number;

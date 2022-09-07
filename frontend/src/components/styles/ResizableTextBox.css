@@ -1,0 +1,14 @@
+.resizable_text_box {
+  width: 100%;
+}
+
+.resizable_text_box textarea {
+  width: 100%;
+  border: none;
+  font-size: 24px;
+  padding: 5px;
+}
+.resizable_text_box textarea::placeholder {
+  color: gray;
+  font-size: 25px;
+}

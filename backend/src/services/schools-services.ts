@@ -5,6 +5,7 @@ import SchoolsData from '../models/SchoolsData.js';
 import RolesType from '../models/RolesType.js';
 import rolesEnum from '../constants/roles.enum.js';
 import UsersData from '../models/UsersData.js';
+import LocationsData from '../models/LocationsData.js';
 
 const getAllMySchools = (schoolsData: SchoolsData) => async (userId: number) => {
   const isProfileOwnerFriend = true; //TODO find if user is a friend
@@ -53,13 +54,14 @@ const getSchoolById =
   };
 
 const createSchool =
-  (schoolsData: SchoolsData, usersData: UsersData) => async (data: SchoolType, userId: number) => {
+  (schoolsData: SchoolsData, usersData: UsersData, locationsData: LocationsData) =>
+  async (data: SchoolType, userId: number) => {
     // create city and country
     if (data.city && data.country) {
-      let existingCity = await usersData.getLocation(data.city);
+      let existingCity = await locationsData.getLocation(data.city);
 
       if (!existingCity) {
-        existingCity = await usersData.createLocation(data.city, data.country);
+        existingCity = await locationsData.createLocation(data.city, data.country);
       }
     }
 
@@ -70,7 +72,7 @@ const createSchool =
   };
 
 const updateSchool =
-  (schoolsData: SchoolsData, usersData: UsersData) =>
+  (schoolsData: SchoolsData, usersData: UsersData, locationsData: LocationsData) =>
   async (schoolId: number, userId: number, role: RolesType, updatedData: SchoolType) => {
     const existingSchool = await schoolsData.getBy('school_id', +schoolId, 'admin');
 
@@ -90,10 +92,10 @@ const updateSchool =
 
     // create city and country
     if (updatedData.city && updatedData.country) {
-      let existingCity = await usersData.getLocation(updatedData.city);
+      let existingCity = await locationsData.getLocation(updatedData.city);
 
       if (!existingCity) {
-        existingCity = await usersData.createLocation(updatedData.city, updatedData.country);
+        existingCity = await locationsData.createLocation(updatedData.city, updatedData.country);
       }
     }
 

@@ -4,6 +4,7 @@ import WorkplacesData from '../models/WorkplacesData.js';
 import RolesType from '../models/RolesType.js';
 import rolesEnum from '../constants/roles.enum.js';
 import UsersData from '../models/UsersData.js';
+import LocationsData from '../models/LocationsData.js';
 
 const getAllMyWorkplaces = (workplacesData: WorkplacesData) => async (userId: number) => {
   const isProfileOwnerFriend = true; //TODO find if user is a friend
@@ -53,14 +54,14 @@ const getWorkplaceById =
   };
 
 const createWorkplace =
-  (workplacesData: WorkplacesData, usersData: UsersData) =>
+  (workplacesData: WorkplacesData, usersData: UsersData, locationsData: LocationsData) =>
   async (data: WorkplaceType, userId: number) => {
     // create city and country
     if (data.city && data.country) {
-      let existingCity = await usersData.getLocation(data.city);
+      let existingCity = await locationsData.getLocation(data.city);
 
       if (!existingCity) {
-        existingCity = await usersData.createLocation(data.city, data.country);
+        existingCity = await locationsData.createLocation(data.city, data.country);
       }
     }
 
@@ -71,7 +72,7 @@ const createWorkplace =
   };
 
 const updateWorkplace =
-  (workplacesData: WorkplacesData, usersData: UsersData) =>
+  (workplacesData: WorkplacesData, usersData: UsersData, locationsData: LocationsData) =>
   async (workplaceId: number, userId: number, role: RolesType, updatedData: WorkplaceType) => {
     const existingWorkplace = await workplacesData.getBy('workplace_id', +workplaceId, 'admin');
 
@@ -91,10 +92,10 @@ const updateWorkplace =
 
     // create city and country
     if (updatedData.city && updatedData.country) {
-      let existingCity = await usersData.getLocation(updatedData.city);
+      let existingCity = await locationsData.getLocation(updatedData.city);
 
       if (!existingCity) {
-        existingCity = await usersData.createLocation(updatedData.city, updatedData.country);
+        existingCity = await locationsData.createLocation(updatedData.city, updatedData.country);
       }
     }
 

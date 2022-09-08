@@ -15,6 +15,7 @@ import createSchoolSchema from '../validator/create-school-schema.js';
 
 import errors from '../constants/service-errors.js';
 import usersData from '../data/users-data.js';
+import locationsData from '../data/locations-data.js';
 
 const schoolsController = express.Router();
 
@@ -83,7 +84,11 @@ schoolsController
     errorHandler(async (req: Request, res: Response) => {
       const data = req.body;
       const { userId } = req.user;
-      const { school } = await schoolsServices.createSchool(schoolsData, usersData)(data, +userId);
+      const { school } = await schoolsServices.createSchool(
+        schoolsData,
+        usersData,
+        locationsData
+      )(data, +userId);
 
       res.status(201).send(school);
     })
@@ -101,12 +106,11 @@ schoolsController
       const { role, userId } = req.user;
       const data = req.body;
 
-      const { error, result } = await schoolsServices.updateSchool(schoolsData, usersData)(
-        +schoolId,
-        +userId,
-        role,
-        data
-      );
+      const { error, result } = await schoolsServices.updateSchool(
+        schoolsData,
+        usersData,
+        locationsData
+      )(+schoolId, +userId, role, data);
 
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({

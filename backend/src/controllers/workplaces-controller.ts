@@ -21,6 +21,7 @@ import { paging } from '../constants/constants.js';
 import rolesEnum from '../constants/roles.enum.js';
 import RequestQuery from '../models/RequestQuery.js';
 import usersData from '../data/users-data.js';
+import locationsData from '../data/locations-data.js';
 
 const workplacesController = express.Router();
 
@@ -92,10 +93,11 @@ workplacesController
       const data = req.body;
       const { userId } = req.user;
 
-      const { workplace } = await workplacesServices.createWorkplace(workplacesData, usersData)(
-        data,
-        +userId
-      );
+      const { workplace } = await workplacesServices.createWorkplace(
+        workplacesData,
+        usersData,
+        locationsData
+      )(data, +userId);
 
       res.status(201).send(workplace);
     })
@@ -114,12 +116,11 @@ workplacesController
       const { role, userId } = req.user;
       const data = req.body;
 
-      const { error, result } = await workplacesServices.updateWorkplace(workplacesData, usersData)(
-        +workplaceId,
-        +userId,
-        role,
-        data
-      );
+      const { error, result } = await workplacesServices.updateWorkplace(
+        workplacesData,
+        usersData,
+        locationsData
+      )(+workplaceId, +userId, role, data);
 
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({

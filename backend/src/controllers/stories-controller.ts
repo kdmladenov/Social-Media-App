@@ -22,6 +22,7 @@ import { paging } from '../constants/constants.js';
 import rolesEnum from '../constants/roles.enum.js';
 import RequestQuery from '../models/RequestQuery.js';
 import usersData from '../data/users-data.js';
+import locationsData from '../data/locations-data.js';
 
 const storiesController = express.Router();
 
@@ -35,7 +36,6 @@ storiesController
     authMiddleware,
     loggedUserGuard,
     errorHandler(async (req: Request<{}, {}, {}, RequestQuery>, res: Response) => {
-
       const { userId } = req.user;
 
       const { search = '', filter = '', sort = 'sort=createdAt asc' } = req.query;
@@ -102,17 +102,23 @@ storiesController
   // @route POST /stories/:storyId
   // @access Private - Logged users
   .post(
-    '/',
+    '/:userId',
     authMiddleware,
     loggedUserGuard,
     validateBody('story', createStorySchema),
     // errorHandler(
-      async (req: Request, res: Response) => {
-      const data = req.body;
-      const { story } = await storiesServices.createStory(storiesData, usersData)(data);
+    async (req: Request, res: Response) => {
+      const { image } = req.body;
+      const { userId } = req.params;
+      const { story } = await storiesServices.createStory(
+        storiesData,
+        usersData,
+        locationsData
+      )(image, +userId);
 
       res.status(201).send(story);
-    })
+    }
+  )
   // )
   // @desc EDIT stories by ID
   // @route PUT /stories/:storyId
@@ -122,19 +128,19 @@ storiesController
     authMiddleware,
     loggedUserGuard,
     validateBody('story', updateStorySchema),
-    errorHandler(async (req: Request, res: Response) => {
+    // errorHandler(
+    async (req: Request, res: Response) => {
       const { storyId, userId } = req.params;
 
       const { role } = req.user;
       const isProfileOwner = +userId === req.user.userId;
       const updatedStoryData = req.body;
-      const { error, result } = await storiesServices.updateStory(storiesData, usersData)(
-        +storyId,
-        +userId,
-        isProfileOwner,
-        role,
-        updatedStoryData
-      );
+
+      const { error, result } = await storiesServices.updateStory(
+        storiesData,
+        usersData,
+        locationsData
+      )(+storyId, +userId, isProfileOwner, role, updatedStoryData);
 
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
@@ -147,8 +153,9 @@ storiesController
       } else {
         res.status(200).send(result);
       }
-    })
+    }
   )
+  // )
 
   // @desc DELETE story
   // @route DELETE /stories/:storyId
@@ -266,31 +273,31 @@ storiesController
         res.status(200).send(deletedImage);
       }
     })
-  )
-  // )
-  // @desc SET story image as main
-  // @route PUT /stories/:storyImageId/images/main
-  // @access Private - Admin only
-  // .put(
-  //   '/:storyImageId/images/main',
-  //   authMiddleware,
-  //   loggedUserGuard,
-  //   roleMiddleware(rolesEnum.admin),
-  //   errorHandler(async (req: Request, res: Response) => {
-  //     const { storyImageId } = req.params;
+  );
+// )
+// @desc SET story image as main
+// @route PUT /stories/:storyImageId/images/main
+// @access Private - Admin only
+// .put(
+//   '/:storyImageId/images/main',
+//   authMiddleware,
+//   loggedUserGuard,
+//   roleMiddleware(rolesEnum.admin),
+//   errorHandler(async (req: Request, res: Response) => {
+//     const { storyImageId } = req.params;
 
-  //     const { error, newMainImage } = await storiesServices.setStoryImageAsMain(storiesImagesData)(
-  //       +storyImageId
-  //     );
+//     const { error, newMainImage } = await storiesServices.setStoryImageAsMain(storiesImagesData)(
+//       +storyImageId
+//     );
 
-  //     if (error === errors.RECORD_NOT_FOUND) {
-  //       res.status(404).send({
-  //         message: 'The story image is not found.'
-  //       });
-  //     } else {
-  //       res.status(200).send(newMainImage);
-  //     }
-  //   })
-  // );
+//     if (error === errors.RECORD_NOT_FOUND) {
+//       res.status(404).send({
+//         message: 'The story image is not found.'
+//       });
+//     } else {
+//       res.status(200).send(newMainImage);
+//     }
+//   })
+// );
 
 export default storiesController;

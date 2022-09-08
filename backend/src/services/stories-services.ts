@@ -6,6 +6,7 @@ import StoriesData from '../models/StoriesData.js';
 import RolesType from '../models/RolesType.js';
 import rolesEnum from '../constants/roles.enum.js';
 import UsersData from '../models/UsersData.js';
+import LocationsData from '../models/LocationsData.js';
 
 const getAllMyStories =
   (storiesData: StoriesData) =>
@@ -63,24 +64,26 @@ const getStoryById =
     };
   };
 
-const createStory = (storiesData: StoriesData, usersData: UsersData) => async (data: StoryType) => {
-  // create city and country
-  if (data.city && data.country) {
-    let existingCity = await usersData.getLocation(data.city);
+const createStory =
+  (storiesData: StoriesData, usersData: UsersData, locationsData: LocationsData) =>
+  async (image: string, userId: number) => {
+    // create city and country
+    // if (data.city && data.country) {
+    //   let existingCity = await locationsData.getLocation(data.city);
 
-    if (!existingCity) {
-      existingCity = await usersData.createLocation(data.city, data.country);
-    }
-  }
+    //   if (!existingCity) {
+    //     existingCity = await locationsData.createLocation(data.city, data.country);
+    //   }
+    // }
 
-  return {
-    error: null,
-    story: await storiesData.create(data)
+    return {
+      error: null,
+      story: await storiesData.create(image, userId)
+    };
   };
-};
 
 const updateStory =
-  (storiesData: StoriesData, usersData: UsersData) =>
+  (storiesData: StoriesData, usersData: UsersData, locationsData: LocationsData) =>
   async (
     storyId: number,
     userId: number,
@@ -97,10 +100,13 @@ const updateStory =
 
     // create city and country
     if (updatedStoryData.city && updatedStoryData.country) {
-      let existingCity = await usersData.getLocation(updatedStoryData.city);
+      let existingCity = await locationsData.getLocation(updatedStoryData.city);
 
       if (!existingCity) {
-        existingCity = await usersData.createLocation(updatedStoryData.city, updatedStoryData.country);
+        existingCity = await locationsData.createLocation(
+          updatedStoryData.city,
+          updatedStoryData.country
+        );
       }
     }
 

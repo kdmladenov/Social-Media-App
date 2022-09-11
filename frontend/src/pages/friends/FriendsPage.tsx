@@ -54,10 +54,12 @@ const FriendsPage = () => {
       ? 'Friend Requests Sent'
       : section === 'allFriends'
       ? 'All Friends'
+      : section === 'birthdays'
+      ? 'Birthdays'
       : 'Suggestions';
 
   useEffect(() => {
-    if (section === 'allFriends') {
+    if (section === 'allFriends' || section === 'birthdays') {
       const { page, pageSize, sort, search } = endpoint;
       dispatch(listFriends(`${page}${pageSize}${sort}${search}`));
     } else if (section === 'home') {
@@ -120,6 +122,14 @@ const FriendsPage = () => {
               ? friendsRequestsSent?.map((user) => (
                   <FriendRequestCard user={user} horizontal={true} type="request_sent" />
                 ))
+              : section === 'birthdays'
+              ? friends
+                  ?.filter(
+                    (friend) =>
+                      new Date(friend.dateOfBirth).getMonth() === new Date().getMonth() &&
+                      new Date(friend.dateOfBirth).getDate() === new Date().getDate()
+                  )
+                  ?.map((user) => <FriendRequestCard user={user} horizontal={true} type="friend" />)
               : friendsSuggestions?.map((user) => (
                   <FriendRequestCard user={user} horizontal={true} type="friend_suggestion" />
                 ))}
@@ -170,6 +180,14 @@ const FriendsPage = () => {
               ? friendsRequestsSent?.map((user) => (
                   <FriendRequestCard user={user} type="request_sent" />
                 ))
+              : section === 'birthdays'
+              ? friends
+                  ?.filter(
+                    (friend) =>
+                      new Date(friend.dateOfBirth).getMonth() === new Date().getMonth() &&
+                      new Date(friend.dateOfBirth).getDate() === new Date().getDate()
+                  )
+                  ?.map((user) => <FriendRequestCard user={user} type="friend" />)
               : friendsSuggestions?.map((user) => (
                   <FriendRequestCard user={user} type="friend_suggestion" />
                 ))}

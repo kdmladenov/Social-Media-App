@@ -88,11 +88,6 @@ const SidebarLeft = () => {
             icon: 'fa fa-bookmark',
             title: 'Saved Posts',
             navigateTo: '/saved'
-          },
-          {
-            icon: 'fa fa-calendar-check',
-            title: 'Events - TBC',
-            navigateTo: '/events'
           }
         ].map((item) => (
           <Accordion.Item isOpen={true}>

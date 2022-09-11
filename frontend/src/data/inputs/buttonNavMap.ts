@@ -2,8 +2,8 @@ const buttonNavMap = {
   home: [
     { name: 'Home', path: '/', icon: 'fa fa-home' },
     { name: 'Profile', path: '/profile/posts', icon: 'fa fa-user' },
-    { name: 'Friends', path: '/friends', icon: 'fa fa-user' },
-    { name: 'Followers', path: '/followers', icon: 'fa fa-user' }
+    { name: 'Friends', path: '/friends', icon: 'fas fa-user-friends' },
+    { name: 'Saved Posts', path: '/saved', icon: 'fa fa-bookmark' }
   ],
   profile: [
     { name: 'Posts', path: '/profile/posts' },

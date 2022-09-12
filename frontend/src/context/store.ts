@@ -7,8 +7,10 @@ import {
   passwordResetReducer,
   userAvatarDeleteReducer,
   userAvatarUpdateReducer,
+  userCoverUpdateReducer,
   userDeleteReducer,
   userDetailsReducer,
+  userImagesListReducer,
   userListReducer,
   userLoginReducer,
   userRegisterReducer,
@@ -16,7 +18,7 @@ import {
   userUpdateProfileReducer
 } from './reducers/userReducers';
 import { portalRefsReducer } from './reducers/portalReducers';
-import { postsMyListReducer } from './reducers/postReducers';
+import { postCreateReducer, postImagesUploadReducer, postsMyListReducer, postUpdateReducer } from './reducers/postReducers';
 import {
   commentCreateReducer,
   commentDeleteReducer,
@@ -27,7 +29,7 @@ import {
   imageCommentEditReducer,
   imageCommentsListReducer
 } from './reducers/commentsReducers';
-import { storiesMyListReducer } from './reducers/storyReducers';
+import { storiesMyListReducer, storyCreateReducer, storyUpdateReducer } from './reducers/storyReducers';
 import {
   commentPostImageReactionCreateReducer,
   commentPostImageReactionDeleteReducer,
@@ -79,8 +81,9 @@ import {
   savedPostsListReducer,
   savedPostUpdateReducer
 } from './reducers/savedPostsReducers';
+import { locationCreateReducer, locationDetailsReducer, locationsListReducer } from './reducers/locationReducers';
 
-const reducer = combineReducers({
+const reducers = combineReducers({
   portalRefs: portalRefsReducer,
   forgottenPassword: forgottenPasswordReducer,
   passwordReset: passwordResetReducer,
@@ -93,6 +96,8 @@ const reducer = combineReducers({
   userUpdateProfile: userUpdateProfileReducer,
   userAvatarUpdate: userAvatarUpdateReducer,
   userAvatarDelete: userAvatarDeleteReducer,
+  userCoverUpdate: userCoverUpdateReducer,
+  userImagesList: userImagesListReducer,
   commentsList: commentsListReducer,
   commentCreate: commentCreateReducer,
   commentEdit: commentEditReducer,
@@ -102,7 +107,12 @@ const reducer = combineReducers({
   imageCommentEdit: imageCommentEditReducer,
   imageCommentDelete: imageCommentDeleteReducer,
   postsMyList: postsMyListReducer,
+  postCreate: postCreateReducer,
+  postUpdate: postUpdateReducer,
+  postImagesUpload: postImagesUploadReducer,
   storiesMyList: storiesMyListReducer,
+  storyCreate: storyCreateReducer,
+  storyUpdate: storyUpdateReducer,
   postReactionCreate: postReactionCreateReducer,
   postReactionsList: postReactionsListReducer,
   postReactionEdit: postReactionEditReducer,
@@ -143,7 +153,10 @@ const reducer = combineReducers({
   workplaceDetails: workplaceDetailsReducer,
   workplaceUpdate: workplaceUpdateReducer,
   workplaceList: workplaceListReducer,
-  workplaceDelete: workplaceDeleteReducer
+  workplaceDelete: workplaceDeleteReducer,
+  locationCreate: locationCreateReducer,
+  locationDetails: locationDetailsReducer,
+  locationsList: locationsListReducer
 });
 
 const userInfoFromLocalStorage = localStorage.getItem('userInfo')
@@ -157,7 +170,7 @@ const initialState = {
 const middleware = [thunk]; // in case we add additional middleware
 
 const store = createStore(
-  reducer,
+  reducers,
   initialState,
   composeWithDevTools(applyMiddleware(...middleware))
 );

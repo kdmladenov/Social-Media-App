@@ -5,6 +5,7 @@ import UserAvatarUpdateActionType from '../../types/context/actions/UserAvatarUp
 import UserCoverUpdateActionType from '../../types/context/actions/UserCoverUpdateActionType';
 import UserDeleteActionType from '../../types/context/actions/UserDeleteActionType';
 import UserDetailsActionType from '../../types/context/actions/UserDetailsActionType';
+import UserImagesListActionType from '../../types/context/actions/UserImagesListActionType';
 import UserListActionType from '../../types/context/actions/UserListActionType';
 import UserLoginActionType from '../../types/context/actions/UserLoginActionType';
 import UserRegisterActionType from '../../types/context/actions/UserRegisterActionType';
@@ -28,6 +29,9 @@ import {
   USER_DETAILS_RESET,
   // USER_DETAILS_RESET,
   USER_DETAILS_SUCCESS,
+  USER_IMAGES_LIST_FAIL,
+  USER_IMAGES_LIST_REQUEST,
+  USER_IMAGES_LIST_SUCCESS,
   USER_LIST_FAIL,
   USER_LIST_REQUEST,
   USER_LIST_RESET,
@@ -212,6 +216,19 @@ export const passwordResetReducer = (state = {}, action: PasswordResetActionType
     case PASSWORD_RESET_SUCCESS:
       return { loading: false, success: true, message: action.payload };
     case PASSWORD_RESET_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const userImagesListReducer = (state = { userImages: [] }, action: UserImagesListActionType) => {
+  switch (action.type) {
+    case USER_IMAGES_LIST_REQUEST:
+      return { loading: true };
+    case USER_IMAGES_LIST_SUCCESS:
+      return { loading: false, userImages: action.payload };
+    case USER_IMAGES_LIST_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

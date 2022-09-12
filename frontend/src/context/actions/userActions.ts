@@ -9,6 +9,7 @@ import UserAvatarUpdateActionType from '../../types/context/actions/UserAvatarUp
 import UserCoverUpdateActionType from '../../types/context/actions/UserCoverUpdateActionType';
 import UserDeleteActionType from '../../types/context/actions/UserDeleteActionType';
 import UserDetailsActionType from '../../types/context/actions/UserDetailsActionType';
+import UserImagesListActionType from '../../types/context/actions/UserImagesListActionType';
 import UserListActionType from '../../types/context/actions/UserListActionType';
 import UserLoginActionType from '../../types/context/actions/UserLoginActionType';
 import UserRegisterActionType from '../../types/context/actions/UserRegisterActionType';
@@ -33,6 +34,9 @@ import {
   USER_DETAILS_REQUEST,
   USER_DETAILS_RESET,
   USER_DETAILS_SUCCESS,
+  USER_IMAGES_LIST_FAIL,
+  USER_IMAGES_LIST_REQUEST,
+  USER_IMAGES_LIST_SUCCESS,
   USER_LIST_FAIL,
   USER_LIST_REQUEST,
   USER_LIST_RESET,
@@ -562,3 +566,38 @@ export const resetPassword =
         });
     }
   };
+
+  export const listUserImages =
+    (userId: number) => async (dispatch: Dispatch<UserImagesListActionType>, getState: () => StoreType) => {
+      try {
+        dispatch({
+          type: USER_IMAGES_LIST_REQUEST
+        });
+        // access to the logged in user info
+        const {
+          userLogin: { userInfo }
+        } = getState();
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`
+          }
+        };
+
+        const { data } = await axios.get(`${BASE_URL}/images/${userId}/users`, config);
+
+        dispatch({
+          type: USER_IMAGES_LIST_SUCCESS,
+          payload: data
+        });
+      } catch (error) {
+        axios.isAxiosError(error) &&
+          dispatch({
+            type: USER_IMAGES_LIST_FAIL,
+            payload:
+              error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+          });
+      }
+    };

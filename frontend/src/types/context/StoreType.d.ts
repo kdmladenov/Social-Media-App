@@ -10,6 +10,8 @@ import FriendType from '../FriendType';
 import SavedPostType from '../SavedPostType';
 import CollectionType from '../CollectionType';
 import StoryType from '../StoryType';
+import LocationType from '../LocationType';
+import ImageFileType from '../ImageFileType';
 
 interface StoreType {
   portalRefs;
@@ -45,11 +47,11 @@ interface StoreType {
     success?: boolean;
     post: PostType;
   };
-  postImageUpload: {
+  postImagesUpload: {
     loading: boolean;
     error?: string;
     success?: boolean;
-    post: PostType;
+    postImages: PostImageType[];
   };
   postImagesList: {
     loading: boolean;
@@ -287,6 +289,11 @@ interface StoreType {
     success?: boolean;
     user: UserType;
   };
+  userImagesList: {
+    loading: boolean;
+    error?: string;
+    userImages: PostImageType[];
+  };
   schoolCreate: {
     loading: boolean;
     error?: string;
@@ -426,6 +433,23 @@ interface StoreType {
     error?: string;
     success?: boolean;
     workplace: WorkplaceType;
+  };
+  locationCreate: {
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+    location: LocationType;
+  };
+  locationDetails: {
+    loading: boolean;
+    error?: string;
+    success?: boolean;
+    location: LocationType;
+  };
+  locationsList: {
+    loading: boolean;
+    error?: string;
+    locations: LocationType[];
   };
 }
 export default StoreType;

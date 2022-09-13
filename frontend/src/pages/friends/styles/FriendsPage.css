@@ -143,4 +143,5 @@
 
 .friend_page .friends_container .container {
   gap: 20px;
+  flex-wrap: wrap;
 }

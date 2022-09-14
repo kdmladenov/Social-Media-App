@@ -53,6 +53,17 @@
   padding: 10px;
 }
 
+.friend_request_card .info .name h2{
+  height: 30px;
+  max-height: 30px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+}
+
 /* Mutual connections */
 .friend_request_card .info .connections {
   gap: 10px;
@@ -161,8 +172,4 @@
 .friend_request_card .info .button_group .button_container {
   width: 100%;
   margin: 0;
-}
-.friend_request_card .info .button_group .button_container {
-  /* width: 50px;
-  min-width: 50px; */
 }

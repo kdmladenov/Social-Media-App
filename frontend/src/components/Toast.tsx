@@ -1,15 +1,15 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import React, {  useEffect, useImperativeHandle, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 import './styles/Toast.css';
 import useCreateDiv from '../hooks/useCreateDiv';
 import getUniqueId from '../utils/getUniqueId';
 
-import ToastProps from '../types/components/ToastProps';
+import ToastProps from '../types/components/ToastProps'; 
 import ToastType, { ToastRefType } from '../types/ToastType';
 
 const Toast = React.forwardRef<ToastRefType, ToastProps>(
-  ({ idDiv = 'toast_message', autoClose = true, autoClosePeriod = 6000 }, forwardedRef) => {
+  ({ idDiv = 'toast_message', autoClose = true, autoClosePeriod = 10000 }, forwardedRef) => {
     const { loaded, divId } = useCreateDiv(idDiv);
 
     const [toasts, setToasts] = useState<ToastType[]>([]);
@@ -41,20 +41,20 @@ const Toast = React.forwardRef<ToastRefType, ToastProps>(
       ReactDOM.createPortal(
         <div className="toasts_container">
           {toasts.map((toast) =>
-            divId === 'toast_cart' ? (
+            divId === 'toast_friendship' ? (
               <div
                 key={toast.id}
                 onClick={() => deleteToast(toast.id)}
-                className={`toast_cart card`}
+                className={`toast_friendship card flex`}
               >
                 <div className="image ">
                   <img src={toast.image} alt={toast.title} />
-                  <div className="badge">
-                    <i className="fa fa-shopping-cart" />
-                  </div>
+                  {toast?.icon && <div className="badge">
+                    <i className={toast.icon} />
+                  </div>}
                 </div>
                 <div className="content">
-                  <div className="title">{toast.title}</div>
+                  <h1 className="title">{toast.title}</h1>
                 </div>
               </div>
             ) : (

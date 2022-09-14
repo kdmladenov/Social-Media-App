@@ -26,19 +26,40 @@ const FriendRequestCard: React.FC<{ user: UserShortType; horizontal?: boolean; t
   const [modalContent, setModalContent] = useState(<></>);
 
   const { user: loggedUser } = useTypedSelector((state) => state.userDetails);
+
   const mutualFriends =
     user?.friends && getMutualFriends(user?.friends, loggedUser)
       ? getMutualFriends(user?.friends, loggedUser)
       : [];
+  const portalRefs = useTypedSelector((state) => state.portalRefs);
+
+  const {
+    portalRefsMap: { toast_friendship: toastFriendshipRef }
+  } = portalRefs;
 
   const confirmFriendshipHandler = () => {
     dispatch(updateFriendRequestStatus(user?.userId, 'approved'));
+    toastFriendshipRef.current.createToast({
+      title: `You are now friends with ${user?.firstName} ${user?.lastName}`,
+      image: user?.avatar,
+      icon: 'fas fa-user-friends'
+    });
   };
   const rejectFriendshipHandler = () => {
     dispatch(updateFriendRequestStatus(user?.userId, 'rejected'));
+    toastFriendshipRef.current.createToast({
+      title: `You have friendship with ${user?.firstName} ${user?.lastName}`,
+      image: user?.avatar,
+      icon: 'fas fa-user-friends'
+    });
   };
   const requestFriendshipHandler = () => {
     dispatch(createFriendRequest(user?.userId));
+    toastFriendshipRef.current.createToast({
+      title: `You have sent a friend request to ${user?.firstName} ${user?.lastName}`,
+      image: user?.avatar,
+      icon: 'fas fa-user-friends'
+    });
   };
 
   const unfriendHandler = (friendUserId: number, messageEnding: string) => {
@@ -144,6 +165,8 @@ const FriendRequestCard: React.FC<{ user: UserShortType; horizontal?: boolean; t
             >
               Unfriend
             </Button>
+          ) : type === 'user' ? (
+            <Button onClick={requestFriendshipHandler}>Add Friend</Button>
           ) : (
             <></>
           )}

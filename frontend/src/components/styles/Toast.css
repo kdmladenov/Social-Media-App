@@ -5,7 +5,7 @@
   z-index: 10000;
 }
 
-#toast_cart {
+#toast_friendship {
   position: fixed;
   top: 60px;
   right: 10px;
@@ -20,7 +20,7 @@
 
 /* Simple message toast */
 .toast,
-.toast_cart {
+.toast_friendship {
   width: 350px;
   min-height: 75px;
   position: relative;
@@ -46,7 +46,7 @@
 }
 
 .toast:hover,
-.toast_cart:hover {
+.toast_friendship:hover {
   transition: 0.2s;
   transform: scale(0.95);
 }
@@ -74,7 +74,7 @@
   background: rgba(255, 170, 70, 0.9);
 }
 
-.toast_cart {
+.toast_friendship {
   display: grid;
   grid-template-columns: 100px 1fr;
   padding: 0;
@@ -83,7 +83,7 @@
   border: 1px solid var(--white);
 }
 
-.toast_cart .image {
+.toast_friendship .image {
   padding: 15px;
   height: 80px;
   width: 100px;
@@ -92,7 +92,7 @@
   position: relative;
 }
 
-.toast_cart .image .badge {
+.toast_friendship .image .badge {
   position: absolute;
   top: 3px;
   left: 3px;
@@ -110,41 +110,26 @@
   align-items: center;
 }
 
-.toast_cart .content {
+.toast_friendship .content {
   display: grid;
-  grid-template-rows: 40px 1fr;
+  grid-template-rows: 50px 1fr;
   gap: 10px;
 }
 
-.toast_cart .content .title {
+.toast_friendship .content .title {
   padding: 10px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   text-align: left;
-  line-height: 15px;
-  font-size: 15px;
+  line-height: 20px;
+  font-size: 20px;
   font-weight: bold;
   overflow: hidden;
   text-overflow: ellipsis;
   text-decoration: none;
 }
 
-.toast_cart .content .price_qty {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.toast_cart .content .price_qty .price_container {
-  width: fit-content;
-  margin-right: 10px;
-}
-
-.toast_cart .content .price_qty > span {
-  font-size: 18px;
-  font-weight: 700;
-}
 
 @keyframes fadeIn {
   from {

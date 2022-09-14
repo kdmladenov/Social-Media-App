@@ -4,8 +4,8 @@ interface ToastType {
   id: number;
   title?: string;
   image?: string;
+  icon?: string;
   price: number;
-  qty?: number;
   message?: string;
   type?: string;
 }
@@ -13,5 +13,3 @@ interface ToastType {
 export default ToastType;
 
 export type ToastRefType = { createToast(toast: ToastType): void };
-
-

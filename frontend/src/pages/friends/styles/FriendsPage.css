@@ -137,7 +137,7 @@
 
 .friend_page .friends_container .container,
 .friend_page .friends_container > div {
-  justify-content: flex-start;
+  justify-content: space-evenly;
   align-items: flex-start;
 }
 

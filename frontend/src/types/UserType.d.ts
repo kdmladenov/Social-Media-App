@@ -36,6 +36,7 @@ interface UserType {
     avatar: string;
     friends?: { userId: number; firstName: string; lastName: string; avatar: string }[];
   }[];
+  type?: string;
 }
 
 export default UserType;

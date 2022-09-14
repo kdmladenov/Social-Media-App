@@ -7,6 +7,7 @@ import useTypedSelector from '../../hooks/useTypedSelector';
 import defaultEndpoint from '../../data/inputs/defaultEndpoint';
 import friendsPageSidebarButtons from '../../data/inputs/friendsPageSidebarButtons';
 import {
+  listFriendRequests,
   listFriends,
   listFriendsRequestsReceived,
   listFriendsRequestsSent,
@@ -22,33 +23,53 @@ const FriendsPage = () => {
   const [usersEndpoint, setUsersEndpoint] = useState(defaultEndpoint['usersList']);
 
   const { friends } = useTypedSelector((state) => state.friendsList);
+  const { friendsRequestsList } = useTypedSelector((state) => state.friendsRequestsList);
   const { users } = useTypedSelector((state) => state.userList);
+  const { user: currentUser } = useTypedSelector((state) => state.userDetails);
 
-  const {
-    loading: loadingRequestReceived,
-    error: errorRequestReceived,
-    friendsRequestsReceived
-  } = useTypedSelector((state) => state.friendsRequestsReceivedList);
+  const usersWithRequestStatus = users?.map((user) => {
+    const usersWithRequest = friendsRequestsList?.find(
+      (userWithRequest) => userWithRequest.userId === user.userId
+    );
+    if (usersWithRequest?.requestStatus) {
+      return {
+        ...user,
+        type: `${
+          usersWithRequest.requestStatus === 'approved'
+            ? 'friend'
+            : usersWithRequest.requestStatus === 'pending' && usersWithRequest.type === 'source'
+            ? 'request_received'
+            : usersWithRequest.requestStatus === 'pending' && usersWithRequest.type === 'target'
+            ? 'request_sent'
+            : usersWithRequest.requestStatus === 'rejected' ||
+              usersWithRequest.requestStatus === 'unfriended' ||
+              usersWithRequest.userId === currentUser.userId
+            ? 'excluded'
+            : 'user'
+        }`
+      };
+    }
+    return {
+      ...user,
+      type: user.userId === currentUser.userId ? 'current_user' : 'user'
+    };
+  });
 
-  const {
-    loading: loadingRequestSent,
-    error: errorRequestSent,
-    friendsRequestsSent
-  } = useTypedSelector((state) => state.friendsRequestsSentList);
-
-  const {
-    loading: loadingSuggestions,
-    error: errorSuggestions,
-    friendsSuggestions
-  } = useTypedSelector((state) => state.friendsSuggestionsList);
+  const { friendsRequestsReceived } = useTypedSelector(
+    (state) => state.friendsRequestsReceivedList
+  );
+  const { friendsRequestsSent } = useTypedSelector((state) => state.friendsRequestsSentList);
+  const { friendsSuggestions } = useTypedSelector((state) => state.friendsSuggestionsList);
 
   const { success: unfriendSuccess } = useTypedSelector((state) => state.friendUnfriend);
   const { success: requestSuccess } = useTypedSelector((state) => state.friendRequestCreate);
   const { success: updateSuccess } = useTypedSelector((state) => state.friendRequestStatusUpdate);
 
   const headerText =
-    section === 'home'
+    section === 'home' && (usersEndpoint.search === '' || usersEndpoint.search === 'search=&')
       ? 'Friends'
+      : section === 'home' && users?.length
+      ? 'People Search'
       : section === 'friendRequestsReceived'
       ? 'Friend Requests Received'
       : section === 'friendRequestsSent'
@@ -63,7 +84,7 @@ const FriendsPage = () => {
     <div className="flex_col">
       {friendsRequestsReceived?.length ? (
         <>
-          <h1>Friends requests Received</h1>
+          <h1>Friend Requests Received</h1>
           <ul className="container flex">
             {friendsRequestsReceived?.map((user) => (
               <FriendRequestCard user={user} type="request_received" />
@@ -76,7 +97,7 @@ const FriendsPage = () => {
 
       {friendsSuggestions?.length ? (
         <>
-          <h1>Friends suggestions</h1>
+          <h1>Friends Suggestions</h1>
           <ul className="container flex">
             {friendsSuggestions?.map((user) => (
               <FriendRequestCard user={user} type="friend_suggestion" />
@@ -98,6 +119,7 @@ const FriendsPage = () => {
       dispatch(listFriendsSuggestions());
       const { page, pageSize, sort, search } = usersEndpoint;
       dispatch(listUsers(`${page}${pageSize}${sort}${search}`));
+      dispatch(listFriendRequests());
     } else if (section === 'friendRequestsReceived') {
       dispatch(listFriendsRequestsReceived());
     } else if (section === 'friendRequestsSent') {
@@ -174,58 +196,61 @@ const FriendsPage = () => {
         </div>
       </aside>
       <div className="friends_container flex_col">
-        {section !== 'home' && <h1>{headerText}</h1>}
-        {section === 'home' && !users?.length ? (
+        {section === 'home' &&
+        (usersEndpoint.search === '' || usersEndpoint.search === 'search=&') ? (
           homeSuggestionsAndRequests
         ) : (
-          <ul className="container flex">
-            {section === 'home' &&
-            users?.length &&
-            (usersEndpoint.search === '' || usersEndpoint.search === 'search=&') ? (
-              users?.map((user) => <FriendRequestCard user={user} type="user" />)
-            ) : section === 'allFriends' && friends?.length ? (
-              friends?.map((user) => <FriendRequestCard user={user} type="friend" />)
-            ) : section === 'friendRequestsReceived' && friendsRequestsReceived?.length ? (
-              friendsRequestsReceived?.map((user) => (
-                <FriendRequestCard user={user} type="request_received" />
-              ))
-            ) : section === 'friendRequestsSent' && friendsRequestsSent?.length ? (
-              friendsRequestsSent?.map((user) => (
-                <FriendRequestCard user={user} type="request_sent" />
-              ))
-            ) : section === 'birthdays' &&
-              friends?.filter(
-                (friend) =>
-                  new Date(friend.dateOfBirth).getMonth() === new Date().getMonth() ||
-                  new Date(friend.dateOfBirth).getDate() === new Date().getDate()
-              )?.length ? (
-              friends
-                ?.filter(
+          <>
+            <h1>{headerText}</h1>
+            <ul className="container flex">
+              {section === 'home' && users?.length ? (
+                usersWithRequestStatus?.map((user) => (
+                  <FriendRequestCard user={user} type={`${user.type}`} />
+                ))
+              ) : section === 'allFriends' && friends?.length ? (
+                friends?.map((user) => <FriendRequestCard user={user} type="friend" />)
+              ) : section === 'friendRequestsReceived' && friendsRequestsReceived?.length ? (
+                friendsRequestsReceived?.map((user) => (
+                  <FriendRequestCard user={user} type="request_received" />
+                ))
+              ) : section === 'friendRequestsSent' && friendsRequestsSent?.length ? (
+                friendsRequestsSent?.map((user) => (
+                  <FriendRequestCard user={user} type="request_sent" />
+                ))
+              ) : section === 'birthdays' &&
+                friends?.filter(
                   (friend) =>
-                    new Date(friend.dateOfBirth).getMonth() === new Date().getMonth() ||
+                    new Date(friend.dateOfBirth).getMonth() === new Date().getMonth() &&
                     new Date(friend.dateOfBirth).getDate() === new Date().getDate()
-                )
-                ?.map((user) => <FriendRequestCard user={user} type="friend" />)
-            ) : section === 'suggestions' && friendsSuggestions?.length ? (
-              friendsSuggestions?.map((user) => (
-                <FriendRequestCard user={user} type="friend_suggestion" />
-              ))
-            ) : (
-              <h4>{`You have no friend${
-                section === 'home'
-                  ? ' suggestions'
-                  : section === 'friendRequestsReceived'
-                  ? ' requests received'
-                  : section === 'friendRequestsSent'
-                  ? ' requests sent'
-                  : section === 'allFriends'
-                  ? 's yet'
-                  : section === 'birthdays'
-                  ? 's with birthdays today'
-                  : ' suggestions'
-              }`}</h4>
-            )}
-          </ul>
+                )?.length ? (
+                friends
+                  ?.filter(
+                    (friend) =>
+                      new Date(friend.dateOfBirth).getMonth() === new Date().getMonth() &&
+                      new Date(friend.dateOfBirth).getDate() === new Date().getDate()
+                  )
+                  ?.map((user) => <FriendRequestCard user={user} type="friend" />)
+              ) : section === 'suggestions' && friendsSuggestions?.length ? (
+                friendsSuggestions?.map((user) => (
+                  <FriendRequestCard user={user} type="friend_suggestion" />
+                ))
+              ) : (
+                <h4>{`You have no friend${
+                  section === 'home'
+                    ? ' suggestions'
+                    : section === 'friendRequestsReceived'
+                    ? ' requests received'
+                    : section === 'friendRequestsSent'
+                    ? ' requests sent'
+                    : section === 'allFriends'
+                    ? 's yet'
+                    : section === 'birthdays'
+                    ? 's with birthdays today'
+                    : ' suggestions'
+                }`}</h4>
+              )}
+            </ul>
+          </>
         )}
       </div>
     </main>

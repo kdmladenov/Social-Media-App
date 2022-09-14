@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import Accordion from '../../components/Accordion';
 import Avatar from '../../components/Avatar';
 import { listFriends } from '../../context/actions/friendsActions';
-import usersDummyData from '../../data/inputs/dummyInputs/usersDummyData';
 import useTypedSelector from '../../hooks/useTypedSelector';
 import FriendType from '../../types/FriendType';
 import './styles/SidebarRight.css';
@@ -45,7 +44,7 @@ const SidebarRight: React.FC = () => {
               ? `${birthdayList?.[0].firstName} ${birthdayList?.[0].lastName}${
                   birthdayList?.length > 1 ? ` and ${birthdayList?.length - 1}  other ` : ''
                 } have birthday today.`
-              : 'There are no friends with birthday today'}
+              : 'You have no friends with birthday today'}
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item isOpen={true}>

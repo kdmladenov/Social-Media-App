@@ -39,6 +39,12 @@ const defaultEndpoint = {
     pageSize: 'pageSize=12&',
     sort: 'sort=location_id asc&',
     search: ''
+  },
+  usersList: {
+    page: 'page=1&',
+    pageSize: 'pageSize=12&',
+    sort: 'sort=first_name asc&',
+    search: ''
   }
 };
 

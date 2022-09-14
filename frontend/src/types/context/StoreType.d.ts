@@ -381,6 +381,18 @@ interface StoreType {
     error?: string;
     friends: FriendType[];
   };
+  friendsRequestsList: {
+    loading: boolean;
+    error?: string;
+    friendsRequestsList: {
+      userId: number;
+      requestStatusId: number;
+      requestStatus: string;
+      createdAt: string | Date;
+      updatedAt: string | Date;
+      type: 'source' | 'target';
+    }[];
+  };
   friendsRequestsSentList: {
     loading: boolean;
     error?: string;

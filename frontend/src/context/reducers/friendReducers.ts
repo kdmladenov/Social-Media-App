@@ -1,6 +1,7 @@
 import FriendRequestCreateActionType from '../../types/context/actions/FriendRequestCreateActionType';
 import FriendRequestStatusUpdateActionType from '../../types/context/actions/FriendRequestStatusUpdateActionType';
 import FriendsListActionType from '../../types/context/actions/FriendsListActionType';
+import FriendsRequestsListActionType from '../../types/context/actions/FriendsRequestsListActionType';
 import FriendsRequestsReceivedListActionType from '../../types/context/actions/FriendsRequestsReceivedListActionType';
 import FriendsRequestsSentListActionType from '../../types/context/actions/FriendsRequestsSentListActionType';
 import FriendsSuggestionsListActionType from '../../types/context/actions/FriendsSuggestionsListActionType';
@@ -31,7 +32,11 @@ import {
   FRIENDS_SUGGESTIONS_LIST_REQUEST,
   FRIENDS_SUGGESTIONS_LIST_SUCCESS,
   FRIENDS_SUGGESTIONS_LIST_FAIL,
-  FRIENDS_SUGGESTIONS_LIST_RESET
+  FRIENDS_SUGGESTIONS_LIST_RESET,
+  FRIENDS_REQUESTS_LIST_REQUEST,
+  FRIENDS_REQUESTS_LIST_SUCCESS,
+  FRIENDS_REQUESTS_LIST_FAIL,
+  FRIENDS_REQUESTS_LIST_RESET
 } from '../constants/friendConstants';
 
 export const friendRequestCreateReducer = (state = {}, action: FriendRequestCreateActionType) => {
@@ -75,6 +80,24 @@ export const friendsSuggestionsListReducer = (
       return { loading: false, error: action.payload };
     case FRIENDS_SUGGESTIONS_LIST_RESET:
       return { friendsSuggestions: [] };
+    default:
+      return state;
+  }
+};
+
+export const friendsRequestsListReducer = (
+  state = { friendRequestsList: [] },
+  action: FriendsRequestsListActionType
+) => {
+  switch (action.type) {
+    case FRIENDS_REQUESTS_LIST_REQUEST:
+      return { loading: true };
+    case FRIENDS_REQUESTS_LIST_SUCCESS:
+      return { loading: false, friendsRequestsList: action.payload };
+    case FRIENDS_REQUESTS_LIST_FAIL:
+      return { loading: false, error: action.payload };
+    case FRIENDS_REQUESTS_LIST_RESET:
+      return { friendRequestsList: [] };
     default:
       return state;
   }

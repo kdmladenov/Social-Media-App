@@ -7,6 +7,9 @@ import {
   FRIENDS_LIST_FAIL,
   FRIENDS_LIST_REQUEST,
   FRIENDS_LIST_SUCCESS,
+  FRIENDS_REQUESTS_LIST_FAIL,
+  FRIENDS_REQUESTS_LIST_REQUEST,
+  FRIENDS_REQUESTS_LIST_SUCCESS,
   FRIENDS_REQUESTS_RECEIVED_FAIL,
   FRIENDS_REQUESTS_RECEIVED_REQUEST,
   FRIENDS_REQUESTS_RECEIVED_SUCCESS,
@@ -33,6 +36,7 @@ import FriendsRequestsReceivedListActionType from '../../types/context/actions/F
 import FriendRequestStatusUpdateActionType from '../../types/context/actions/FriendRequestStatusUpdateActionType';
 import FriendUnfriendActionType from '../../types/context/actions/FriendUnfriendActionType';
 import FriendsSuggestionsListActionType from '../../types/context/actions/FriendsSuggestionsListActionType';
+import FriendsRequestsListActionType from '../../types/context/actions/FriendsRequestsListActionType';
 
 export const createFriendRequest =
   (requestorId: number) =>
@@ -93,6 +97,41 @@ export const listFriends =
       axios.isAxiosError(error) &&
         dispatch({
           type: FRIENDS_LIST_FAIL,
+          payload:
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message
+        });
+    }
+  };
+
+export const listFriendRequests =
+  () => async (dispatch: Dispatch<FriendsRequestsListActionType>, getState: () => StoreType) => {
+    try {
+      dispatch({
+        type: FRIENDS_REQUESTS_LIST_REQUEST
+      });
+
+      const {
+        userLogin: { userInfo }
+      } = getState();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      };
+
+      const { data } = await axios.get(`${BASE_URL}/friends/requests`, config);
+
+      dispatch({
+        type: FRIENDS_REQUESTS_LIST_SUCCESS,
+        payload: data
+      });
+    } catch (error) {
+      axios.isAxiosError(error) &&
+        dispatch({
+          type: FRIENDS_REQUESTS_LIST_FAIL,
           payload:
             error.response && error.response.data.message
               ? error.response.data.message

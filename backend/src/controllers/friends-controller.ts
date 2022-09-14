@@ -76,6 +76,21 @@ friendsController
       res.status(200).send(result);
     })
   )
+  // @desc Get All friend requests
+  // @route GET /friends/requests
+  // @access Public - Logged users only
+  .get(
+    '/requests',
+    authMiddleware,
+    loggedUserGuard,
+    errorHandler(async (req: Request, res: Response) => {
+      const { userId } = req.user;
+
+      const result = await friendsServices.getAllMyFriendRequests(friendsData)(+userId);
+
+      res.status(200).send(result);
+    })
+  )
 
   // @desc Get all pending SENT friend requests
 
@@ -193,6 +208,7 @@ friendsController
       }
     }
     // )
-  );
+  )
+
 
 export default friendsController;

@@ -12,6 +12,12 @@ const getAllMyFriends =
     return result;
   };
 
+const getAllMyFriendRequests = (friendsData: FriendsData) => async (userId: number) => {
+  const result = await friendsData.getAllFriendRequestsByUser(userId);
+
+  return result;
+};
+
 const getAllMySentPendingFriendRequests = (friendsData: FriendsData) => async (userId: number) => {
   const result = await friendsData.getAllMySentPendingRequests(userId);
 
@@ -203,6 +209,7 @@ const unfriendFriend =
 export default {
   createFriendRequest,
   getAllMyFriends,
+  getAllMyFriendRequests,
   getAllMySentPendingFriendRequests,
   getAllMyReceivedPendingFriendRequests,
   getAllFriendSuggestions,

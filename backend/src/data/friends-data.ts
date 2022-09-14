@@ -33,7 +33,8 @@ const getAllFriendRequestsByUser = async (userId: number) => {
       f.request_status_id as requestStatusId, 
       rs.request_status as requestStatus, 
       f.created_at as createdAt, 
-      f.updated_at as updatedAt
+      f.updated_at as updatedAt,
+      'source' as type
       
     FROM friends f
     LEFT JOIN (SELECT request_status_id, request_status
@@ -48,7 +49,8 @@ const getAllFriendRequestsByUser = async (userId: number) => {
       f.request_status_id as requestStatusId, 
       rs.request_status as requestStatus, 
       f.created_at as createdAt, 
-      f.updated_at as updatedAt
+      f.updated_at as updatedAt,
+      'target' as type
       
     FROM friends f
     LEFT JOIN (SELECT request_status_id, request_status

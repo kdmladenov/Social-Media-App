@@ -4,9 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { listFriends, unfriendFriend } from '../../context/actions/friendsActions';
 import defaultEndpoint from '../../data/inputs/defaultEndpoint';
 import { friendsListPageSizeOptionsMap } from '../../data/inputs/pageSizeOptionsMap';
-import { adminUserListSortOptionsMap } from '../../data/inputs/sortDropdownOptionsMaps';
+import { friendsListSortOptionsMap } from '../../data/inputs/sortDropdownOptionsMaps';
 import useTypedSelector from '../../hooks/useTypedSelector';
-import getMutualFriends from '../../utils/getMutualFriends';
 import Avatar from '../../components/Avatar';
 import Button from '../../components/Button';
 import DropDown from '../../components/Dropdown';
@@ -21,15 +20,13 @@ const FriendList: React.FC<{ screen: string }> = ({ screen = '' }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [endpoint, setEndpoint] = useState(defaultEndpoint['friendsList']);
+  const [endpoint, setEndpoint] = useState({
+    ...defaultEndpoint['friendsList'],
+    pageSize: screen === 'profile_posts_screen' ? 'pageSize=9&' : 'pageSize=10&'
+  });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(<></>);
 
-  const {
-    user,
-    loading: loadingUser,
-    error: errorUser
-  } = useTypedSelector((state) => state.userDetails);
   const { loading, error, friends } = useTypedSelector((state) => state.friendsList);
   const { success: unfriendSuccess } = useTypedSelector((state) => state.friendUnfriend);
 
@@ -50,9 +47,6 @@ const FriendList: React.FC<{ screen: string }> = ({ screen = '' }) => {
     dispatch(listFriends(`${page}${pageSize}${sort}${search}`));
   }, [dispatch, endpoint, unfriendSuccess]);
 
-  const friendsCount =
-    screen === 'profile_posts_screen' ? 9 : screen === 'profile_about_screen' ? 8 : friends?.length;
-
   return (
     <div className={`friend_list card flex_col ${screen}`}>
       <div className="header flex">
@@ -66,14 +60,18 @@ const FriendList: React.FC<{ screen: string }> = ({ screen = '' }) => {
             query={endpoint}
             resource="friends"
             pageSizeOptionsMap={friendsListPageSizeOptionsMap}
-            sortOptionsMap={adminUserListSortOptionsMap}
+            sortOptionsMap={friendsListSortOptionsMap}
           />
         )}
-        <Button classes="text" onClick={() => navigate('/profile/friends')}>
-          See all friends
+        <Button
+          classes="text"
+          onClick={() =>
+            navigate(screen === 'profile_friends_screen' ? '/friends' : '/profile/friends')
+          }
+        >
+          {screen === 'profile_friends_screen' ? 'Friends Details' : 'See All Friends'}
         </Button>
       </div>
-      <div>ButtonNav Filter</div>
       <ul>
         {friends?.length > 0 ? (
           friends.map((friend) => (
@@ -86,11 +84,7 @@ const FriendList: React.FC<{ screen: string }> = ({ screen = '' }) => {
                 firstName={friend.firstName}
                 lastName={friend.lastName}
               />
-              <span>{friend.friends && getMutualFriends(friend.friends, user).length}</span>
               {screen === 'profile_friends_screen' && (
-                // <Button classes="icon">
-                //   <i className="fa fa-ellipsis-h"></i>
-                // </Button>
                 <DropDown
                   button={
                     <Button classes="icon item_btn flex">

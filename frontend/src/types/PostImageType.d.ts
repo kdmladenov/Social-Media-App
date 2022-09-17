@@ -3,6 +3,7 @@ interface PostImageType {
   postId: number;
   image: string;
   isDeleted: number | boolean;
+  totalDBItems?: number;
 }
 
 export default PostImageType;

@@ -39,7 +39,7 @@
 
 .friend_list.profile_posts_screen ul {
   grid-template-columns: repeat(3, 145px);
-  grid-template-rows: repeat(3, 160px);
+  grid-auto-rows: 170px;
 }
 
 .friend_list ul li.friend {

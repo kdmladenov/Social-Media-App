@@ -1,5 +1,5 @@
 import React from 'react';
-import { photoList } from '../../data/inputs/dummyInputs/imagesDummyData';
+import UserType from '../../types/UserType';
 import PostCreateCard from '../home/posts/PostCreateCard';
 import PostsMy from '../home/posts/PostsMy';
 
@@ -14,8 +14,8 @@ const ProfilePosts: React.FC = () => {
     <div className="profile_posts">
       <aside className="sidebar flex_col">
         <ProfileIntro />
-        <PhotoList screen="profile_posts_screen" photos={photoList} />
-        <FriendList screen="profile_posts_screen"/>
+        <PhotoList screen="profile_posts_screen"/>
+        <FriendList screen="profile_posts_screen" />
       </aside>
       <div className="posts flex_col">
         <PostCreateCard />

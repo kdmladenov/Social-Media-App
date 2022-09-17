@@ -5,7 +5,7 @@ import Button from './Button';
 
 import './styles/Slider.css';
 
-const Slider: SliderType = ({ dots, children = [], slideIndex, setSlideIndex }) => {
+const Slider: SliderType = ({ dots = false, children = [], slideIndex = 0, setSlideIndex }) => {
   const prevSlideHandler = () => {
     setSlideIndex(slideIndex !== 0 ? slideIndex - 1 : children.length - 1);
   };
@@ -13,7 +13,7 @@ const Slider: SliderType = ({ dots, children = [], slideIndex, setSlideIndex }) 
   const nextSlideHandler = () => {
     setSlideIndex(slideIndex !== children.length - 1 ? slideIndex + 1 : 0);
   };
-  console.log('next');
+
   return (
     <div className="slider_container">
       <ul className="slides_list">
@@ -24,12 +24,20 @@ const Slider: SliderType = ({ dots, children = [], slideIndex, setSlideIndex }) 
         ))}
       </ul>
 
-      <button className="slider_btn prev" onClick={prevSlideHandler}>
+      <button
+        className={`slider_btn prev ${slideIndex === 0 ? 'hidden' : ''}`}
+        onClick={prevSlideHandler}
+      >
         <i className="fas fa-chevron-left" />
       </button>
-      <button className="slider_btn next" onClick={nextSlideHandler}>
+
+      <button
+        className={`slider_btn next ${slideIndex === children.length - 1 ? 'hidden' : ''}`}
+        onClick={nextSlideHandler}
+      >
         <i className="fas fa-chevron-right" />
       </button>
+
       {dots && (
         <div className="slider_dots">
           {children.map((_, index) => (
@@ -45,12 +53,17 @@ const Slider: SliderType = ({ dots, children = [], slideIndex, setSlideIndex }) 
   );
 };
 
-const Item: SliderItemType = ({ item, button_controls = false }) => {
+const Item: SliderItemType = ({
+  item,
+  button_controls = false,
+  isFullScreen = false,
+  setIsFullScreen
+}) => {
   // TO DO fullscreen
-  const [isFullScreen, setIsFullScreen] = useState(false);
+
   const [zoom, setZoom] = useState(1);
   return (
-    <div className={`slide_container ${isFullScreen ? 'full_screen' : ''}`}>
+    <div className="slide_container">
       <div className="image flex">
         <img
           crossOrigin="anonymous"
@@ -61,6 +74,13 @@ const Item: SliderItemType = ({ item, button_controls = false }) => {
             transform: `scale(${zoom})`
           }}
         />
+        {item?.message ? (
+          <div className="message">
+            <span>{item?.message}</span>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
       <div
         className="blurred_background"

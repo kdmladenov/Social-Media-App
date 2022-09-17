@@ -1,6 +1,5 @@
 .slider_container {
-  position: relative;
-  height: 100%;
+  height: fit-content;
   width: 100%;
 }
 
@@ -25,16 +24,19 @@
   opacity: 1;
 }
 
-/* Image */
-.slider_container li.slide .image{
-  overflow: scroll;
-}
-
 .slider_container li.slide > img {
   object-fit: cover;
 }
 
+.slider_container .slide .image {
+  position: relative;
+}
 
+.slider_container .slide .image .message {
+  position: absolute;
+  top: 40px;
+  z-index: 1000;
+}
 
 /* Arrow buttons */
 .slider_container .slider_btn {
@@ -50,6 +52,10 @@
   align-items: center;
   cursor: pointer;
   z-index: 1;
+}
+
+.slider_container .slider_btn.hidden {
+  display: none;
 }
 
 .slider_container .slider_btn:hover {

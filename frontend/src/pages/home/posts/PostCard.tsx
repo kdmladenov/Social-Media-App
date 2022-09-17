@@ -12,7 +12,6 @@ import Button from '../../../components/Button';
 import Slider from '../../../components/Slider';
 import DropDown from '../../../components/Dropdown';
 import {
-  createCollection,
   createSavedPost,
   listCollections,
   listSavedPosts
@@ -22,7 +21,6 @@ import FormComponent from '../../../components/FormComponent';
 import useTypedSelector from '../../../hooks/useTypedSelector';
 import createCollectionInitialInputState from '../../../data/inputs/createCollectionInitialInputState';
 import changePostCollectionInitialInputState from '../../../data/inputs/changePostCollectionInitialInputState';
-import { COLLECTION_UPDATE_RESET } from '../../../context/constants/savedPostsConstants';
 
 const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: string }> = ({
   post,
@@ -35,6 +33,7 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(<></>);
+  const [isModalSliderFullScreen, setIsModalSliderFullScreen] = useState(false);
 
   const { success: savedPostCreateSuccess } = useTypedSelector((state) => state.savedPostCreate);
   const { collections } = useTypedSelector((state) => state.collectionsList);
@@ -45,7 +44,7 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
   const isPostSaved = !!savedPosts?.filter((savedPost) => savedPost.postId === postId).length;
 
   const imageModalHandler = (imageId: number) => {
-    setSelectedPostImageIndex(post?.images.findIndex((image) => image.imageId === imageId));
+    setSelectedPostImageIndex(post?.images?.findIndex((image) => image.imageId === imageId));
     setIsModalOpen(true);
   };
 
@@ -82,6 +81,7 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
           <i className="fa fa-ellipsis-h"></i>
         </Button>
       }
+      isPointed={false}
     >
       <ul className="menu flex_col">
         <li onClick={() => savePostHandler(postId)}>Save Post</li>
@@ -90,15 +90,15 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
   );
 
   const getImagesClass = () =>
-    images.length === 1
+    images?.length === 1
       ? ''
-      : images.length === 2
+      : images?.length === 2
       ? 'two'
-      : images.length === 2
+      : images?.length === 2
       ? 'two'
-      : images.length === 3
+      : images?.length === 3
       ? 'three'
-      : images.length === 4
+      : images?.length === 4
       ? 'four'
       : 'more';
 
@@ -114,28 +114,27 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
     <div className="post_card card">
       <div className="post_header">
         <Avatar imageUrl={userAvatar} firstName={userFirstName} lastName={userLastName} />
-        {postId}
         {dropDown ? dropDown : !isPostSaved && postCardDropdown}
       </div>
       <div className="message">
         <Link to={`/posts/${postId}`}>{message}</Link>
       </div>
       <ul className={`images ${getImagesClass()}`}>
-        {images.map((image, index) => (
+        {images?.map((image, index) => (
           <li className={`image${index + 1}`} onClick={() => imageModalHandler(image?.imageId)}>
             <img
               crossOrigin="anonymous"
               src={image?.image?.startsWith('http') ? image?.image : `${BASE_URL}/${image?.image}`}
               alt="post"
             />
-            {images?.length > 4 && <span>{`+${images.length - 4} more`}</span>}
+            {images?.length > 4 && <span>{`+${images?.length - 4} more`}</span>}
           </li>
         ))}
       </ul>
       <PostCardFooter postId={postId} />
       {isMenuModalOpen && <Modal setIsOpenModal={setIsMenuModalOpen}>{modalContent}</Modal>}
       {isModalOpen && (
-        <Modal classes="post_images" setIsOpenModal={setIsModalOpen}>
+        <Modal classes={`post_images ${isModalSliderFullScreen ? 'full_screen': ''}`} setIsOpenModal={setIsModalOpen}>
           <>
             <aside className="post_images_sidebar flex_col">
               <div className="post_images_header">
@@ -159,7 +158,12 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
                 setSlideIndex={setSelectedPostImageIndex}
               >
                 {images?.map((image) => (
-                  <Slider.Item item={image} button_controls={true} />
+                  <Slider.Item
+                    item={image}
+                    button_controls={true}
+                    isFullScreen={isModalSliderFullScreen}
+                    setIsFullScreen={setIsModalSliderFullScreen}
+                  />
                 ))}
               </Slider>
             </div>

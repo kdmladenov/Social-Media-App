@@ -201,7 +201,6 @@ const FormComponent: React.FC<FormComponentProps> = ({
     }
   }, [
     dispatch,
-    // history,
     resource,
     resourceId,
     successUpdate,

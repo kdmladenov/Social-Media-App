@@ -44,12 +44,10 @@ const SidebarLeft = () => {
               />
               <h3>{`${user?.firstName} ${user?.lastName}`}</h3>
               <h3>
-                {
-                  user?.workplaces?.sort(
+                {user?.workplaces?.sort(
                     (a, b) =>
                       new Date(b.startDate).getFullYear() - new Date(a.startDate).getFullYear()
-                  )[0].position
-                }
+                  )[0]?.position}
               </h3>
               <Divider></Divider>
               <div className="info">

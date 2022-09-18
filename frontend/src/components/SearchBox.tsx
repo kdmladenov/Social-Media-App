@@ -19,7 +19,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ updateQuery, resource }) => {
 
   const resetInputButtonHandler = () => {
     setSearchTerm('');
-    updateQuery('search', `search=`);
+    updateQuery('search', `search=&`);
   };
 
   const keywordInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {

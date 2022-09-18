@@ -44,7 +44,7 @@ const SidebarRight: React.FC = () => {
               ? `${birthdayList?.[0].firstName} ${birthdayList?.[0].lastName}${
                   birthdayList?.length > 1 ? ` and ${birthdayList?.length - 1}  other ` : ''
                 } have birthday today.`
-              : 'You have no friends with birthday today'}
+              : 'You have no friends with birthdays today'}
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item isOpen={true}>

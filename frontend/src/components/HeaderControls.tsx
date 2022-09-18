@@ -27,7 +27,7 @@ const HeaderControls: React.FC<HeaderControlsProps> = ({
           <Breadcrumbs paths={breadcrumbsPaths} />
         </div>
       )}
-      <SearchBox updateQuery={updateQuery} resource={resource} />
+      {resource && <SearchBox updateQuery={updateQuery} resource={resource} />}
       <div className="dropdown_group_container">
         {!!pageSizeOptionsMap && (
           <DropdownSelect

@@ -1,31 +1,33 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
-import Modal from '../../components/Modal';
-
+import UserType from '../../types/UserType';
+import getProfileAboutInfoItems from '../../utils/getProfileAboutInfoItems';
 import './styles/ProfileIntro.css';
 
-const ProfileIntro: React.FC = () => {
-  const [openBioModal, setOpenBioModal] = useState(false);
-  const [openDetailsModal, setOpenDetailsModal] = useState(false);
-  return (
-    <div className="profile_intro card flex_col">
-      <Link to={'/profile/about'}>
-        <h1>Intro</h1>
-      </Link>
+const ProfileIntro: React.FC<{ user: UserType }> = ({ user }) => {
+  const profileInfoItemsMap = getProfileAboutInfoItems(user);
 
-      <Button onClick={() => setOpenBioModal(true)}>Add bio</Button>
-      <Button onClick={() => setOpenDetailsModal(true)}>Edit details</Button>
-      {openBioModal && (
-        <Modal classes="image" setIsOpenModal={setOpenBioModal}>
-          Add Bio Modal
-        </Modal>
-      )}
-      {openDetailsModal && (
-        <Modal classes="image" setIsOpenModal={setOpenDetailsModal}>
-          Add Details Modal
-        </Modal>
-      )}
+  return (
+    <div className="profile_intro flex_col card">
+      <h1>Intro</h1>
+      <ul className="info_list flex_col">
+        {profileInfoItemsMap['Overview'].map(
+          ({ subsectionKey, icon, spanText, labelText, inputData }) =>
+            user[subsectionKey as keyof UserType] &&
+            inputData && (
+              <li className="info_item flex">
+                <div className="info flex">
+                  <i className={icon}></i>
+                  <div className="info_details flex_col">
+                    <span>{spanText}</span>
+                    {labelText && <h5>{labelText}</h5>}
+                  </div>
+                </div>
+              </li>
+            )
+        )}
+      </ul>
     </div>
   );
 };

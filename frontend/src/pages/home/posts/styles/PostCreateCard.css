@@ -6,24 +6,6 @@
   gap: 10px;
 }
 
-.post_create_card .button_group {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 10px;
-}
-
-.post_create_card .button_group i {
-  font-size: 30px;
-}
-
-.post_create_card .button_group .button_container:first-child i {
-  color: var(--cheetos);
-}
-.post_create_card .button_group .button_container:last-child i {
-  color: var(--kiwi);
-}
-
 /* Modal */
 
 #modal .modal_container.post_create {

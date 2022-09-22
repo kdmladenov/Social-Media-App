@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { COMMENT } from '../../../data/constants';
 import getNestedComments from '../../../utils/getNestedComments';
@@ -23,8 +23,9 @@ const additionalCommentToLoad = 10;
 const PostComments: React.FC<{
   postId: number;
   imageId?: number;
-  type?: 'post' | 'image' ;
-}> = ({ postId, imageId, type = 'post' }) => {
+  type?: 'post' | 'image';
+  isFormVisible: boolean;
+}> = ({ postId, imageId, type = 'post', isFormVisible = false }) => {
   const dispatch = useDispatch();
 
   const { user: currentUserDetails } = useTypedSelector((state) => state.userDetails);
@@ -37,7 +38,6 @@ const PostComments: React.FC<{
   } = useTypedSelector((state) => state.imageCommentsList);
 
   const {
-    //Todo do not update
     success: successCreate,
     loading: loadingCreate,
     error: errorCreate
@@ -110,7 +110,9 @@ const PostComments: React.FC<{
     successImageCommentDelete
   ]);
 
-  return (
+  return comments?.[postId]?.length > 0 ||
+    imageComments?.[`${postId}/${imageId}`]?.length ||
+    isFormVisible ? (
     <div className="post_comments">
       {loading || loadingCreate || loadingDelete || loadingEdit ? (
         <Loader />
@@ -132,8 +134,9 @@ const PostComments: React.FC<{
                 ? 'another'
                 : 'the first'
             } comment`}
-            closedAtStart={!(nestedComments?.length! === 0)}
+            closedAtStart={comments?.[postId]?.length > 0}
           />
+
           {nestedComments?.length! > 0 &&
             nestedComments
               ?.filter((comment) => comment.replyTo === -1)
@@ -155,6 +158,8 @@ const PostComments: React.FC<{
         </div>
       )}
     </div>
+  ) : (
+    <></>
   );
 };
 

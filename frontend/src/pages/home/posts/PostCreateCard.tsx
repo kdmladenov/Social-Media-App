@@ -12,7 +12,6 @@ import { listAllLocations } from '../../../context/actions/locationActions';
 import { createPost, uploadPostImages } from '../../../context/actions/postActions';
 import { BASE_URL, POST } from '../../../data/constants';
 import defaultEndpoint from '../../../data/inputs/defaultEndpoint';
-import usersDummyData from '../../../data/inputs/dummyInputs/usersDummyData';
 import feelingsList from '../../../data/inputs/feelingsList';
 import useTypedSelector from '../../../hooks/useTypedSelector';
 import NewPostType from '../../../types/NewPostType';
@@ -21,8 +20,6 @@ import getPostImagesClass from '../../../utils/getPostImagesClass';
 
 import './styles/PostCreateCard.css';
 import ResizableTextBox from '../../../components/ResizableTextBox';
-
-const currentUser = usersDummyData[0];
 
 const PostCreateCard: React.FC = () => {
   const dispatch = useDispatch();
@@ -77,8 +74,6 @@ const PostCreateCard: React.FC = () => {
     }
   }, [uploadedPostImages, successImagesUpload]);
 
-  console.log(newPost?.message, 'newPost');
-
   useEffect(() => {
     if (section === 'locations') {
       const { page, pageSize, sort, search } = locationEndpoint;
@@ -93,22 +88,13 @@ const PostCreateCard: React.FC = () => {
     <div className="post_create_card card">
       <InputBoxWithAvatar
         onClick={() => setIsModalOpen(true)}
-        currentUserDetails={currentUser}
+        currentUserDetails={user}
         createAction={createPost}
         validationMin={POST.MIN_MESSAGE_LENGTH}
         validationMax={POST.MAX_MESSAGE_LENGTH}
-        placeholder={`What's on your mind, ${currentUser.firstName}?`}
+        placeholder={`What's on your mind, ${user?.firstName}?`}
         errorMessage={`The comment should be ${POST.MIN_MESSAGE_LENGTH} - ${POST.MAX_MESSAGE_LENGTH} characters long`}
       />
-      <hr />
-      <div className="button_group">
-        <Button classes="icon">
-          <i className="fa fa-eye" />
-        </Button>
-        <Button classes="icon">
-          <i className="fa fa-eye" />
-        </Button>
-      </div>
       {isModalOpen && (
         <Modal classes="post_create flex_col" setIsOpenModal={setIsModalOpen}>
           <div className="title flex">

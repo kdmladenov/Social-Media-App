@@ -10,35 +10,33 @@ import defaultEndpoint from '../../data/inputs/defaultEndpoint';
 import { imagesListPageSizeOptionsMap } from '../../data/inputs/pageSizeOptionsMap';
 import { imagesListSortOptionsMap } from '../../data/inputs/sortDropdownOptionsMaps';
 import useTypedSelector from '../../hooks/useTypedSelector';
+import UserType from '../../types/UserType';
 
 import './styles/PhotoList.css';
 
-const PhotoList: React.FC<{ screen: string }> = ({ screen = '' }) => {
+const PhotoList: React.FC<{ screen: string, user: UserType }> = ({ screen = '', user }) => {
   const dispatch = useDispatch();
   const [endpoint, setEndpoint] = useState({
     ...defaultEndpoint['photoList'],
     pageSize: screen === 'profile_posts_screen' ? 'pageSize=9&' : 'pageSize=12&'
   });
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState(<></>);
-      const [selectedPostImageIndex, setSelectedPostImageIndex] = useState(0);
-
-    
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPostImageIndex, setSelectedPostImageIndex] = useState(0);
 
   const { userImages } = useTypedSelector((state) => state.userImagesList);
 
-      const imageModalHandler = (imageId: number) => {
-        setSelectedPostImageIndex(userImages?.findIndex((image) => image.imageId === imageId));
-        setIsModalOpen(true);
-      };
+  const imageModalHandler = (imageId: number) => {
+    setSelectedPostImageIndex(userImages?.findIndex((image) => image.imageId === imageId));
+    setIsModalOpen(true);
+  };
 
   useEffect(() => {
     const { page, pageSize, sort, search } = endpoint;
-    dispatch(listUserImages(`${page}${pageSize}${sort}${search}`));
-  }, [dispatch, endpoint]);
+    dispatch(listUserImages(`${page}${pageSize}${sort}${search}`, user?.userId));
+  }, [dispatch, endpoint, user?.userId]);
 
   return (
-    <div className={`photo_list card flex_col ${screen}`}>
+    <div className={`photo_list_container card flex_col ${screen}`}>
       <div className="header flex">
         <h1>Photos</h1>
         {screen === 'profile_photos_screen' && (

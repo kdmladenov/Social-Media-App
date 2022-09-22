@@ -1,24 +1,27 @@
 import React from 'react';
+import useTypedSelector from '../../hooks/useTypedSelector';
 import UserType from '../../types/UserType';
 import PostCreateCard from '../home/posts/PostCreateCard';
 import PostsMy from '../home/posts/PostsMy';
-
 
 import FriendList from './FriendList';
 import PhotoList from './PhotoList';
 import ProfileIntro from './ProfileIntro';
 import './styles/ProfilePosts.css';
 
-const ProfilePosts: React.FC = () => {
+const ProfilePosts: React.FC<{ user: UserType }> = ({ user }) => {
+  const { userInfo: currentUser } = useTypedSelector((state) => state.userLogin);
+  const isCurrentUser = currentUser?.userId === user?.userId;
+
   return (
     <div className="profile_posts">
       <aside className="sidebar flex_col">
-        <ProfileIntro />
-        <PhotoList screen="profile_posts_screen"/>
-        <FriendList screen="profile_posts_screen" />
+        <ProfileIntro user={user} />
+        <PhotoList screen="profile_posts_screen" user={user} />
+        <FriendList user={user} screen="profile_posts_screen" />
       </aside>
       <div className="posts flex_col">
-        <PostCreateCard />
+        {isCurrentUser && <PostCreateCard />}
         <PostsMy />
       </div>
     </div>

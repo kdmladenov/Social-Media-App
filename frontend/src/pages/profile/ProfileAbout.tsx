@@ -1,13 +1,22 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import Button from '../../components/Button';
 import ConfirmMessage from '../../components/ConfirmMessage';
 import DropDown from '../../components/Dropdown';
 import FormComponent from '../../components/FormComponent';
 import Modal from '../../components/Modal';
-import { createSchool, deleteSchool, getSchoolDetails, updateSchool } from '../../context/actions/schoolsActions';
+import {
+  createSchool,
+  deleteSchool,
+  getSchoolDetails,
+  updateSchool
+} from '../../context/actions/schoolsActions';
 import { getUserDetails, updateUserProfile } from '../../context/actions/userActions';
-import { createWorkplace, deleteWorkplace, getWorkplaceDetails, updateWorkplace } from '../../context/actions/workplacesActions';
-import { photoList } from '../../data/inputs/dummyInputs/imagesDummyData';
+import {
+  createWorkplace,
+  deleteWorkplace,
+  getWorkplaceDetails,
+  updateWorkplace
+} from '../../context/actions/workplacesActions';
 import validateInputUser from '../../data/validations/userValidator';
 import useTypedSelector from '../../hooks/useTypedSelector';
 import FormInputDataType from '../../types/FormInputDataType';
@@ -222,8 +231,8 @@ const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
           </ul>
         </div>
       </div>
-      <PhotoList screen="profile_about_screen" photos={photoList} />
-      <FriendList screen="profile_about_screen" />
+      <PhotoList screen="profile_about_screen" user={user}/>
+      <FriendList user={user} screen="profile_about_screen" />
       {isModalOpen && <Modal setIsOpenModal={setIsModalOpen}>{modalContent}</Modal>}
     </div>
   );

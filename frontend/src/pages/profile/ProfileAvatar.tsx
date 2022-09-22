@@ -8,8 +8,10 @@ import { deleteUserAvatar, updateUserAvatar } from '../../context/actions/userAc
 import UserType from '../../types/UserType';
 import './styles/ProfileAvatar.css';
 
-
-const ProfileAvatar: React.FC<{ user: UserType }> = ({ user }) => {
+const ProfileAvatar: React.FC<{ user: UserType; editable: boolean }> = ({
+  user,
+  editable = true
+}) => {
   const [showImageUrlForm, setShowImageUrlForm] = useState(false);
   const [showDeleteAvatarModal, setShowDeleteAvatarModal] = useState(false);
   const [modalContent, setModalContent] = useState(<></>);
@@ -35,16 +37,24 @@ const ProfileAvatar: React.FC<{ user: UserType }> = ({ user }) => {
           firstName={user.firstName}
           lastName={user.lastName}
         />
-        <Button classes="icon" onClick={() => setShowImageUrlForm(!showImageUrlForm)}>
-          <i className="fa fa-camera" />
-        </Button>
-        <Button classes="icon delete" onClick={() => deleteAvatarHandler(user.userId)}>
-          <i className="fas fa-trash" />
-        </Button>
+        {editable && (
+          <>
+            <Button classes="icon" onClick={() => setShowImageUrlForm(!showImageUrlForm)}>
+              <i className="fa fa-camera" />
+            </Button>
+            <Button classes="icon delete" onClick={() => deleteAvatarHandler(user.userId)}>
+              <i className="fas fa-trash" />
+            </Button>
+          </>
+        )}
       </div>
       {showImageUrlForm && (
         <Modal classes="image" setIsOpenModal={setShowImageUrlForm}>
-          <PhotoUploadForm resourceId={user?.userId} updateAction={updateUserAvatar}/>
+          <PhotoUploadForm
+            resourceId={user?.userId}
+            updateAction={updateUserAvatar}
+            title="Change your profile picture"
+          />
         </Modal>
       )}
       {showDeleteAvatarModal && (

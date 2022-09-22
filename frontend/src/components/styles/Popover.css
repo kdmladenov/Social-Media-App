@@ -30,10 +30,13 @@
   border-bottom: 2px solid transparent;
 }
 
-.popover:hover .body,
-.popover .body:hover {
+.popover:hover .body {
   visibility: visible;
   opacity: 1;
+}
+.popover .body:hover {
+  visibility: none;
+  opacity: 0;
 }
 
 /* Bottom-default */

@@ -5,5 +5,6 @@ interface DropDownProps {
   tooltipText?: string;
   // userInfo: UserInfoType
   children: React.ReactNode;
+  isPointed?:boolean;
 }
 export default DropDownProps;

@@ -3,7 +3,7 @@ import EndpointType from '../EndpointType';
 interface HeaderControlsProps {
   updateQuery: (prop: string, value: string) => void;
   query: EndpointType;
-  resource: string;
+  resource?: string;
   pageSizeOptionsMap?: { label: number | string; value: string }[];
   sortOptionsMap: { label: string; value: string }[];
   ratingFilterOptionsMap?: { label: string; value: string }[];

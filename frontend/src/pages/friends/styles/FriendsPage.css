@@ -12,6 +12,8 @@
   padding: 10px;
 }
 
+
+
 .friend_page .sidebar .menu {
   height: fit-content;
   width: 100%;
@@ -137,11 +139,11 @@
 
 .friend_page .friends_container .container,
 .friend_page .friends_container > div {
-  justify-content: space-evenly;
-  align-items: flex-start;
+  justify-content: flex-start;
+  align-items: flex-start
 }
 
-.friend_page .friends_container .container {
-  gap: 20px;
+.friend_page .friends_container .container{
+  gap: 40px;
   flex-wrap: wrap;
 }

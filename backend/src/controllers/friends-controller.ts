@@ -53,11 +53,11 @@ friendsController
   // @route GET /friends
   // @access Public - Logged users only
   .get(
-    '/',
+    '/:userId',
     authMiddleware,
     loggedUserGuard,
-    errorHandler(async (req: Request<{}, {}, {}, RequestQuery>, res: Response) => {
-      const { userId } = req.user;
+    errorHandler(async (req: Request<{ userId: number }, {}, {}, RequestQuery>, res: Response) => {
+      const { userId } = req.params;
       const { search = '', sort = 'sort=user_id asc' } = req.query;
       let { pageSize = paging.DEFAULT_FRIENDS_PAGESIZE, page = paging.DEFAULT_PAGE } = req.query;
 
@@ -208,7 +208,6 @@ friendsController
       }
     }
     // )
-  )
-
+  );
 
 export default friendsController;

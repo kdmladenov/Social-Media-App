@@ -3,7 +3,6 @@ import { FriendTypeFriendsAsJson } from '../models/FriendsType.js';
 import FriendRequestType from '../models/FriendRequestType.js';
 
 const getFriendRequestBy = async (userId: number, friendUserId: number) => {
-
   const sql = `
     SELECT 
       f.source_id as sourceId, 
@@ -21,7 +20,6 @@ const getFriendRequestBy = async (userId: number, friendUserId: number) => {
       `;
 
   const result = await db.query(sql, [+userId, +friendUserId, +userId, +friendUserId]);
-
 
   return result[0];
 };
@@ -71,7 +69,9 @@ const getAllMyFriends = async (
 ) => {
   const sortArr = sort.split(' ');
   const direction = ['ASC', 'asc', 'DESC', 'desc'].includes(sortArr[1]) ? sortArr[1] : 'asc';
-  const sortColumn = ['userId', 'firstName', 'lastName'].includes(sortArr[0])
+  const sortColumn = ['userId', 'firstName', 'lastName', 'createdAt', 'updatedAt'].includes(
+    sortArr[0]
+  )
     ? sortArr[0]
     : 'firstName';
 

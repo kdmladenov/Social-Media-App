@@ -112,7 +112,7 @@ postsController
       async (req: Request, res: Response) => {
       const  postData  = req.body;
       const { userId } = req.user;
-      console.log(postData, 'postData');
+
       const { post } = await postsServices.createPost(
         postsData,
         locationsData,

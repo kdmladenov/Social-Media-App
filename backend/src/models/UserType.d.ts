@@ -1,4 +1,5 @@
 import GendersType from './GendersType';
+import Image from './Image';
 import RelationshipStatusTypes from './RelationshipStatusTypes';
 
 export interface UserType {
@@ -41,4 +42,5 @@ export default UserType;
 
 export interface UserTypeFriendsAsJson extends UserType {
   friends: string;
+  images: string;
 }

@@ -49,7 +49,6 @@ usersController
       }
     })
   )
-  // TODO
   // @desc Get all users
   // @route GET /users
   // @access Public - Logged users only

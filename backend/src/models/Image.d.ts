@@ -1,9 +1,7 @@
 interface Image {
-  postImageId: number;
-  postId: number;
+  imageId: number;
   image: string;
-  isMain: number;
-  isDeleted: number;
+  isDeleted?: number;
 }
 
 export default Image;

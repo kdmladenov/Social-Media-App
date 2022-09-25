@@ -26,6 +26,8 @@ import updatePasswordSchema from '../validator/update-password-schema.js';
 import uploadPostImages from '../middleware/upload-post-images.js';
 import multer from 'multer';
 import addPostImagesSchema from '../validator/add-post-images-schema.js';
+import RequestQuery from '../models/RequestQuery.js';
+import { paging } from '../constants/constants.js';
 
 const imagesController = express.Router();
 
@@ -64,7 +66,7 @@ imagesController
           }
           return;
         }
-        
+
         res.status(200).send(req.files);
       });
     }
@@ -135,6 +137,42 @@ imagesController
         });
       } else {
         res.status(200).send(deletedImage);
+      }
+    })
+  )
+  // @desc GET ALL user's images
+
+  // @route GET /images/users/:userId
+  // @access Public
+  .get(
+    '/users/:userId',
+    authMiddleware,
+    loggedUserGuard,
+    errorHandler(async (req: Request<{ userId: number }, {}, {}, RequestQuery>, res: Response) => {
+      const { userId } = req.params;
+      const { role } = req.user;
+      const { search = '', sort = 'sort=image_id asc' } = req.query;
+
+      let { pageSize = paging.DEFAULT_IMAGES_PAGESIZE, page = paging.DEFAULT_PAGE } = req.query;
+
+      if (+pageSize > paging.MAX_IMAGES_PAGESIZE) pageSize = paging.MAX_IMAGES_PAGESIZE;
+      if (+pageSize < paging.MIN_IMAGES_PAGESIZE) pageSize = paging.MIN_IMAGES_PAGESIZE;
+      if (page < paging.DEFAULT_PAGE) page = paging.DEFAULT_PAGE;
+
+      const { error, userImages } = await imagesServices.getAllUserImages(imagesData, usersData)(
+        +userId,
+        search,
+        sort,
+        +page,
+        +pageSize
+      );
+
+      if (error === errors.RECORD_NOT_FOUND) {
+        res.status(404).send({
+          message: 'The user is not found.'
+        });
+      } else {
+        res.status(200).send(userImages);
       }
     })
   )

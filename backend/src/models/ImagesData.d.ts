@@ -7,6 +7,13 @@ interface ImagesData {
   getImage: (imageId: number) => Promise<any>;
   getImageByURL: (image: string) => Promise<any>;
   getAllPostImages: (postId: number) => Promise<any>;
+  getAllUserImages: (
+    userId: number,
+    search: string,
+    sort: string,
+    page: number,
+    pageSize: number
+  ) => Promise<any>;
   addPostImage: (postId: number, image: string) => Promise<any>;
   remove: (postId: number, imageId: number) => Promise<any>;
 }

@@ -71,5 +71,8 @@ export default {
 
   savedPost: {
     collection: `Expected valid collection string with length in the range [${collection.MIN_MESSAGE_LENGTH}-${collection.MAX_MESSAGE_LENGTH}]`
+  },
+  postImages: {
+    images: `Expected valid array of image strings `
   }
 };

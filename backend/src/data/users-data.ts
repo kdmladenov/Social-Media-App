@@ -1,8 +1,6 @@
 import db from './pool.js';
 import rolesEnum from '../constants/roles.enum.js';
-import UserType, {
-  UserTypeFriendsAsJson
-} from '../models/UserType.js';
+import UserType, { UserTypeFriendsAsJson } from '../models/UserType.js';
 import RolesType from '../models/RolesType.js';
 import LocationType from '../models/LocationType.js';
 
@@ -21,6 +19,7 @@ const getBy = async (
       u.avatar,
       u.cover,
       f.friends,
+      i.images,
       u.about_me as aboutMe
       ${
         role === 'admin' || isProfileOwner || isProfileOwnerFriend // TODO or friend
@@ -48,6 +47,15 @@ const getBy = async (
     LEFT JOIN (SELECT location_id, city, country
       FROM locations
       GROUP BY location_id) as cc ON u.current_city_id = cc.location_id
+    LEFT JOIN (SELECT 
+        user_id,
+        JSON_ARRAYAGG(JSON_OBJECT('image', image, 'imageId', image_id)) as images
+      FROM post_images pi
+        LEFT JOIN (SELECT image_id, image
+                  FROM images) as img using (image_id)
+    LEFT JOIN (SELECT post_id, user_id
+                  FROM posts) as p using (post_id)
+    GROUP BY user_id) as i USING (user_id)
     LEFT JOIN (SELECT relationship_status_id, relationship_status
       FROM relationship_statuses
       GROUP BY relationship_status_id) as rel using (relationship_status_id)
@@ -459,14 +467,9 @@ const getAll = async (
           ) as fr USING (user_id)
           GROUP BY user_id) as f USING (user_id)
 
-    WHERE ${role === rolesEnum.basic ? ' u.is_deleted = 0 AND ' : ''} ${
-    search.length > 0
-      ? `CONCAT_WS(',', u.user_id, u.first_name, u.last_name ${
-          role === rolesEnum.admin && `, u.email`
-        }
-      )`
-      : ' u.first_name '
-  } Like '%${search}%'
+    WHERE ${
+      role === rolesEnum.basic ? ' u.is_deleted = 0 AND ' : ''
+    } ${`CONCAT_WS(',', u.user_id, u.first_name, u.last_name, u.email)`} Like '%${search}%'
     ORDER BY ${sortColumn} ${direction} 
     LIMIT ? OFFSET ?
     `;

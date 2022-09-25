@@ -4,6 +4,8 @@ import PostsData from '../models/PostsData.js';
 import UsersData from '../models/UsersData.js';
 import { user as userConstants } from '../constants/constants.js';
 import Image from '../models/Image.js';
+import RolesType from '../models/RolesType.js';
+import rolesEnum from '../constants/roles.enum.js';
 
 const uploadImage = (imagesData: ImagesData) => async (imageUrl: string) => {
   const existingImage = await imagesData.getImageByURL(imageUrl);
@@ -88,6 +90,33 @@ const deletePostImage = (imagesData: ImagesData) => async (postId: number, image
   };
 };
 
+const getAllUserImages =
+  (imagesData: ImagesData, usersData: UsersData) =>
+  async (
+    userId: number,
+    search: string,
+    sort: string,
+    page: number,
+    pageSize: number
+    
+  ) => {
+    const existingUser = await usersData.getBy('user_id', userId, false, 'admin');
+
+    if (!existingUser) {
+      return {
+        error: errors.RECORD_NOT_FOUND,
+        userImages: null
+      };
+    }
+
+    const userImages = await imagesData.getAllUserImages(+userId, search, sort, +page, +pageSize);
+
+    return {
+      error: null,
+      userImages
+    };
+  };
+
 const addUserAvatar = (usersData: UsersData) => async (userId: number, imageUrl: string) => {
   const existingUser = await usersData.getBy('user_id', userId, false, 'admin');
 
@@ -150,6 +179,7 @@ export default {
   // uploadImages,
   addPostImages,
   getAllPostImages,
+  getAllUserImages,
   deletePostImage,
   addUserAvatar,
   deleteUserAvatar,

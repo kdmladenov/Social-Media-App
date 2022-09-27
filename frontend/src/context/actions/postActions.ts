@@ -13,15 +13,15 @@ import {
   POST_IMAGES_LIST_FAIL,
   POST_IMAGES_LIST_REQUEST,
   POST_IMAGES_LIST_SUCCESS,
+  POST_IMAGES_UPLOAD_FAIL,
+  POST_IMAGES_UPLOAD_REQUEST,
+  POST_IMAGES_UPLOAD_SUCCESS,
   POST_IMAGE_DELETE_FAIL,
   POST_IMAGE_DELETE_REQUEST,
   POST_IMAGE_DELETE_SUCCESS,
   POST_IMAGE_SET_MAIN_FAIL,
   POST_IMAGE_SET_MAIN_REQUEST,
   POST_IMAGE_SET_MAIN_SUCCESS,
-  POST_IMAGE_UPLOAD_FAIL,
-  POST_IMAGE_UPLOAD_REQUEST,
-  POST_IMAGE_UPLOAD_SUCCESS,
   POST_MY_LIST_FAIL,
   POST_MY_LIST_REQUEST,
   POST_MY_LIST_SUCCESS,
@@ -41,18 +41,20 @@ import PostRestoreActionType from '../../types/context/actions/PostRestoreAction
 import PostType from '../../types/PostType';
 import PostCreateActionType from '../../types/context/actions/PostCreateActionType';
 import PostUpdateActionType from '../../types/context/actions/PostUpdateActionType';
-import PostImageUploadActionType from '../../types/context/actions/PostImageUploadActionType';
 import PostImagesListActionType from '../../types/context/actions/PostImagesListActionType';
 import PostImageDeleteActionType from '../../types/context/actions/PostImageDeleteActionType';
 import PostImageSetMainActionType from '../../types/context/actions/PostImageSetMainActionType';
 import PostDetailsActionType from '../../types/context/actions/PostDetailsActionType';
+import ImageFileType from '../../types/ImageFileType';
+import PostImagesUploadActionType from '../../types/context/actions/PostImagesUploadActionType';
+import NewPostType from '../../types/NewPostType';
 
 export const listMyPosts =
-  (endpoint: string = '') =>
+  (endpoint = '') =>
   async (dispatch: Dispatch<PostsMyListActionType>, getState: () => StoreType) => {
     try {
       dispatch({ type: POST_MY_LIST_REQUEST });
-      // access to the logged in user info
+
       const {
         userLogin: { userInfo }
       } = getState();
@@ -64,7 +66,7 @@ export const listMyPosts =
       };
 
       const { data } = await axios.get(`${BASE_URL}/posts?${endpoint}`, config);
-
+      console.log(data, 'data');
       dispatch({
         type: POST_MY_LIST_SUCCESS,
         payload: data
@@ -233,7 +235,7 @@ export const restorePost =
 //     }
 //   };
 
-export const createPost =
+export const uploadPostImages =
   (
     userId: number,
     mode: string,
@@ -244,32 +246,32 @@ export const createPost =
       | React.DragEvent<HTMLDivElement>,
     imageAddress?: string
   ) =>
-  async (dispatch: Dispatch<PostCreateActionType>, getState: () => StoreType) => {
+  async (dispatch: Dispatch<PostImagesUploadActionType>, getState: () => StoreType) => {
     // mode: 'file_upload' or 'add_image_url'
-    let image = imageAddress || '';
-    
+    let images = imageAddress ? [imageAddress] : [];
+
     try {
       dispatch({
-        type: POST_CREATE_REQUEST
+        type: POST_IMAGES_UPLOAD_REQUEST
       });
-      
+
       const {
         userLogin: { userInfo }
       } = getState();
-      
+
       if (mode === 'file_upload') {
         // Case file upload
-        
+
         const files =
           (event.target as HTMLInputElement).files ||
           (event as React.DragEvent<HTMLDivElement>).dataTransfer.files;
         const formData = new FormData();
         if (files.length !== 0) {
-        for (const single_file of files) {
+          for (const single_file of files) {
             formData.append('postImages', single_file);
+          }
         }
-    }
-console.log(files, 'file');
+
         const config = {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -279,9 +281,36 @@ console.log(files, 'file');
 
         const { data } = await axios.post(`${BASE_URL}/images/posts/upload`, formData, config);
 
-        console.log(data)
-        image = data?.image;
+        data?.forEach((image: ImageFileType) => images.push(image.path));
       }
+
+      dispatch({
+        type: POST_IMAGES_UPLOAD_SUCCESS,
+        payload: images
+      });
+    } catch (error) {
+      axios.isAxiosError(error) &&
+        dispatch({
+          type: POST_IMAGES_UPLOAD_FAIL,
+          payload:
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message
+        });
+    }
+  };
+
+export const createPost =
+  (userId: number, createPostData: NewPostType) =>
+  async (dispatch: Dispatch<PostCreateActionType>, getState: () => StoreType) => {
+    try {
+      dispatch({
+        type: POST_CREATE_REQUEST
+      });
+
+      const {
+        userLogin: { userInfo }
+      } = getState();
 
       const config = {
         headers: {
@@ -290,8 +319,16 @@ console.log(files, 'file');
         }
       };
 
-      const { data } = await axios.post(`${BASE_URL}/posts`, { image }, config);
-
+      console.log(createPostData, 'createPostData');
+      const { data } = await axios.post(`${BASE_URL}/posts`, createPostData, config);
+      // console.log(newPost, 'newPost');
+      // Empty post created and Images have been successfully uploaded or image address is available
+      // const { data: newPostImages } = await axios.post(
+      //   `${BASE_URL}/images/${newPost.postId}/posts`,
+      //   { images },
+      //   config
+      // );
+      console.log(data, 'createdPost');
       dispatch({
         type: POST_CREATE_SUCCESS,
         payload: data
@@ -307,8 +344,6 @@ console.log(files, 'file');
         });
     }
   };
-
-
 
 // export const updatePost =
 //   (postId: number, updatedPost: PostType) =>
@@ -382,7 +417,6 @@ export const updatePost =
         }
       };
 
-
       const { data } = await axios.put(
         `${BASE_URL}/posts/${userInfo?.userId}/${postId}`,
         updatedPost,
@@ -398,7 +432,6 @@ export const updatePost =
         type: POST_DETAILS_SUCCESS,
         payload: data
       });
-
     } catch (error) {
       axios.isAxiosError(error) &&
         dispatch({
@@ -411,76 +444,76 @@ export const updatePost =
     }
   };
 
-export const uploadPostImage =
-  (
-    postId: number,
-    mode: string,
-    event:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.MouseEvent<HTMLButtonElement>
-      | React.KeyboardEvent<HTMLInputElement>,
+// export const uploadPostImage =
+//   (
+//     postId: number,
+//     mode: string,
+//     event:
+//       | React.ChangeEvent<HTMLInputElement>
+//       | React.MouseEvent<HTMLButtonElement>
+//       | React.KeyboardEvent<HTMLInputElement>,
 
-    imageAddress?: string
-  ) =>
-  async (dispatch: Dispatch<PostImageUploadActionType>, getState: () => StoreType) => {
-    // mode: 'file_upload' or 'add_image_url'
-    let imageUrl = imageAddress || '';
+//     imageAddress?: string
+//   ) =>
+//   async (dispatch: Dispatch<PostImageUploadActionType>, getState: () => StoreType) => {
+//     // mode: 'file_upload' or 'add_image_url'
+//     let imageUrl = imageAddress || '';
 
-    try {
-      dispatch({
-        type: POST_IMAGE_UPLOAD_REQUEST
-      });
+//     try {
+//       dispatch({
+//         type: POST_IMAGE_UPLOAD_REQUEST
+//       });
 
-      const {
-        userLogin: { userInfo }
-      } = getState();
+//       const {
+//         userLogin: { userInfo }
+//       } = getState();
 
-      if (mode === 'file_upload') {
-        // Case file upload
-        const file = (event.target as HTMLInputElement).files?.[0];
-        const formData = new FormData();
-        formData.append('image', file!);
+//       if (mode === 'file_upload') {
+//         // Case file upload
+//         const file = (event.target as HTMLInputElement).files?.[0];
+//         const formData = new FormData();
+//         formData.append('image', file!);
 
-        const config = {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${userInfo.token}`
-          }
-        };
+//         const config = {
+//           headers: {
+//             'Content-Type': 'multipart/form-data',
+//             Authorization: `Bearer ${userInfo.token}`
+//           }
+//         };
 
-        const uploadedImageURL = await axios.post(
-          `${BASE_URL}/posts/images/upload`,
-          formData,
-          config
-        );
+//         const uploadedImageURL = await axios.post(
+//           `${BASE_URL}/posts/images/upload`,
+//           formData,
+//           config
+//         );
 
-        imageUrl = uploadedImageURL.data;
-      }
+//         imageUrl = uploadedImageURL.data;
+//       }
 
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`
-        }
-      };
+//       const config = {
+//         headers: {
+//           'Content-Type': 'application/json',
+//           Authorization: `Bearer ${userInfo.token}`
+//         }
+//       };
 
-      const { data } = await axios.post(`${BASE_URL}/posts/${postId}/images`, { imageUrl }, config);
+//       const { data } = await axios.post(`${BASE_URL}/posts/${postId}/images`, { imageUrl }, config);
 
-      dispatch({
-        type: POST_IMAGE_UPLOAD_SUCCESS,
-        payload: data
-      });
-    } catch (error) {
-      axios.isAxiosError(error) &&
-        dispatch({
-          type: POST_IMAGE_UPLOAD_FAIL,
-          payload:
-            error.response && error.response.data.message
-              ? error.response.data.message
-              : error.message
-        });
-    }
-  };
+//       dispatch({
+//         type: POST_IMAGE_UPLOAD_SUCCESS,
+//         payload: data
+//       });
+//     } catch (error) {
+//       axios.isAxiosError(error) &&
+//         dispatch({
+//           type: POST_IMAGE_UPLOAD_FAIL,
+//           payload:
+//             error.response && error.response.data.message
+//               ? error.response.data.message
+//               : error.message
+//         });
+//     }
+//   };
 
 export const listPostImages =
   (postId: number) => async (dispatch: Dispatch<PostImagesListActionType>) => {
@@ -503,7 +536,7 @@ export const listPostImages =
   };
 
 export const deletePostImage =
-  (postImageId: number) =>
+  (imageId: number) =>
   async (dispatch: Dispatch<PostImageDeleteActionType>, getState: () => StoreType) => {
     try {
       dispatch({
@@ -520,7 +553,7 @@ export const deletePostImage =
         }
       };
 
-      await axios.delete(`${BASE_URL}/posts/${postImageId}/images`, config);
+      await axios.delete(`${BASE_URL}/posts/${imageId}/images`, config);
 
       dispatch({
         type: POST_IMAGE_DELETE_SUCCESS
@@ -538,7 +571,7 @@ export const deletePostImage =
   };
 
 export const setImageAsMain =
-  (postImageId: number) =>
+  (imageId: number) =>
   async (dispatch: Dispatch<PostImageSetMainActionType>, getState: () => StoreType) => {
     try {
       dispatch({
@@ -555,7 +588,7 @@ export const setImageAsMain =
         }
       };
 
-      await axios.put(`${BASE_URL}/posts/${postImageId}/images/main`, {}, config);
+      await axios.put(`${BASE_URL}/posts/${imageId}/images/main`, {}, config);
 
       dispatch({
         type: POST_IMAGE_SET_MAIN_SUCCESS

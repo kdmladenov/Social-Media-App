@@ -12,6 +12,10 @@ import {
   POST_IMAGES_LIST_FAIL,
   POST_IMAGES_LIST_REQUEST,
   POST_IMAGES_LIST_SUCCESS,
+  POST_IMAGES_UPLOAD_FAIL,
+  POST_IMAGES_UPLOAD_REQUEST,
+  POST_IMAGES_UPLOAD_RESET,
+  POST_IMAGES_UPLOAD_SUCCESS,
   POST_IMAGE_DELETE_FAIL,
   POST_IMAGE_DELETE_REQUEST,
   POST_IMAGE_DELETE_SUCCESS,
@@ -34,7 +38,6 @@ import {
 } from '../constants/postConstants';
 import PostCreateActionType from '../../types/context/actions/PostCreateActionType';
 import PostUpdateActionType from '../../types/context/actions/PostUpdateActionType';
-import PostImageUploadActionType from '../../types/context/actions/PostImageUploadActionType';
 import PostImagesListActionType from '../../types/context/actions/PostImagesListActionType';
 import PostImageDeleteActionType from '../../types/context/actions/PostImageDeleteActionType';
 import PostImageSetMainActionType from '../../types/context/actions/PostImageSetMainActionType';
@@ -42,6 +45,7 @@ import PostDetailsActionType from '../../types/context/actions/PostDetailsAction
 import PostRestoreActionType from '../../types/context/actions/PostRestoreActionType';
 import PostDeleteActionType from '../../types/context/actions/PostDeleteActionType';
 import PostsMyListActionType from '../../types/context/actions/PostMyListActionType';
+import PostImagesUploadActionType from '../../types/context/actions/PostImagesUploadActionType';
 
 export const postsMyListReducer = (state = {posts: []}, action: PostsMyListActionType) => {
   switch (action.type) {
@@ -113,6 +117,21 @@ export const postCreateReducer = (state = {}, action: PostCreateActionType) => {
   }
 };
 
+export const postImagesUploadReducer = (state = {}, action: PostImagesUploadActionType) => {
+  switch (action.type) {
+    case POST_IMAGES_UPLOAD_REQUEST:
+      return { loading: true };
+    case POST_IMAGES_UPLOAD_SUCCESS:
+      return { loading: false, success: true, postImages: action.payload };
+    case POST_IMAGES_UPLOAD_FAIL:
+      return { loading: false, error: action.payload };
+    case POST_IMAGES_UPLOAD_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
 export const postUpdateReducer = (state = { post: {} }, action: PostUpdateActionType) => {
   switch (action.type) {
     case POST_UPDATE_REQUEST:
@@ -128,18 +147,18 @@ export const postUpdateReducer = (state = { post: {} }, action: PostUpdateAction
   }
 };
 
-export const postImageUploadReducer = (state = {}, action: PostImageUploadActionType) => {
-  switch (action.type) {
-    case POST_IMAGE_UPLOAD_REQUEST:
-      return { loading: true };
-    case POST_IMAGE_UPLOAD_SUCCESS:
-      return { loading: false, success: true, post: action.payload };
-    case POST_IMAGE_UPLOAD_FAIL:
-      return { loading: false, error: action.payload };
-    default:
-      return state;
-  }
-};
+// export const postImageUploadReducer = (state = {}, action: PostImageUploadActionType) => {
+//   switch (action.type) {
+//     case POST_IMAGE_UPLOAD_REQUEST:
+//       return { loading: true };
+//     case POST_IMAGE_UPLOAD_SUCCESS:
+//       return { loading: false, success: true, post: action.payload };
+//     case POST_IMAGE_UPLOAD_FAIL:
+//       return { loading: false, error: action.payload };
+//     default:
+//       return state;
+//   }
+// };
 
 export const postImagesListReducer = (
   state = { postImages: [] },

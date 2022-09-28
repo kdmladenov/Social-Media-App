@@ -11,7 +11,7 @@ interface StoriesData {
     page: number
   ) => Promise<StoryType[]>;
   getBy: (column: string, value: string | number, role?: RolesType) => Promise<StoryType>;
-  create: (story: StoryType) => Promise<StoryType>;
+  create: (image: string, userId: number) => Promise<StoryType>;
   update: (updatedStory: StoryType) => Promise<StoryType>;
   remove: (storyToDelete: StoryType) => Promise<any>;
 }

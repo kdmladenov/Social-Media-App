@@ -77,11 +77,11 @@ const createPost =
         existingCity = await locationsData.createLocation(createData.city, createData.country);
       }
     }  
-    console.log(createData, 'createData');
 
+    
     const newPost = await postsData.create(userId, createData);
-    console.log(newPost, 'newPost');
 
+    
     if (createData?.taggedFriends) {
       await Promise.all(
         createData.taggedFriends.map((taggedFriend: UserType) =>
@@ -89,16 +89,16 @@ const createPost =
         )
       );
     }
-    console.log('tagged');
+
     await Promise.all(createData.images.map((image) => imagesData.uploadImage(image)));
-    console.log('uploaded');
+
     await Promise.all(
       createData.images.map((image) => imagesData.addPostImage(+newPost.postId, image))
     );
-    console.log('addPostImage');
-    const finalPost = await postsData.getBy('post_id', newPost.postId);
-    console.log(finalPost, 'finalPost');
 
+    const finalPost = await postsData.getBy('post_id', newPost.postId);
+
+    
     return {
       error: null,
       post: finalPost

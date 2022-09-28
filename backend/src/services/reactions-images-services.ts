@@ -56,7 +56,7 @@ const createPostImageReaction =
       if (existingPostImageReaction.reactionName !== reactionName) {
         const updatedPostImageReaction = await reactionsImagesData.updatePostImageReaction(
           reactionName,
-          existingPostImageReaction.reactionPostImageId
+          existingPostImageReaction.reactionId
         );
 
         return {
@@ -81,10 +81,10 @@ const createPostImageReaction =
 
 const updatePostImageReaction =
   (reactionsImagesData: ReactionsImagesData) =>
-  async (reactionName: string, reactionPostImageId: number, userId: number, role: RolesType) => {
+  async (reactionName: string, reactionId: number, userId: number, role: RolesType) => {
     const existingPostImageReaction = await reactionsImagesData.getPostImageReactionBy(
       'reaction_post_image_id',
-      +reactionPostImageId
+      +reactionId
     );
 
     if (!existingPostImageReaction) {
@@ -104,7 +104,7 @@ const updatePostImageReaction =
 
     const updatedPostImageReaction = await reactionsImagesData.updatePostImageReaction(
       reactionName,
-      reactionPostImageId
+      reactionId
     );
 
     return {
@@ -115,10 +115,10 @@ const updatePostImageReaction =
 
 const deletePostImageReaction =
   (reactionsImagesData: ReactionsImagesData) =>
-  async (reactionPostImageId: number, userId: number, role: RolesType) => {
+  async (reactionId: number, userId: number, role: RolesType) => {
     const existingPostImageReaction = await reactionsImagesData.getPostImageReactionBy(
       'reaction_post_image_id',
-      reactionPostImageId
+      reactionId
     );
 
     if (!existingPostImageReaction) {
@@ -136,7 +136,7 @@ const deletePostImageReaction =
       };
     }
 
-    await reactionsImagesData.deletePostImageReaction(reactionPostImageId);
+    await reactionsImagesData.deletePostImageReaction(reactionId);
 
     return {
       error: null,
@@ -146,10 +146,10 @@ const deletePostImageReaction =
 
 const getAllPostImageCommentReactions =
   (reactionsImagesData: ReactionsImagesData, commentsImagesData: CommentsImagesData) =>
-  async (postImageCommentId: number) => {
+  async (commentId: number) => {
     const existingComment = await commentsImagesData.getPostImageCommentBy(
       'post_image_comment_id',
-      postImageCommentId
+      commentId
     );
     if (!existingComment) {
       return {
@@ -159,7 +159,7 @@ const getAllPostImageCommentReactions =
     }
 
     const postImageCommentReactions = await reactionsImagesData.getAllPostImageCommentReactions(
-      postImageCommentId
+      commentId
     );
 
     return {
@@ -169,10 +169,10 @@ const getAllPostImageCommentReactions =
   };
 const createPostImageCommentReaction =
   (commentsImagesData: CommentsImagesData, reactionsImagesData: ReactionsImagesData) =>
-  async (userId: number, postImageCommentId: number, reactionName: string) => {
+  async (userId: number, commentId: number, reactionName: string) => {
     const existingComment = await commentsImagesData.getPostImageCommentBy(
       'post_image_comment_id',
-      postImageCommentId
+      commentId
     );
 
     if (!existingComment) {
@@ -183,7 +183,7 @@ const createPostImageCommentReaction =
     }
 
     const existingPostImageCommentReaction = await reactionsImagesData.getPostImageCommentReaction(
-      +postImageCommentId,
+      +commentId,
       +userId
     );
 
@@ -199,7 +199,7 @@ const createPostImageCommentReaction =
         const updatedPostImageCommentReaction =
           await reactionsImagesData.updatePostImageCommentReaction(
             reactionName,
-            existingPostImageCommentReaction.reactionPostImageCommentId
+            existingPostImageCommentReaction.reactionId
           );
 
         return {
@@ -210,11 +210,7 @@ const createPostImageCommentReaction =
     }
 
     const createdPostImageCommentReaction =
-      await reactionsImagesData.createPostImageCommentReaction(
-        userId,
-        postImageCommentId,
-        reactionName
-      );
+      await reactionsImagesData.createPostImageCommentReaction(userId, commentId, reactionName);
 
     return {
       error: null,
@@ -224,16 +220,11 @@ const createPostImageCommentReaction =
 
 const updatePostImageCommentReaction =
   (reactionsImagesData: ReactionsImagesData) =>
-  async (
-    reactionName: string,
-    reactionPostImageCommentId: number,
-    userId: number,
-    role: RolesType
-  ) => {
+  async (reactionName: string, reactionId: number, userId: number, role: RolesType) => {
     const existingPostImageCommentReaction =
       await reactionsImagesData.getPostImageCommentReactionBy(
         'reaction_post_image_comment_id',
-        +reactionPostImageCommentId
+        +reactionId
       );
 
     if (!existingPostImageCommentReaction) {
@@ -252,10 +243,7 @@ const updatePostImageCommentReaction =
     }
 
     const updatedPostImageCommentReaction =
-      await reactionsImagesData.updatePostImageCommentReaction(
-        reactionName,
-        reactionPostImageCommentId
-      );
+      await reactionsImagesData.updatePostImageCommentReaction(reactionName, reactionId);
 
     return {
       error: null,
@@ -265,11 +253,11 @@ const updatePostImageCommentReaction =
 
 const deletePostImageCommentReaction =
   (reactionsImagesData: ReactionsImagesData) =>
-  async (reactionPostImageCommentId: number, userId: number, role: RolesType) => {
+  async (reactionId: number, userId: number, role: RolesType) => {
     const existingPostImageCommentReaction =
       await reactionsImagesData.getPostImageCommentReactionBy(
         'reaction_post_image_comment_id',
-        reactionPostImageCommentId
+        reactionId
       );
 
     if (!existingPostImageCommentReaction) {
@@ -287,7 +275,7 @@ const deletePostImageCommentReaction =
       };
     }
 
-    await reactionsImagesData.deletePostImageCommentReaction(reactionPostImageCommentId);
+    await reactionsImagesData.deletePostImageCommentReaction(reactionId);
 
     return {
       error: null,

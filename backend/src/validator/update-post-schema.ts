@@ -9,7 +9,7 @@ export default {
     (typeof value === 'string' &&
       value.length >= POST.MIN_MESSAGE_LENGTH &&
       value.length <= POST.MAX_MESSAGE_LENGTH),
-  image: (value: string) => !value || typeof value === 'string',
+  images: (value: string[]) => !value || typeof value === 'string',
   feelingType: (value: string) =>
     !value || (typeof value === 'string' && Object.keys(feelingTypes).includes(value)),
   city: (value: string) =>

@@ -376,8 +376,6 @@ const resetPassword =
     };
   };
 
-
-
 export default {
   getUser,
   getAllUsers,

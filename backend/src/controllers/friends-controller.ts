@@ -80,7 +80,7 @@ friendsController
   // @route GET /friends/requests
   // @access Public - Logged users only
   .get(
-    '/requests',
+    '/requests/all',
     authMiddleware,
     loggedUserGuard,
     errorHandler(async (req: Request, res: Response) => {
@@ -131,7 +131,7 @@ friendsController
   // @route GET /friends/suggestions
   // @access Public - Logged users only
   .get(
-    '/suggestions',
+    '/suggestions/all',
     authMiddleware,
     loggedUserGuard,
     errorHandler(async (req: Request, res: Response) => {

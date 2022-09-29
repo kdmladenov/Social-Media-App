@@ -28,6 +28,9 @@ const getAllFriendRequestsByUser = async (userId: number) => {
   const sql = `
     SELECT 
       f.source_id as userId, 
+      u.first_name as firstName,
+      u.last_name as lastName,
+      u.avatar,
       f.request_status_id as requestStatusId, 
       rs.request_status as requestStatus, 
       f.created_at as createdAt, 
@@ -38,12 +41,18 @@ const getAllFriendRequestsByUser = async (userId: number) => {
     LEFT JOIN (SELECT request_status_id, request_status
       FROM request_statuses
       GROUP BY request_status_id) as rs using (request_status_id)
+    LEFT JOIN (SELECT user_id, first_name, last_name, avatar
+      FROM users
+      GROUP BY user_id) as u ON user_id = f.source_id
     WHERE f.target_id = ?
 
     UNION 
 
     SELECT 
       f.target_id as userId, 
+      u.first_name as firstName,
+      u.last_name as lastName,
+      u.avatar,
       f.request_status_id as requestStatusId, 
       rs.request_status as requestStatus, 
       f.created_at as createdAt, 
@@ -54,6 +63,9 @@ const getAllFriendRequestsByUser = async (userId: number) => {
     LEFT JOIN (SELECT request_status_id, request_status
       FROM request_statuses
       GROUP BY request_status_id) as rs using (request_status_id)
+    LEFT JOIN (SELECT user_id, first_name, last_name, avatar
+      FROM users
+      GROUP BY user_id) as u ON user_id = f.target_id
     WHERE f.source_id = ?
       `;
 

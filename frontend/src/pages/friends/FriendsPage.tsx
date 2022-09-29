@@ -15,11 +15,13 @@ import {
 } from '../../context/actions/friendsActions';
 import './styles/FriendsPage.css';
 import { listUsers } from '../../context/actions/userActions';
+import Timeline from '../../components/Timeline';
+import getDate from '../../utils/getDate';
 
 const FriendsPage = () => {
   const dispatch = useDispatch();
   const [section, setSection] = useState('home');
-  const [endpoint, setEndpoint] = useState(defaultEndpoint['friendsList']);
+  const [friendsEndpoint, setFriendsEndpoint] = useState(defaultEndpoint['friendsList']);
   const [usersEndpoint, setUsersEndpoint] = useState(defaultEndpoint['usersList']);
 
   const { friends } = useTypedSelector((state) => state.friendsList);
@@ -60,7 +62,6 @@ const FriendsPage = () => {
   );
   const { friendsRequestsSent } = useTypedSelector((state) => state.friendsRequestsSentList);
   const { friendsSuggestions } = useTypedSelector((state) => state.friendsSuggestionsList);
-
   const { success: unfriendSuccess } = useTypedSelector((state) => state.friendUnfriend);
   const { success: requestSuccess } = useTypedSelector((state) => state.friendRequestCreate);
   const { success: updateSuccess } = useTypedSelector((state) => state.friendRequestStatusUpdate);
@@ -76,43 +77,44 @@ const FriendsPage = () => {
       ? 'Friend Requests Sent'
       : section === 'allFriends'
       ? 'All Friends'
+      : section === 'timeline'
+      ? 'Timeline'
       : section === 'birthdays'
       ? 'Birthdays'
       : 'Suggestions';
 
   const homeSuggestionsAndRequests = (
     <div className="flex_col">
-      {friendsRequestsReceived?.length ? (
-        <>
-          <h1>Friend Requests Received</h1>
+      <>
+        <h1>Friend Requests Received</h1>
+        {friendsRequestsReceived?.length ? (
           <ul className="container flex">
             {friendsRequestsReceived?.map((user) => (
               <FriendRequestCard user={user} type="request_received" />
             ))}
           </ul>
-        </>
-      ) : (
-        <></>
-      )}
-
-      {friendsSuggestions?.length ? (
-        <>
-          <h1>Friends Suggestions</h1>
+        ) : (
+          <span>You have no pending received friend requests</span>
+        )}
+      </>
+      <>
+        <h1>Friends Suggestions</h1>
+        {friendsSuggestions?.length ? (
           <ul className="container flex">
             {friendsSuggestions?.map((user) => (
               <FriendRequestCard user={user} type="friend_suggestion" />
             ))}
           </ul>
-        </>
-      ) : (
-        <></>
-      )}
+        ) : (
+          <span>You have no friend suggestions</span>
+        )}
+      </>
     </div>
   );
 
   useEffect(() => {
     if (section === 'allFriends' || section === 'birthdays') {
-      const { page, pageSize, sort, search } = endpoint;
+      const { page, pageSize, sort, search } = friendsEndpoint;
       dispatch(listFriends(`${page}${pageSize}${sort}${search}`));
     } else if (section === 'home') {
       dispatch(listFriendsRequestsReceived());
@@ -124,10 +126,20 @@ const FriendsPage = () => {
       dispatch(listFriendsRequestsReceived());
     } else if (section === 'friendRequestsSent') {
       dispatch(listFriendsRequestsSent());
+    } else if (section === 'timeline') {
+      dispatch(listFriendRequests());
     } else if (section === 'suggestions') {
       dispatch(listFriendsSuggestions());
     }
-  }, [dispatch, endpoint, usersEndpoint, section, unfriendSuccess, requestSuccess, updateSuccess]);
+  }, [
+    dispatch,
+    friendsEndpoint,
+    usersEndpoint,
+    section,
+    unfriendSuccess,
+    requestSuccess,
+    updateSuccess
+  ]);
 
   return (
     <main className="friend_page">
@@ -151,47 +163,51 @@ const FriendsPage = () => {
               <SearchBox
                 updateQuery={(prop, value) =>
                   section === 'allFriends'
-                    ? setEndpoint({ ...endpoint, [prop]: value })
+                    ? setFriendsEndpoint({ ...friendsEndpoint, [prop]: value })
                     : setUsersEndpoint({ ...usersEndpoint, [prop]: value })
                 }
                 resource={section === 'allFriends' ? 'friends' : 'people'}
               />
             )}
-            {section === 'home'
-              ? friendsPageSidebarButtons?.map((button) => (
-                  <li
-                    className="button card"
-                    key={button?.label}
-                    onClick={() => setSection(button?.nextSection)}
-                  >
-                    <i className={`${button?.icon} left`} />
-                    <span>{`${button?.label}`}</span>
-                    {button?.label !== 'Home' && <i className="fas fa-angle-right chevron" />}
-                  </li>
-                ))
-              : section === 'allFriends'
-              ? friends?.map((user) => (
-                  <FriendRequestCard user={user} horizontal={true} type="friend" />
-                ))
-              : section === 'friendRequestsReceived'
-              ? friendsRequestsReceived?.map((user) => (
-                  <FriendRequestCard user={user} horizontal={true} type="request_received" />
-                ))
-              : section === 'friendRequestsSent'
-              ? friendsRequestsSent?.map((user) => (
-                  <FriendRequestCard user={user} horizontal={true} type="request_sent" />
-                ))
-              : section === 'birthdays'
-              ? friends
-                  ?.filter(
-                    (friend) =>
-                      new Date(friend.dateOfBirth).getMonth() === new Date().getMonth() &&
-                      new Date(friend.dateOfBirth).getDate() === new Date().getDate()
-                  )
-                  ?.map((user) => <FriendRequestCard user={user} horizontal={true} type="friend" />)
-              : friendsSuggestions?.map((user) => (
-                  <FriendRequestCard user={user} horizontal={true} type="friend_suggestion" />
-                ))}
+            {section === 'home' ? (
+              friendsPageSidebarButtons?.map((button) => (
+                <li
+                  className="button card"
+                  key={button?.label}
+                  onClick={() => setSection(button?.nextSection)}
+                >
+                  <i className={`${button?.icon} left`} />
+                  <span>{`${button?.label}`}</span>
+                  {button?.label !== 'Home' && <i className="fas fa-angle-right chevron" />}
+                </li>
+              ))
+            ) : section === 'allFriends' ? (
+              friends?.map((user) => (
+                <FriendRequestCard user={user} horizontal={true} type="friend" />
+              ))
+            ) : section === 'friendRequestsReceived' ? (
+              friendsRequestsReceived?.map((user) => (
+                <FriendRequestCard user={user} horizontal={true} type="request_received" />
+              ))
+            ) : section === 'friendRequestsSent' ? (
+              friendsRequestsSent?.map((user) => (
+                <FriendRequestCard user={user} horizontal={true} type="request_sent" />
+              ))
+            ) : section === 'birthdays' ? (
+              friends
+                ?.filter(
+                  (friend) =>
+                    new Date(friend.dateOfBirth).getMonth() === new Date().getMonth() &&
+                    new Date(friend.dateOfBirth).getDate() === new Date().getDate()
+                )
+                ?.map((user) => <FriendRequestCard user={user} horizontal={true} type="friend" />)
+            ) : section === 'suggestions' ? (
+              friendsSuggestions?.map((user) => (
+                <FriendRequestCard user={user} horizontal={true} type="friend_suggestion" />
+              ))
+            ) : (
+              <></>
+            )}
           </ul>
         </div>
       </aside>
@@ -217,6 +233,32 @@ const FriendsPage = () => {
                 friendsRequestsSent?.map((user) => (
                   <FriendRequestCard user={user} type="request_sent" />
                 ))
+              ) : section === 'timeline' && friendsRequestsList?.length ? (
+                <Timeline>
+                  {friendsRequestsList?.map((request) => (
+                    <Timeline.Item
+                      key={request.userId}
+                      item={request}
+                      text="Go to profile"
+                      date={getDate(request?.updatedAt || request?.createdAt, 0, false)}
+                      icon='fa fa-times'
+                    >
+                      <FriendRequestCard
+                        user={request}
+                        horizontal={true}
+                        type={`${
+                          request.requestStatus === 'pending' && request.type === 'source'
+                            ? 'request_received'
+                            : request.requestStatus === 'pending' && request.type === 'target'
+                            ? 'request_sent'
+                            : request.requestStatus === 'approved'
+                            ? 'friend'
+                            : 'rejected'
+                        }`}
+                      />
+                    </Timeline.Item>
+                  ))}
+                </Timeline>
               ) : section === 'birthdays' &&
                 friends?.filter(
                   (friend) =>
@@ -244,6 +286,8 @@ const FriendsPage = () => {
                     ? ' requests sent'
                     : section === 'allFriends'
                     ? 's yet'
+                    : section === 'timeline'
+                    ? 's history yet'
                     : section === 'birthdays'
                     ? 's with birthdays today'
                     : ' suggestions'

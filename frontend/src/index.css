@@ -1,13 +1,171 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  --black: #000;
+  --black_2: #333;
+  --ramones: #2c363f;
+  --inkwell: #1d2228;
+  --midnight: #101518;
+  --batcave: #232a31;
+  --malbec: #39007d;
+  --sapphire: #2f0060;
+  --blue_dark: #222f3e;
+  --cobalt: #003abc;
+  --blurple: #5d5eff;
+  --grape-jelly: #6001d2;
+  --hulk-pants: #7e1fff;
+  --starfish: #7759ff;
+  --thanos: #907cff;
+  --dory: #0f69ff;
+  --blue: rgb(21, 161, 250);
+  --peeps: #7dcbff;
+  --sky: #12a9ff;
+  --smurfette: #188fff;
+  --blue_middle: rgb(85, 151, 238);
+  --blue_light: #d9f2fb;
+  --red_dark: rgb(170, 2, 2);
+  --red: #ff0000;
+  --barbie: #f80e5d;
+  --barney: #cc008c;
+  --malibu: #ff0080;
+  --solo-cup: #eb0f29;
+  --swedish-fish: #ff333a;
+  --carrot-juice: #ff520d;
+  --watermelon: #ff4d52;
+  --cheetos: #ff6e0c;
+  --orange: #ffa41c;
+  --turmeric: #ffa700;
+  --masala: #ff8b12;
+  --yellow: #ffd712;
+  --yellow_dark: #d4b100;
+  --mimosa: #ffd333;
+  --canary: #ffde00;
+  --yellow_light: #fbe8aa;
+  --sea-foam: #11d3cd;
+  --green_dark: rgb(1, 113, 133);
+  --spirulina: #009c94;
+  --green: rgb(4, 214, 4);
+  --green_lime: lime;
+  --kiwi: #00d15e;
+  --mulah: #1ac567;
+  --ninja-turtle: #00ab5e;
+  --playdoh: #21d87d;
+  --bonsai: #00873c;
+  --battleship: #5b636a;
+  --charcoal: #464e56;
+  --gray: #e0e5ec;
+  --gray_background: rgb(239, 242, 245);
+  --gray_light: #f3f3f3;
+  --gray_dark: #838383;
+  --dolphin: #6e7780;
+  --bob: #b0b9c1;
+  --gandalf: #979ea8;
+  --shark: #828a93;
+  --grey-hair: #f0f3f5;
+  --hendrix: #f8f4ff;
+  --marshmallow: #f5f8fa;
+  --pebble: #c7cdd2;
+  --dirty-seagull: #e0e4e9;
+  --white: #fff;
+  --border_radius: 10px;
+  --border_radius_top: 10px 10px 0 0;
+  --border_radius_bottom: 0 0 10px 10px;
+  --border_radius_left: 10px 0 0 10px;
+  --border_radius_right: 0 10px 10px 0;
+  --box_shadow: 0 0 1px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.1);
+  --box_shadow_2: 0 0.0625rem 0.125rem 0.0625rem rgba(0, 0, 0, 0.15);
+  --box_shadow_3: 0 3px 10px rgba(0, 0, 0, 0.2);
+  --box_shadow_4: 0 14px 28px rgba(0, 0, 0, 0.3);
+  --box_shadow_angle: -7px -7px 20px 0 #fff9, -4px -4px 5px 0 #fff9, 7px 7px 20px 0px #0002,
+    4px 4px 5px 0px #0001, inset 0px 0px 0px 0px #fff9, inset 0px 0px 0px 0px #0001,
+    inset 0px 0px 0px 0px #fff9, inset 0px 0px 0px 0px #0001;
+  --box_shadow_angle_active: 4px 4px 6px 0 rgba(255, 255, 255, 0.5),
+    -4px -4px 6px 0 rgba(116, 125, 136, 0.2), inset -4px -4px 6px 0px rgba(255, 255, 255, 0.5),
+    inset 4px 4px 6px 0px rgba(116, 125, 136, 0.2);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: 'san-serif';
+  color: #333;
+  line-height: 1.6;
+}
+
+#root {
+  min-height: 100vh;
+  max-width: 100vw;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    'header'
+    'content_area'
+    'footer';
+  background: var(--gray_background);
+}
+
+footer {
+  grid-area: footer;
+}
+
+ul {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+  color: var(--black_2);
+}
+
+p {
+  margin: 10px 0;
+}
+
+img {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.card {
+  position: relative;
+  background-color: var(--white);
+  border-radius: var(--border_radius);
+  /* border: 1px solid var(--gray); */
+  box-shadow: var(--box_shadow);
+  color: var(--black);
+}
+
+.btn {
+  height: 100%;
+  width: 50%;
+  display: inline-block;
+  cursor: pointer;
+  color: #fff;
+  background: var(--primary-color);
+  border: none;
+  border-radius: 5px;
+}
+
+hr {
+  border-color: var(--gray_light);
+  width: 100%;
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.flex_col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }

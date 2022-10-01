@@ -17,9 +17,19 @@ import './styles/FriendsPage.css';
 import { listUsers } from '../../context/actions/userActions';
 import Timeline from '../../components/Timeline';
 import getDate from '../../utils/getDate';
+import Tooltip from '../../components/Tooltip';
+import { useNavigate } from 'react-router-dom';
+import {
+  getFriendsHeaderText,
+  getFriendsNoResultText,
+  getFriendsTimelineCardType,
+  getFriendsTimelineType,
+  getUsersWithRequestStatusType
+} from '../../utils/getFriendsPageText';
 
 const FriendsPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [section, setSection] = useState('home');
   const [friendsEndpoint, setFriendsEndpoint] = useState(defaultEndpoint['friendsList']);
   const [usersEndpoint, setUsersEndpoint] = useState(defaultEndpoint['usersList']);
@@ -28,35 +38,6 @@ const FriendsPage = () => {
   const { friendsRequestsList } = useTypedSelector((state) => state.friendsRequestsList);
   const { users } = useTypedSelector((state) => state.userList);
   const { user: currentUser } = useTypedSelector((state) => state.userDetails);
-
-  const usersWithRequestStatus = users?.map((user) => {
-    const usersWithRequest = friendsRequestsList?.find(
-      (userWithRequest) => userWithRequest.userId === user.userId
-    );
-    if (usersWithRequest?.requestStatus) {
-      return {
-        ...user,
-        type: `${
-          usersWithRequest.requestStatus === 'approved'
-            ? 'friend'
-            : usersWithRequest.requestStatus === 'pending' && usersWithRequest.type === 'source'
-            ? 'request_received'
-            : usersWithRequest.requestStatus === 'pending' && usersWithRequest.type === 'target'
-            ? 'request_sent'
-            : usersWithRequest.requestStatus === 'rejected' ||
-              usersWithRequest.requestStatus === 'unfriended' ||
-              usersWithRequest.userId === currentUser.userId
-            ? 'excluded'
-            : 'user'
-        }`
-      };
-    }
-    return {
-      ...user,
-      type: user.userId === currentUser.userId ? 'current_user' : 'user'
-    };
-  });
-
   const { friendsRequestsReceived } = useTypedSelector(
     (state) => state.friendsRequestsReceivedList
   );
@@ -66,22 +47,33 @@ const FriendsPage = () => {
   const { success: requestSuccess } = useTypedSelector((state) => state.friendRequestCreate);
   const { success: updateSuccess } = useTypedSelector((state) => state.friendRequestStatusUpdate);
 
-  const headerText =
-    section === 'home' && (usersEndpoint.search === '' || usersEndpoint.search === 'search=&')
-      ? 'Friends'
-      : section === 'home' && users?.length
-      ? 'People Search'
-      : section === 'friendRequestsReceived'
-      ? 'Friend Requests Received'
-      : section === 'friendRequestsSent'
-      ? 'Friend Requests Sent'
-      : section === 'allFriends'
-      ? 'All Friends'
-      : section === 'timeline'
-      ? 'Timeline'
-      : section === 'birthdays'
-      ? 'Birthdays'
-      : 'Suggestions';
+  const headerText = getFriendsHeaderText(section, usersEndpoint.search, users?.length);
+
+  const friendsWithBirthDays = friends?.filter(
+    (friend) =>
+      new Date(friend.dateOfBirth).getMonth() === new Date().getMonth() &&
+      new Date(friend.dateOfBirth).getDate() === new Date().getDate()
+  );
+
+  const usersWithRequestStatus = users?.map((user) => {
+    const usersWithRequest = friendsRequestsList?.find(
+      (userWithRequest) => userWithRequest.userId === user.userId
+    );
+    if (usersWithRequest?.requestStatus) {
+      return {
+        ...user,
+        type: `${getUsersWithRequestStatusType(
+          usersWithRequest.requestStatus,
+          usersWithRequest.type,
+          usersWithRequest.userId === currentUser.userId
+        )}`
+      };
+    }
+    return {
+      ...user,
+      type: user.userId === currentUser.userId ? 'current_user' : 'user'
+    };
+  });
 
   const homeSuggestionsAndRequests = (
     <div className="flex_col">
@@ -238,60 +230,38 @@ const FriendsPage = () => {
                   {friendsRequestsList?.map((request) => (
                     <Timeline.Item
                       key={request.userId}
-                      item={request}
-                      text="Go to profile"
-                      date={getDate(request?.updatedAt || request?.createdAt, 0, false)}
-                      icon='fa fa-times'
+                      text={`${getFriendsTimelineType(
+                        request.requestStatus,
+                        request.type
+                      )} ${getDate(request?.updatedAt || request?.createdAt, 0, false)}`}
+                      hoverText={`${request?.firstName}'s profile`}
+                      button={
+                        <span
+                          className="btn"
+                          onClick={() => navigate(`/profile/${request.userId}/posts`)}
+                        >
+                          <Tooltip text="profile">
+                            <i className="fa fa-user" />
+                          </Tooltip>
+                        </span>
+                      }
                     >
                       <FriendRequestCard
                         user={request}
                         horizontal={true}
-                        type={`${
-                          request.requestStatus === 'pending' && request.type === 'source'
-                            ? 'request_received'
-                            : request.requestStatus === 'pending' && request.type === 'target'
-                            ? 'request_sent'
-                            : request.requestStatus === 'approved'
-                            ? 'friend'
-                            : 'rejected'
-                        }`}
+                        type={`${getFriendsTimelineCardType(request.requestStatus, request.type)}`}
                       />
                     </Timeline.Item>
                   ))}
                 </Timeline>
-              ) : section === 'birthdays' &&
-                friends?.filter(
-                  (friend) =>
-                    new Date(friend.dateOfBirth).getMonth() === new Date().getMonth() &&
-                    new Date(friend.dateOfBirth).getDate() === new Date().getDate()
-                )?.length ? (
-                friends
-                  ?.filter(
-                    (friend) =>
-                      new Date(friend.dateOfBirth).getMonth() === new Date().getMonth() &&
-                      new Date(friend.dateOfBirth).getDate() === new Date().getDate()
-                  )
-                  ?.map((user) => <FriendRequestCard user={user} type="friend" />)
+              ) : section === 'birthdays' && friendsWithBirthDays?.length ? (
+                friendsWithBirthDays?.map((user) => <FriendRequestCard user={user} type="friend" />)
               ) : section === 'suggestions' && friendsSuggestions?.length ? (
                 friendsSuggestions?.map((user) => (
                   <FriendRequestCard user={user} type="friend_suggestion" />
                 ))
               ) : (
-                <h4>{`You have no friend${
-                  section === 'home'
-                    ? ' suggestions'
-                    : section === 'friendRequestsReceived'
-                    ? ' requests received'
-                    : section === 'friendRequestsSent'
-                    ? ' requests sent'
-                    : section === 'allFriends'
-                    ? 's yet'
-                    : section === 'timeline'
-                    ? 's history yet'
-                    : section === 'birthdays'
-                    ? 's with birthdays today'
-                    : ' suggestions'
-                }`}</h4>
+                <h4>{`You have no friend${getFriendsNoResultText(section)}`}</h4>
               )}
             </ul>
           </>

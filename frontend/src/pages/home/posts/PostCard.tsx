@@ -21,6 +21,7 @@ import FormComponent from '../../../components/FormComponent';
 import useTypedSelector from '../../../hooks/useTypedSelector';
 import createCollectionInitialInputState from '../../../data/inputs/createCollectionInitialInputState';
 import changePostCollectionInitialInputState from '../../../data/inputs/changePostCollectionInitialInputState';
+import getImagesClass from '../../../utils/getImagesClass';
 
 const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: string }> = ({
   post,
@@ -89,19 +90,6 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
     </DropDown>
   );
 
-  const getImagesClass = () =>
-    images?.length === 1
-      ? ''
-      : images?.length === 2
-      ? 'two'
-      : images?.length === 2
-      ? 'two'
-      : images?.length === 3
-      ? 'three'
-      : images?.length === 4
-      ? 'four'
-      : 'more';
-
   useEffect(() => {
     if (screen !== 'saved_posts') {
       dispatch(listCollections());
@@ -119,7 +107,7 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
       <div className="message">
         <Link to={`/posts/${postId}`}>{message}</Link>
       </div>
-      <ul className={`images ${getImagesClass()}`}>
+      <ul className={`images ${getImagesClass(images)}`}>
         {images?.map((image, index) => (
           <li className={`image${index + 1}`} onClick={() => imageModalHandler(image?.imageId)}>
             <img
@@ -134,7 +122,10 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
       <PostCardFooter postId={postId} />
       {isMenuModalOpen && <Modal setIsOpenModal={setIsMenuModalOpen}>{modalContent}</Modal>}
       {isModalOpen && (
-        <Modal classes={`post_images ${isModalSliderFullScreen ? 'full_screen': ''}`} setIsOpenModal={setIsModalOpen}>
+        <Modal
+          classes={`post_images ${isModalSliderFullScreen ? 'full_screen' : ''}`}
+          setIsOpenModal={setIsModalOpen}
+        >
           <>
             <aside className="post_images_sidebar flex_col">
               <div className="post_images_header">

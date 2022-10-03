@@ -1,13 +1,26 @@
 .comment_card .content .reactions_list {
   position: absolute;
-  height: fit-content;
   bottom: -15px;
   right: 5px;
+}
+
+.post_footer .reactions_shares .reactions_list,
+.comment_card .content .reactions_list {
+  height: fit-content;
+  width: fit-content;
   padding: 0 4px;
   gap: 5px;
   font-size: 13px;
 }
+.post_footer .reactions_shares .reactions_list .tooltip,
+.comment_card .content .reactions_list .tooltip {
+  margin-right: -5px;
+}
+.post_footer .reactions_shares .reactions_list .tooltip:last-child,
+.comment_card .content .reactions_list .tooltip:last-child {
+  margin-right: 0px;
+}
 
 .comment_card .content .reactions_list i {
-  color: red;
+  color: white;
 }

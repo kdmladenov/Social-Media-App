@@ -1,13 +1,10 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import Tooltip from '../../../components/Tooltip';
-import { listCommentsReactions, listPostImageCommentReactions, listPostImageReactions, listPostsReactions } from '../../../context/actions/reactionsActions';
 import reactionButtons from '../../../data/inputs/reactionButtons';
 import useTypedSelector from '../../../hooks/useTypedSelector';
 import getGroupReactions from '../../../utils/getGroupReactions';
 
 import './styles/ReactionsList.css';
-
 
 const REACTION_NAMES_COUNT_AT_HOVER = 1;
 
@@ -16,14 +13,9 @@ export const ReactionsList: React.FC<{
   resourceId: number;
   subResourceId?: number;
 }> = ({ type, resourceId, subResourceId }) => {
-  const dispatch = useDispatch();
-
   const { postReactions } = useTypedSelector((state) => state.postReactionsList);
-
   const { commentReactions } = useTypedSelector((state) => state.commentReactionsList);
-
   const { postImageReactions } = useTypedSelector((state) => state.postImageReactionsList);
-
   const { postImageCommentReactions } = useTypedSelector(
     (state) => state.commentPostImageReactionsList
   );
@@ -50,22 +42,13 @@ export const ReactionsList: React.FC<{
     </ul>
   );
 
-  useEffect(() => {
-    type === 'post'
-      ? dispatch(listPostsReactions(resourceId))
-      : type === 'post_comment'
-      ? dispatch(listCommentsReactions(resourceId))
-      : type === 'image' && subResourceId
-      ? dispatch(listPostImageReactions(resourceId, subResourceId))
-      : dispatch(listPostImageCommentReactions(resourceId));
-  }, [dispatch, type, resourceId, subResourceId]);
-
   return reactions?.length ? (
     <div className={`reactions_list flex card ${type}`}>
       {reactionButtons.map(
         ({ reactionIcon, reactionName }) =>
           groupedReactions[reactionName] && (
             <Tooltip
+              classes={reactionName}
               direction="bottom"
               text={nameList(groupedReactions[reactionName].authorsList)}
               key={reactionName}

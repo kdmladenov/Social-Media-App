@@ -2,8 +2,34 @@
   position: relative;
 }
 /* Main Button */
-.reactions > .button_container.active {
-  color: var(--watermelon)
+.reactions > .button_container i,
+.reactions > .button_container  {
+  font-size: 17px;
+}
+/* Comment only */
+.single_comment .reactions > .button_container span {
+  font-size: 13px;
+}
+.reactions > .button_container.active.like {
+  color: var(--blue)
+}
+.reactions > .button_container.active.dislike {
+  color: var(--orange)
+}
+.reactions > .button_container.active.heart {
+  color: var(--red)
+}
+.reactions > .button_container.active.smile {
+  color: var(--sky)
+}
+.reactions > .button_container.active.laugh {
+  color: var(--kiwi)
+}
+.reactions > .button_container.active.sad {
+  color: var(--spirulina)
+}
+.reactions > .button_container.active.angry {
+  color: var(--malibu)
 }
 
 /* Reaction Button Group */
@@ -24,7 +50,7 @@
   color: var(--white);
   gap: 5px;
 }
-
+.reactions_list .tooltip,
 .reactions .reactions_button_group .button_container {
   height: 36px;
   width: 36px;
@@ -32,6 +58,32 @@
   color: var(--white);
   font-size: 20px;
   padding: 0;
+}
+.reactions_list .tooltip{
+  height: 18px;
+  width: 18px;
+  font-size: 12px;
+}
+.reactions_list .tooltip.smile i,
+.reactions_list .tooltip.laugh i,
+.reactions_list .tooltip.angry i,
+.reactions_list .tooltip.sad i{
+  font-size: 18px;
+}
+.reactions_list .tooltip.smile i{
+    color: var(--sky);
+}
+
+.reactions_list .tooltip.laugh i{
+  color: var(--kiwi);
+}
+
+.reactions_list .tooltip.sad i{
+ color: var(--spirulina);
+}
+
+.reactions_list .tooltip.angry i{
+  color: var(--malibu);
 }
 
 .reactions .tooltip_body.top {
@@ -42,7 +94,7 @@
 .reactions .reactions_button_group .button_container:hover {
   border-bottom: none;
 }
-
+.reactions_list .tooltip.like,
 .reactions .reactions_button_group .button_container.like {
   background: var(--blue);
 }
@@ -50,7 +102,7 @@
 .reactions .reactions_button_group .button_container.like i {
   animation: animateThumbs 2s ease-in-out infinite;
 }
-
+.reactions_list .tooltip.dislike,
 .reactions .reactions_button_group .button_container.dislike {
   background: var(--orange);
 }
@@ -58,7 +110,7 @@
 .reactions .reactions_button_group .button_container.dislike i {
   animation: animateThumbs 2s ease-in infinite;
 }
-
+.reactions_list .tooltip.heart,
 .reactions .reactions_button_group .button_container.heart {
   background: var(--red);
 }

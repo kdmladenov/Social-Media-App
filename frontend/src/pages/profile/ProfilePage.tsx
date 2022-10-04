@@ -8,7 +8,6 @@ import Message from '../../components/Message';
 import { useParams } from 'react-router-dom';
 import ProfilePosts from './ProfilePosts';
 import ProfileAbout from './ProfileAbout';
-import { listFriends } from '../../context/actions/friendsActions';
 import FriendList from './FriendList';
 import PhotoList from './PhotoList';
 import ProfileHeader from './ProfileHeader';
@@ -24,10 +23,24 @@ const ProfilePage: React.FC = () => {
   const { success: successUpdateCover } = useTypedSelector((state) => state.userCoverUpdate);
 
   useEffect(() => {
-    if (!user?.userId || successUpdateAvatar || successDeleteAvatar || successUpdateCover) {
+    if (
+      !user?.userId ||
+      +userId! !== user?.userId ||
+      successUpdateAvatar ||
+      successDeleteAvatar ||
+      successUpdateCover
+    ) {
       dispatch(getUserDetails(+userId!));
     }
-  }, [dispatch, successUpdateAvatar, successDeleteAvatar, successUpdateCover, section]);
+  }, [
+    dispatch,
+    successUpdateAvatar,
+    successDeleteAvatar,
+    successUpdateCover,
+    section,
+    userId,
+    user?.userId
+  ]);
 
   return loading ? (
     <Loader />

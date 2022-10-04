@@ -4,18 +4,27 @@
   background: var(--gray_background);
   margin: 0 auto;
   display: grid;
-  gap: 80px;
+  gap: 20px;
   grid-template-columns: 1fr 680px 1fr;
-  grid-template-areas:
-    'left_sidebar'
-    'posts'
-    'right_sidebar';
+  grid-template-areas: 'left_sidebar home right_sidebar';
   height: fit-content;
+  margin: 0 auto;
 }
 
 .home_page .home_content {
-  max-width: 100% ;
+  max-width: 680px;
   height: fit-content;
   gap: 20px;
   padding: 20px 0;
+}
+
+@media (max-width: 1280px) {
+  .home_page {
+    grid-template-columns: 680px 1fr;
+    grid-template-areas: 'home right_sidebar';
+    gap: 0;
+  }
+  .home_page .home_content {
+    margin: 0 20px;
+  }
 }

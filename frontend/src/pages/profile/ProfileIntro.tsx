@@ -13,10 +13,10 @@ const ProfileIntro: React.FC<{ user: UserType }> = ({ user }) => {
       <h1>Intro</h1>
       <ul className="info_list flex_col">
         {profileInfoItemsMap['Overview'].map(
-          ({ subsectionKey, icon, spanText, labelText, inputData }) =>
+          ({ subsectionKey, icon, spanText, labelText, inputData }, index) =>
             user[subsectionKey as keyof UserType] &&
             inputData && (
-              <li className="info_item flex">
+              <li className="info_item flex" key={index}>
                 <div className="info flex">
                   <i className={icon}></i>
                   <div className="info_details flex_col">

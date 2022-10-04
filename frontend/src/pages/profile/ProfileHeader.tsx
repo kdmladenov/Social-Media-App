@@ -52,7 +52,7 @@ const ProfileHeader: React.FC<{ user: UserType; section?: string }> = ({ user, s
               <h6>{`${user?.friends?.length} Friends`}</h6>
               <div className="friends_avatars flex">
                 {user?.friends?.slice(0, 8).map((friend) => (
-                  <Avatar classes="image_only" imageUrl={friend?.avatar} key={friend.userId} />
+                  <Avatar classes="image_only" imageUrl={friend?.avatar} key={friend?.userId} />
                 ))}
               </div>
             </div>

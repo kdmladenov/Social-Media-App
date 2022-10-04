@@ -44,10 +44,12 @@ const SidebarLeft = () => {
               />
               <h3>{`${user?.firstName} ${user?.lastName}`}</h3>
               <h3>
-                {user?.workplaces?.sort(
+                {
+                  user?.workplaces?.sort(
                     (a, b) =>
                       new Date(b.startDate).getFullYear() - new Date(a.startDate).getFullYear()
-                  )[0]?.position}
+                  )[0]?.position
+                }
               </h3>
               <Divider></Divider>
               <div className="info">
@@ -55,8 +57,12 @@ const SidebarLeft = () => {
                   {user?.friends?.length ? (
                     <>
                       <div className="friends_avatars flex">
-                        {user?.friends.slice(0, 4).map((friend, index) => (
-                          <Avatar classes="image_only" imageUrl={friend?.avatar} key={index} />
+                        {user?.friends.slice(0, 4).map((friend) => (
+                          <Avatar
+                            classes="image_only"
+                            imageUrl={friend?.avatar}
+                            key={friend?.userId}
+                          />
                         ))}
                       </div>
                       <h4>{`${user?.friends.length} Friend${
@@ -88,7 +94,7 @@ const SidebarLeft = () => {
             navigateTo: '/saved'
           }
         ].map((item) => (
-          <Accordion.Item isOpen={true}>
+          <Accordion.Item isOpen={true} key={item.title}>
             <Accordion.Header>
               <Accordion.Title>
                 <div onClick={() => navigate(item.navigateTo)}>

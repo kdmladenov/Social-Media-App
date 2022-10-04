@@ -77,7 +77,12 @@ const CommentCard: React.FC<{
   };
 
   const repliesToRender = (replies || []).map((item) => (
-    <CommentCard key={commentId} comment={item} currentUserDetails={currentUserDetails} />
+    <CommentCard
+      key={commentId}
+      comment={item}
+      currentUserDetails={currentUserDetails}
+      type={type === 'post' ? 'post' : 'image'}
+    />
   ));
 
   return (

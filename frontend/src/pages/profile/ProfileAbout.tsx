@@ -150,7 +150,7 @@ const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
                 addButton
               }) =>
                 user[subsectionKey as keyof UserType] && inputData ? (
-                  <li className="info_item flex">
+                  <li className="info_item flex" key={resourceId}>
                     <div className="info flex">
                       <i className={icon}></i>
                       <div className="info_details flex_col">
@@ -231,7 +231,7 @@ const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
           </ul>
         </div>
       </div>
-      <PhotoList screen="profile_about_screen" user={user}/>
+      <PhotoList screen="profile_about_screen" user={user} />
       <FriendList user={user} screen="profile_about_screen" />
       {isModalOpen && <Modal setIsOpenModal={setIsModalOpen}>{modalContent}</Modal>}
     </div>

@@ -109,7 +109,11 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
       </div>
       <ul className={`images ${getImagesClass(images)}`}>
         {images?.map((image, index) => (
-          <li className={`image${index + 1}`} onClick={() => imageModalHandler(image?.imageId)}>
+          <li
+            className={`image${index + 1}`}
+            onClick={() => imageModalHandler(image?.imageId)}
+            key={image?.imageId}
+          >
             <img
               crossOrigin="anonymous"
               src={image?.image?.startsWith('http') ? image?.image : `${BASE_URL}/${image?.image}`}
@@ -151,6 +155,7 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
                 {images?.map((image) => (
                   <Slider.Item
                     item={image}
+                    key={image?.imageId}
                     button_controls={true}
                     isFullScreen={isModalSliderFullScreen}
                     setIsFullScreen={setIsModalSliderFullScreen}

@@ -17,7 +17,6 @@ import useTypedSelector from '../../../hooks/useTypedSelector';
 import NewPostType from '../../../types/NewPostType';
 import UserType from '../../../types/UserType';
 import getPostImagesClass from '../../../utils/getPostImagesClass';
-
 import './styles/PostCreateCard.css';
 import ResizableTextBox from '../../../components/ResizableTextBox';
 
@@ -33,11 +32,9 @@ const PostCreateCard: React.FC = () => {
   const [taggedFriendsList, setTaggedFriendsList] = useState<UserType[]>([]);
 
   const { user } = useTypedSelector((state) => state.userDetails);
-
   const { success: successImagesUpload, postImages: uploadedPostImages } = useTypedSelector(
     (state) => state.postImagesUpload
   );
-
   const { locations } = useTypedSelector((state) => state.locationsList);
   const { friends } = useTypedSelector((state) => state.friendsList);
 
@@ -68,6 +65,7 @@ const PostCreateCard: React.FC = () => {
     newPost?.images?.length && dispatch(createPost(user?.userId, newPost));
     setIsModalOpen(false);
   };
+  
   useEffect(() => {
     if (successImagesUpload) {
       setNewPost({ ...newPost, images: uploadedPostImages });
@@ -166,7 +164,7 @@ const PostCreateCard: React.FC = () => {
                   <div className="images_container">
                     <ul className={`images ${getPostImagesClass(newPost?.images)}`}>
                       {newPost?.images.map((image, index) => (
-                        <li className={`image${index + 1}`}>
+                        <li className={`image${index + 1}`} key={index}>
                           <img
                             crossOrigin="anonymous"
                             src={
@@ -199,7 +197,11 @@ const PostCreateCard: React.FC = () => {
           ) : section === 'feelings' ? (
             <ul className="post_create_feelings">
               {feelingsList.map((feeling) => (
-                <li className="feeling flex" onClick={() => addFeelingHandler(feeling)}>
+                <li
+                  className="feeling flex"
+                  onClick={() => addFeelingHandler(feeling)}
+                  key={feeling?.icon}
+                >
                   <div className="icon flex">
                     <i className={feeling.icon}></i>
                   </div>
@@ -220,7 +222,7 @@ const PostCreateCard: React.FC = () => {
                   <h4>TAGGED</h4>
                   <ul className="flex">
                     {taggedFriendsList.map((taggedFriend) => (
-                      <li className="flex">
+                      <li className="flex" key={taggedFriend?.userId}>
                         <span>{`${taggedFriend?.firstName} ${taggedFriend?.lastName}`}</span>
                         <Button classes="icon" onClick={() => tagFriendRemoveHandler(taggedFriend)}>
                           <i className="fa fa-times" />
@@ -235,7 +237,11 @@ const PostCreateCard: React.FC = () => {
               <ul className="friends_tag flex_col">
                 {friends?.length ? (
                   friends.map((friend) => (
-                    <li className="friend flex" onClick={() => tagFriendHandler(friend)}>
+                    <li
+                      className="friend flex"
+                      onClick={() => tagFriendHandler(friend)}
+                      key={friend?.userId}
+                    >
                       <Avatar
                         imageUrl={friend?.avatar}
                         firstName={friend?.firstName}
@@ -259,7 +265,11 @@ const PostCreateCard: React.FC = () => {
               <ul className="locations flex_col">
                 {locations?.length ? (
                   locations?.map((location) => (
-                    <li className="location flex" onClick={() => addLocationHandler(location)}>
+                    <li
+                      className="location flex"
+                      onClick={() => addLocationHandler(location)}
+                      key={location?.locationId}
+                    >
                       <div className="icon flex">
                         <i className="fa fa-map"></i>
                       </div>

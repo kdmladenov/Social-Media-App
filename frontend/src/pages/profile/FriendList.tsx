@@ -15,8 +15,9 @@ import Pagination from '../../components/Pagination';
 
 import './styles/FriendList.css';
 import Modal from '../../components/Modal';
+import UserType from '../../types/UserType';
 
-const FriendList: React.FC<{ screen: string }> = ({ screen = '' }) => {
+const FriendList: React.FC<{ screen: string; user: UserType }> = ({ screen = '', user }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -29,6 +30,9 @@ const FriendList: React.FC<{ screen: string }> = ({ screen = '' }) => {
 
   const { loading, error, friends } = useTypedSelector((state) => state.friendsList);
   const { success: unfriendSuccess } = useTypedSelector((state) => state.friendUnfriend);
+  const { userInfo } = useTypedSelector((state) => state.userLogin);
+
+  
 
   const unfriendHandler = (friendUserId: number, messageEnding: string) => {
     setIsModalOpen(true);
@@ -44,15 +48,15 @@ const FriendList: React.FC<{ screen: string }> = ({ screen = '' }) => {
 
   useEffect(() => {
     const { page, pageSize, sort, search } = endpoint;
-    dispatch(listFriends(`${page}${pageSize}${sort}${search}`));
-  }, [dispatch, endpoint, unfriendSuccess]);
+    dispatch(listFriends(`${page}${pageSize}${sort}${search}`, user?.userId));
+  }, [dispatch, endpoint, unfriendSuccess, user?.userId]);
 
   return (
     <div className={`friend_list card flex_col ${screen}`}>
       <div className="header flex">
         <div className="friends_info flex_col">
           <h1 onClick={() => navigate('/profile/friends')}>Friends</h1>
-          <h3>{`${friends?.length ? friends?.[0].totalDBItems : 0} friends`}</h3>
+          <h3>{`${user?.friends?.length} friends`}</h3>
         </div>
         {screen === 'profile_friends_screen' && (
           <HeaderControls
@@ -63,21 +67,23 @@ const FriendList: React.FC<{ screen: string }> = ({ screen = '' }) => {
             sortOptionsMap={friendsListSortOptionsMap}
           />
         )}
-        <Button
-          classes="text"
-          onClick={() =>
-            navigate(screen === 'profile_friends_screen' ? '/friends' : '/profile/friends')
-          }
-        >
-          {screen === 'profile_friends_screen' ? 'Friends Details' : 'See All Friends'}
-        </Button>
+        {userInfo?.userId === user?.userId && (
+          <Button
+            classes="text"
+            onClick={() =>
+              navigate(screen === 'profile_friends_screen' ? '/friends' : '/profile/friends')
+            }
+          >
+            {screen === 'profile_friends_screen' ? 'Friends Details' : 'See All Friends'}
+          </Button>
+        )}
       </div>
       <ul>
         {friends?.length > 0 ? (
           friends.map((friend) => (
             <li
               className={`friend ${screen === 'profile_posts_screen' ? 'flex_col' : 'flex'}`}
-              key={friend.userId}
+              key={friend?.userId}
             >
               <Avatar
                 imageUrl={friend.avatar}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Accordion from '../../components/Accordion';
 import Avatar from '../../components/Avatar';
 import { listFriends } from '../../context/actions/friendsActions';
@@ -9,6 +10,7 @@ import './styles/SidebarRight.css';
 
 const SidebarRight: React.FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [friendsListSuccess, setFriendsListSuccess] = useState<boolean>(false);
   const [birthdayList, setBirthdayList] = useState<FriendType[]>([]);
 
@@ -31,7 +33,7 @@ const SidebarRight: React.FC = () => {
 
   return (
     <section className="sidebar_right">
-      <Accordion key="user">
+      <Accordion>
         <Accordion.Item isOpen={true}>
           <Accordion.Header>
             <Accordion.Title>
@@ -56,12 +58,14 @@ const SidebarRight: React.FC = () => {
           </Accordion.Header>
           <Accordion.Body>
             {friends?.map((friend) => (
-              <Avatar
-                imageUrl={friend.avatar}
-                firstName={friend.firstName}
-                lastName={friend.lastName}
-                key={friend.userId}
-              />
+              <li onClick={() => navigate(`/profile/${friend.userId}/posts`)} key={friend?.userId}>
+                <Avatar
+                  imageUrl={friend.avatar}
+                  firstName={friend.firstName}
+                  lastName={friend.lastName}
+                  key={friend.userId}
+                />
+              </li>
             ))}
           </Accordion.Body>
         </Accordion.Item>

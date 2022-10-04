@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Button from '../../components/Button';
 import useTypedSelector from '../../hooks/useTypedSelector';
@@ -151,9 +151,9 @@ const SavedPostsPage = () => {
           <div className="menu_header">
             {section &&
               collections?.length &&
-              collections.map((_) => (
+              collections.map((_, index) => (
                 <>
-                  <Button classes="icon flex" onClick={() => setSection('')}>
+                  <Button classes="icon flex" onClick={() => setSection('')} key={index}>
                     <i className="fas fa-arrow-left" />
                   </Button>
 
@@ -217,9 +217,8 @@ const SavedPostsPage = () => {
             {savedPosts
               .filter((post) => (section ? post.collection === section : true))
               .map((post) => (
-                <li className="saved_post_card">
+                <li className="saved_post_card" key={post.postId}>
                   <PostCard
-                    key={post.postId}
                     post={post}
                     dropDown={postCardDropdown(post?.postId)}
                     screen="saved_posts"

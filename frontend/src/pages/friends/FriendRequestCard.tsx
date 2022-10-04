@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BASE_URL } from '../../data/constants';
 import getMutualFriends from '../../utils/getMutualFriends';
 import useTypedSelector from '../../hooks/useTypedSelector';
-import UserType, { UserShortType } from '../../types/UserType';
+import { UserShortType } from '../../types/UserType';
 import {
   createFriendRequest,
   unfriendFriend,
@@ -93,7 +93,10 @@ const FriendRequestCard: React.FC<{ user: UserShortType; horizontal?: boolean; t
     );
   };
   return (
-    <li className={`friend_request_card card ${type} ${horizontal ? 'horizontal' : ''}`}>
+    <li
+      className={`friend_request_card card ${type} ${horizontal ? 'horizontal' : ''}`}
+      key={user?.userId}
+    >
       <div className="request_avatar">
         <img
           src={user?.avatar?.startsWith('http') ? user?.avatar : `${BASE_URL}/${user?.avatar}`}
@@ -111,14 +114,13 @@ const FriendRequestCard: React.FC<{ user: UserShortType; horizontal?: boolean; t
               <div className="friends_avatars flex">
                 {mutualFriends.slice(0, 4).map((friend, index) => (
                   <Popover
-                    header={
-                      <Avatar classes="image_only small" imageUrl={friend?.avatar} key={index} />
-                    }
+                    header={<Avatar classes="image_only small" imageUrl={friend?.avatar} />}
                     direction="top"
+                    key={index}
                   >
                     <>
                       <div className="avatar_container flex">
-                        <Avatar classes="image_only big" imageUrl={friend?.avatar} key={index} />
+                        <Avatar classes="image_only big" imageUrl={friend?.avatar} />
                       </div>
                       <div className="popover_info flex_col">
                         <h3>{`${friend?.firstName} ${friend?.lastName}`}</h3>

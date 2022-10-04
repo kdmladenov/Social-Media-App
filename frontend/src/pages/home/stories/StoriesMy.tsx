@@ -7,7 +7,7 @@ import Loader from '../../../components/Loader';
 import Message from '../../../components/Message';
 import Modal from '../../../components/Modal';
 import Slider from '../../../components/Slider';
-import {  listMyStories } from '../../../context/actions/storyActions';
+import { listMyStories } from '../../../context/actions/storyActions';
 import { BASE_URL } from '../../../data/constants';
 import defaultEndpoint from '../../../data/inputs/defaultEndpoint';
 import useTypedSelector from '../../../hooks/useTypedSelector';
@@ -17,7 +17,6 @@ import './styles/StoriesMy.css';
 
 const StoriesMy = () => {
   const dispatch = useDispatch();
-
   const [endpoint, setEndpoint] = useState(defaultEndpoint['storiesMy']);
   const [selectedStoryIndex, setSelectedStoryIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,43 +29,18 @@ const StoriesMy = () => {
   };
 
   useEffect(() => {
-    // dispatch({ type: STORY_CREATE_RESET });
-    // if (userInfo?.role !== 'admin') {
-    //   navigate('/login');
-    // }
-    // if (successCreate) {
-    //   navigate(`/admin/products/${createdStory.storyId}/edit/details`);
-    // } else {
+    const { page, pageSize, sort, search } = endpoint;
+    dispatch(listMyStories(`${page}${pageSize}${sort}${search}`));
 
- 
-      const { page, pageSize, sort, search } = endpoint;
-      dispatch(listMyStories(`${page}${pageSize}${sort}${search}`));
-    
     // }
-  }, [
-    dispatch,
-    // navigate,
-    // userInfo,
-    // successDelete,
-    // successRestore,
-
-    // createdPost,
-    endpoint
-  ]);
+  }, [dispatch, endpoint]);
 
   return (
     <section className="stories_my">
       {loading ? (
-        //  || loadingDelete || loadingRestore || loadingCreate
         <Loader />
       ) : error ? (
-        // || errorDelete || errorRestore || errorCreate
-        <Message type="error">
-          {
-            error
-            // || errorDelete || errorRestore || errorCreate
-          }
-        </Message>
+        <Message type="error">{error}</Message>
       ) : stories?.length > 0 ? (
         <Carousel>
           <ul>
@@ -74,7 +48,7 @@ const StoriesMy = () => {
             {stories.map((story) => (
               <li
                 className="story_card card"
-                key={story.storyId}
+                key={story?.storyId}
                 onClick={() => storyModalHandler(story.storyId)}
               >
                 <div className="story_image">
@@ -119,6 +93,7 @@ const StoriesMy = () => {
                         stories.findIndex((item) => item.storyId === story.storyId)
                       )
                     }
+                    key={story?.storyId}
                   >
                     <Avatar
                       classes="big"
@@ -140,7 +115,7 @@ const StoriesMy = () => {
                 setSlideIndex={setSelectedStoryIndex}
               >
                 {stories?.map((story) => (
-                  <Slider.Item item={story}/>
+                  <Slider.Item item={story} key={story?.storyId}/>
                 ))}
               </Slider>
             </div>

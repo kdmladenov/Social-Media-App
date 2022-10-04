@@ -55,6 +55,7 @@ const PhotoList: React.FC<{ screen: string, user: UserType }> = ({ screen = '', 
             alt={photo.image || 'image'}
             crossOrigin="anonymous"
             onClick={() => imageModalHandler(photo?.imageId)}
+            key={photo?.imageId}
           />
         ))}
       </div>
@@ -73,7 +74,7 @@ const PhotoList: React.FC<{ screen: string, user: UserType }> = ({ screen = '', 
               setSlideIndex={setSelectedPostImageIndex}
             >
               {userImages?.map((image) => (
-                <Slider.Item item={image} button_controls={true} />
+                <Slider.Item item={image} button_controls={true} key={image?.imageId}/>
               ))}
             </Slider>
           </div>

@@ -38,11 +38,11 @@ const LoginScreen: React.FC = () => {
           screen="login"
         />
         <div className="registerRedirect">
-          New Customer?
-          <Link to={redirect ? `/register?redirect=${redirect}` : '/register'}> Register</Link>
+          <span>New Customer ? </span>
+          <Link to={redirect ? `/register?redirect=${redirect}` : '/register'}>Register</Link>
         </div>
         <div className="registerRedirect">
-          Forgot your password?
+          <span>Forgot your password ? </span>
           <Link to={redirect ? `/forgotPassword?redirect=${redirect}` : '/forgotPassword'}>
             Reset
           </Link>

@@ -74,49 +74,6 @@
   text-align: center;
 }
 
-/* Button Dropdown */
-.profile_about .profile_about_card .profile_info li .dropdown {
-  justify-content: flex-end;
-}
-
-.profile_about .profile_about_card .profile_info li .dropdown .body::before {
-  right: 5px;
-}
-
-.profile_about .profile_about_card .profile_info li .dropdown .tooltip button.info_item_btn {
-  background: var(--gray_background);
-  padding: 0;
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-}
-
-.profile_about .profile_about_card .profile_info li .dropdown .body.show {
-  top: calc(100% + 5px);
-  width: fit-content;
-  min-width: 250px;
-  border: none;
-}
-
-.profile_about .profile_about_card .profile_info li .dropdown .body.show:before {
-  border: none;
-  background-color: transparent;
-}
-
-.profile_about .profile_about_card .profile_info li .dropdown .body.show .menu_info_item li {
-  width: 100%;
-  gap: 10px;
-  justify-content: flex-start;
-  padding: 0 10px;
-}
-.profile_about .profile_about_card .profile_info li .dropdown .body.show .menu_info_item li:hover {
-  cursor: pointer;
-}
-
-.profile_about .profile_about_card .profile_info li .dropdown .body.show .menu_info_item li i {
-  font-size: 18px;
-  width: 20px;
-}
 
 /* Add Item button */
 .profile_about .profile_about_card .profile_info li button.add_profile_info {

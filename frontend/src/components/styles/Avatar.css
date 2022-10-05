@@ -71,6 +71,7 @@
 .avatar.image_only {
   height: 34px;
   width: 34px;
+  gap: 0;
 }
 
 .avatar.image_only .name {

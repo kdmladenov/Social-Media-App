@@ -13,7 +13,7 @@ header {
   top: 0;
   z-index: 100;
   padding: 0 10px;
-  /* overflow: hidden; */
+
 }
 
 /* Logo and search bar (left side) */
@@ -33,10 +33,9 @@ header .header_logo {
 }
 
 header .search {
-  display: flex;
-  justify-content: center;
-  align-self: flex-start;
-  margin-top: 12px;
+  position: relative;
+  height: 36px;
+  width: 250px;
 }
 /* Button navigation (middle) */
 

@@ -1,22 +1,27 @@
-.photo_list {
+.photo_list_container {
   padding: 15px;
+  height: fit-content;
 }
 
-.photo_list .header {
+.photo_list_container .header {
   width: 100%;
   justify-content: space-between;
   padding: 10px;
 }
 
-.photo_list .header h1 {
+.photo_list_container .header_controls {
+  border: none;
+}
+
+.photo_list_container .header h1 {
   font-size: 25px;
 }
 
-.photo_list .header button {
+.photo_list_container .header button {
   font-size: 17px;
 }
 
-.photo_list .photo_list {
+.photo_list_container .photo_list {
   display: grid;
   grid-template-columns: repeat(6, 185px);
   grid-auto-rows: 185px;
@@ -24,9 +29,9 @@
   padding: 0;
 }
 
-.photo_list.profile_posts_screen .photo_list {
+.photo_list_container.profile_posts_screen .photo_list {
   grid-template-columns: repeat(3, 150px);
-  grid-template-rows: repeat(3, 150px);
+  grid-auto-rows: 150px;
   overflow: clip;
   border-radius: 10px;
   gap: 5px;
@@ -38,7 +43,11 @@
   border-radius: 10px;
 }
 
-.photo_list.profile_posts_screen img {
+.photo_list img:hover {
+  cursor: pointer;
+}
+
+.photo_list_container.profile_posts_screen img {
   height: 150px;
   width: 150px;
   object-fit: cover;
@@ -85,12 +94,26 @@
   position: relative;
 }
 
-#modal .modal_container.images_list .images_container .slider_container ul li .slide_container .image {
+#modal
+  .modal_container.images_list
+  .images_container
+  .slider_container
+  ul
+  li
+  .slide_container
+  .image {
   z-index: 100;
   overflow: scroll;
 }
 
-#modal .modal_container.images_list .images_container .slider_container li .slide_container .image img {
+#modal
+  .modal_container.images_list
+  .images_container
+  .slider_container
+  li
+  .slide_container
+  .image
+  img {
   object-fit: contain;
 }
 
@@ -104,12 +127,12 @@
 }
 
 #modal .modal_container.images_list button.close_modal_btn {
-    height: 40px;
-    width: 40px;
-    font-size: 25px;
-    position: absolute;
-    top: 20px;
-    right: auto;
-    left: 10px;
-    background: transparent;
+  height: 40px;
+  width: 40px;
+  font-size: 25px;
+  position: absolute;
+  top: 20px;
+  right: auto;
+  left: 10px;
+  background: transparent;
 }

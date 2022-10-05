@@ -18,3 +18,12 @@
 .login_screen .login_container .form_component .wrapper {
   height: 36px;
 }
+
+.login_screen a {
+  color: blue;
+  text-decoration: none;
+}
+
+.login_screen a:hover {
+  text-decoration: underline;
+}

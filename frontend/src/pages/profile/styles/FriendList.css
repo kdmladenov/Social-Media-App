@@ -4,7 +4,7 @@
   width: 100%;
 }
 
-.friend_list .header {
+.friend_list > .header {
   width: 100%;
   justify-content: space-between;
   align-items: flex-start;

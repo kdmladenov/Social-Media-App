@@ -66,7 +66,7 @@ export const listMyPosts =
       };
 
       const { data } = await axios.get(`${BASE_URL}/posts?${endpoint}`, config);
-      console.log(data, 'data');
+
       dispatch({
         type: POST_MY_LIST_SUCCESS,
         payload: data
@@ -319,16 +319,15 @@ export const createPost =
         }
       };
 
-      console.log(createPostData, 'createPostData');
       const { data } = await axios.post(`${BASE_URL}/posts`, createPostData, config);
-      // console.log(newPost, 'newPost');
+
       // Empty post created and Images have been successfully uploaded or image address is available
       // const { data: newPostImages } = await axios.post(
       //   `${BASE_URL}/images/${newPost.postId}/posts`,
       //   { images },
       //   config
       // );
-      console.log(data, 'createdPost');
+
       dispatch({
         type: POST_CREATE_SUCCESS,
         payload: data

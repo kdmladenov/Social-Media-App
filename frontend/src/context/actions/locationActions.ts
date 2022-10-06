@@ -27,7 +27,6 @@ export const getLocationDetails =
         type: LOCATION_DETAILS_REQUEST
       });
 
-      // access to the logged in user info
       const {
         userLogin: { userInfo }
       } = getState();
@@ -38,7 +37,7 @@ export const getLocationDetails =
         }
       };
 
-      const { data } = await axios.get(`${BASE_URL}/location/${locationId}`, config);
+      const { data } = await axios.get(`${BASE_URL}/locations/${locationId}`, config);
 
       dispatch({
         type: LOCATION_DETAILS_SUCCESS,
@@ -63,7 +62,7 @@ export const listAllLocations =
       dispatch({
         type: LOCATION_LIST_REQUEST
       });
-      // access to the logged in user info
+
       const {
         userLogin: { userInfo }
       } = getState();
@@ -73,9 +72,9 @@ export const listAllLocations =
           Authorization: `Bearer ${userInfo.token}`
         }
       };
-      console.log(endpoint, 'endpoint');
+
       const { data } = await axios.get(`${BASE_URL}/locations?${endpoint}`, config);
-      console.log(data, 'data');
+
       dispatch({
         type: LOCATION_LIST_SUCCESS,
         payload: data

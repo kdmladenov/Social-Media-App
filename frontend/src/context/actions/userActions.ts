@@ -146,14 +146,13 @@ export const register =
   };
 
 export const getUserDetails =
-  (userId: number) =>
+  (userId?: number) =>
   async (dispatch: Dispatch<UserDetailsActionType>, getState: () => StoreType) => {
     try {
       dispatch({
         type: USER_DETAILS_REQUEST
       });
 
-      // access to the logged in user info
       const {
         userLogin: { userInfo }
       } = getState();
@@ -164,7 +163,10 @@ export const getUserDetails =
         }
       };
 
-      const { data } = await axios.get(`${BASE_URL}/users/${userId}`, config);
+      const { data } = await axios.get(
+        `${BASE_URL}/users/${userId ? userId : userInfo?.userId}`,
+        config
+      );
 
       dispatch({
         type: USER_DETAILS_SUCCESS,
@@ -226,7 +228,7 @@ export const listUsers =
       dispatch({
         type: USER_LIST_REQUEST
       });
-      // access to the logged in user info
+
       const {
         userLogin: { userInfo }
       } = getState();
@@ -262,7 +264,7 @@ export const deleteUser =
       dispatch({
         type: USER_DELETE_REQUEST
       });
-      // access to the logged in user info
+
       const {
         userLogin: { userInfo }
       } = getState();
@@ -297,7 +299,7 @@ export const restoreUser =
       dispatch({
         type: USER_RESTORE_REQUEST
       });
-      // access to the logged in user info
+
       const {
         userLogin: { userInfo }
       } = getState();
@@ -517,7 +519,7 @@ export const forgotPassword =
         }
       };
 
-      await axios.post(`${BASE_URL}/users/forgotten-password`, email, config);
+      await axios.post(`${BASE_URL}/users/password/forgotten`, email, config);
 
       dispatch({
         type: FORGOTTEN_PASSWORD_SUCCESS
@@ -546,7 +548,7 @@ export const resetPassword =
       };
 
       const { data } = await axios.post(
-        `${BASE_URL}/users/reset-password/${userId}/${token}`,
+        `${BASE_URL}/users/password/reset/${userId}/${token}`,
         { password, reenteredPassword },
         config
       );
@@ -567,37 +569,41 @@ export const resetPassword =
     }
   };
 
-  export const listUserImages =
-    (userId: number) => async (dispatch: Dispatch<UserImagesListActionType>, getState: () => StoreType) => {
-      try {
+export const listUserImages =
+  (endpoint = '', userId: number) =>
+  async (dispatch: Dispatch<UserImagesListActionType>, getState: () => StoreType) => {
+    try {
+      dispatch({
+        type: USER_IMAGES_LIST_REQUEST
+      });
+
+      const {
+        userLogin: { userInfo }
+      } = getState();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      };
+
+      const { data } = await axios.get(
+        `${BASE_URL}/images/users/${userId ? userId : userInfo?.userId}?${endpoint}`,
+        config
+      );
+
+      dispatch({
+        type: USER_IMAGES_LIST_SUCCESS,
+        payload: [...data]
+      });
+    } catch (error) {
+      axios.isAxiosError(error) &&
         dispatch({
-          type: USER_IMAGES_LIST_REQUEST
+          type: USER_IMAGES_LIST_FAIL,
+          payload:
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message
         });
-        // access to the logged in user info
-        const {
-          userLogin: { userInfo }
-        } = getState();
-
-        const config = {
-          headers: {
-            Authorization: `Bearer ${userInfo.token}`
-          }
-        };
-
-        const { data } = await axios.get(`${BASE_URL}/images/${userId}/users`, config);
-
-        dispatch({
-          type: USER_IMAGES_LIST_SUCCESS,
-          payload: data
-        });
-      } catch (error) {
-        axios.isAxiosError(error) &&
-          dispatch({
-            type: USER_IMAGES_LIST_FAIL,
-            payload:
-              error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message
-          });
-      }
-    };
+    }
+  };

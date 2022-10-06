@@ -33,7 +33,7 @@ export const createWorkplace =
     try {
       dispatch({ type: WORKPLACE_CREATE_REQUEST });
 
-      // access to the logged in user info
+
       const {
         userLogin: { userInfo }
       } = getState();
@@ -68,7 +68,6 @@ export const getWorkplaceDetails =
         type: WORKPLACE_DETAILS_REQUEST
       });
 
-      // access to the logged in user info
       const {
         userLogin: { userInfo }
       } = getState();
@@ -145,7 +144,7 @@ export const listWorkplaces =
       dispatch({
         type: WORKPLACE_LIST_REQUEST
       });
-      // access to the logged in user info
+
       const {
         userLogin: { userInfo }
       } = getState();
@@ -181,7 +180,7 @@ export const deleteWorkplace =
       dispatch({
         type: WORKPLACE_DELETE_REQUEST
       });
-      // access to the logged in user info
+
       const {
         userLogin: { userInfo }
       } = getState();

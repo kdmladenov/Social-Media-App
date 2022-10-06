@@ -145,7 +145,7 @@ export const listSchools =
       dispatch({
         type: SCHOOL_LIST_REQUEST
       });
-      // access to the logged in user info
+
       const {
         userLogin: { userInfo }
       } = getState();

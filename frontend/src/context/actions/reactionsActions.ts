@@ -120,7 +120,6 @@ export const listPostsReactions =
           Authorization: `Bearer ${userInfo.token}`
         }
       };
-
       const { data } = await axios.get(`${BASE_URL}/reactions/post/${postId}`, config);
 
       dispatch({ type: REACTIONS_POST_LIST_SUCCESS, payload: { reactions: data, postId } });
@@ -488,7 +487,7 @@ export const deleteCommentReaction =
             Authorization: `Bearer ${userInfo.token}`
           }
         };
-
+console.log('aaaaaaaaaaa')
         const { data } = await axios.post(
           `${BASE_URL}/reactions-images/image-comments/${commentId}`,
           { reactionName },
@@ -568,7 +567,7 @@ export const deleteCommentReaction =
         };
 
         const { data } = await axios.put(
-          `${BASE_URL}/reactions-images/image-comments${reactionId}`,
+          `${BASE_URL}/reactions-images/image-comments/${reactionId}`,
           { reactionName },
           config
         );
@@ -604,7 +603,7 @@ export const deleteCommentReaction =
           }
         };
 
-        await axios.delete(`${BASE_URL}/reactions-images/image-comments${reactionId}`, config);
+        await axios.delete(`${BASE_URL}/reactions-images/image-comments/${reactionId}`, config);
 
         dispatch({ type: REACTIONS_POST_IMAGE_COMMENT_DELETE_SUCCESS });
       } catch (error) {

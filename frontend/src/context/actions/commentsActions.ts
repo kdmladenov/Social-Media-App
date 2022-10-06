@@ -2,7 +2,6 @@ import axios from 'axios';
 import { Dispatch } from 'redux';
 
 import { BASE_URL } from '../../data/constants';
-import CommentType from '../../types/CommentType';
 import CommentCreateActionType from '../../types/context/actions/CommentCreateActionType';
 import CommentDeleteActionType from '../../types/context/actions/CommentDeleteActionType';
 import CommentEditActionType from '../../types/context/actions/CommentEditActionType';

@@ -70,7 +70,7 @@ export const createFriendRequest =
   };
 
 export const listFriends =
-  (endpoint = '') =>
+  (endpoint = '', userId?: number) =>
   async (dispatch: Dispatch<FriendsListActionType>, getState: () => StoreType) => {
     try {
       dispatch({
@@ -87,7 +87,10 @@ export const listFriends =
         }
       };
 
-      const { data } = await axios.get(`${BASE_URL}/friends?${endpoint}`, config);
+      const { data } = await axios.get(
+        `${BASE_URL}/friends/${userId ? userId : userInfo?.userId}?${endpoint}`,
+        config
+      );
 
       dispatch({
         type: FRIENDS_LIST_SUCCESS,
@@ -122,7 +125,7 @@ export const listFriendRequests =
         }
       };
 
-      const { data } = await axios.get(`${BASE_URL}/friends/requests`, config);
+      const { data } = await axios.get(`${BASE_URL}/friends/requests/all`, config);
 
       dispatch({
         type: FRIENDS_REQUESTS_LIST_SUCCESS,
@@ -157,7 +160,7 @@ export const listFriendsSuggestions =
         }
       };
 
-      const { data } = await axios.get(`${BASE_URL}/friends/suggestions`, config);
+      const { data } = await axios.get(`${BASE_URL}/friends/suggestions/all`, config);
 
       dispatch({
         type: FRIENDS_SUGGESTIONS_LIST_SUCCESS,

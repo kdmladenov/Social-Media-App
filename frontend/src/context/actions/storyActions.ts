@@ -52,7 +52,7 @@ export const listMyStories =
   async (dispatch: Dispatch<StoriesMyListActionType>, getState: () => StoreType) => {
     try {
       dispatch({ type: STORY_MY_LIST_REQUEST });
-      // access to the logged in user info
+
       const {
         userLogin: { userInfo }
       } = getState();
@@ -69,7 +69,7 @@ export const listMyStories =
         type: STORY_MY_LIST_SUCCESS,
         payload: data
       });
-      
+
       // // update localStorage totalMyStoryCount
       // if (
       //   !localStorage.getItem('totalMyStoryCount') ||
@@ -192,16 +192,90 @@ export const restoreStory =
     }
   };
 
+// export const createStory =
+//   (_: number, storyData: StoryType) =>
+//   async (dispatch: Dispatch<StoryCreateActionType>, getState: () => StoreType) => {
+//     try {
+//       dispatch({
+//         type: STORY_CREATE_REQUEST
+//       });
+//       const {
+//         userLogin: { userInfo }
+//       } = getState();
+
+//       const config = {
+//         headers: {
+//           'Content-Type': 'application/json',
+//           Authorization: `Bearer ${userInfo.token}`
+//         }
+//       };
+
+//       const { data } = await axios.post(`${BASE_URL}/stories`, storyData, config);
+
+//       dispatch({
+//         type: STORY_CREATE_SUCCESS,
+//         payload: data
+//       });
+//       // for Sidebar input map
+//       const { data: allStoryList } = await axios.get(
+//         `${BASE_URL}/stories?pageSize=${localStorage.getItem('totalMyStoryCount')}`
+//       );
+//       localStorage.setItem('allStoriesList', JSON.stringify(allStoryList));
+//     } catch (error) {
+//       axios.isAxiosError(error) &&
+//         dispatch({
+//           type: STORY_CREATE_FAIL,
+//           payload:
+//             error.response && error.response.data.message
+//               ? error.response.data.message
+//               : error.message
+//         });
+//     }
+//   };
+
 export const createStory =
-  (_: number, storyData: StoryType) =>
+  (
+    userId: number,
+    mode: string,
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.MouseEvent<HTMLButtonElement>
+      | React.KeyboardEvent<HTMLInputElement>
+      | React.DragEvent<HTMLDivElement>,
+    imageAddress?: string
+  ) =>
   async (dispatch: Dispatch<StoryCreateActionType>, getState: () => StoreType) => {
+    // mode: 'file_upload' or 'add_image_url'
+    let image = imageAddress || '';
+
     try {
       dispatch({
         type: STORY_CREATE_REQUEST
       });
+
       const {
         userLogin: { userInfo }
       } = getState();
+
+      if (mode === 'file_upload') {
+        // Case file upload
+        const file =
+          (event.target as HTMLInputElement).files?.[0] ||
+          (event as React.DragEvent<HTMLDivElement>).dataTransfer.files?.[0];
+        const formData = new FormData();
+        formData.append('story', file);
+
+        const config = {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${userInfo.token}`
+          }
+        };
+
+        const { data } = await axios.post(`${BASE_URL}/images/stories/upload`, formData, config);
+
+        image = data?.image;
+      }
 
       const config = {
         headers: {
@@ -210,17 +284,12 @@ export const createStory =
         }
       };
 
-      const { data } = await axios.post(`${BASE_URL}/stories`, storyData, config);
+      const { data } = await axios.post(`${BASE_URL}/stories/${userId}`, { image }, config);
 
       dispatch({
         type: STORY_CREATE_SUCCESS,
         payload: data
       });
-      // for Sidebar input map
-      const { data: allStoryList } = await axios.get(
-        `${BASE_URL}/stories?pageSize=${localStorage.getItem('totalMyStoryCount')}`
-      );
-      localStorage.setItem('allStorysList', JSON.stringify(allStoryList));
     } catch (error) {
       axios.isAxiosError(error) &&
         dispatch({
@@ -255,7 +324,11 @@ export const updateStory =
         }
       };
 
-      const { data } = await axios.put(`${BASE_URL}/stories/${storyId}`, updatedStory, config);
+      const { data } = await axios.put(
+        `${BASE_URL}/stories/${userInfo?.userId}/${storyId}`,
+        updatedStory,
+        config
+      );
 
       dispatch({
         type: STORY_UPDATE_SUCCESS,
@@ -283,76 +356,76 @@ export const updateStory =
     }
   };
 
-export const uploadStoryImage =
-  (
-    storyId: number,
-    mode: string,
-    event:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.MouseEvent<HTMLButtonElement>
-      | React.KeyboardEvent<HTMLInputElement>,
+// export const uploadStoryImage =
+//   (
+//     storyId: number,
+//     mode: string,
+//     event:
+//       | React.ChangeEvent<HTMLInputElement>
+//       | React.MouseEvent<HTMLButtonElement>
+//       | React.KeyboardEvent<HTMLInputElement>,
 
-    imageAddress?: string
-  ) =>
-  async (dispatch: Dispatch<StoryImageUploadActionType>, getState: () => StoreType) => {
-    // mode: 'file_upload' or 'add_image_url'
-    let imageUrl = imageAddress || '';
+//     imageAddress?: string
+//   ) =>
+//   async (dispatch: Dispatch<StoryImageUploadActionType>, getState: () => StoreType) => {
+//     // mode: 'file_upload' or 'add_image_url'
+//     let imageUrl = imageAddress || '';
 
-    try {
-      dispatch({
-        type: STORY_IMAGE_UPLOAD_REQUEST
-      });
+//     try {
+//       dispatch({
+//         type: STORY_IMAGE_UPLOAD_REQUEST
+//       });
 
-      const {
-        userLogin: { userInfo }
-      } = getState();
+//       const {
+//         userLogin: { userInfo }
+//       } = getState();
 
-      if (mode === 'file_upload') {
-        // Case file upload
-        const file = (event.target as HTMLInputElement).files?.[0];
-        const formData = new FormData();
-        formData.append('image', file!);
+//       if (mode === 'file_upload') {
+//         // Case file upload
+//         const file = (event.target as HTMLInputElement).files?.[0];
+//         const formData = new FormData();
+//         formData.append('image', file!);
 
-        const config = {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${userInfo.token}`
-          }
-        };
+//         const config = {
+//           headers: {
+//             'Content-Type': 'multipart/form-data',
+//             Authorization: `Bearer ${userInfo.token}`
+//           }
+//         };
 
-        const uploadedImageURL = await axios.post(
-          `${BASE_URL}/stories/images/upload`,
-          formData,
-          config
-        );
+//         const uploadedImageURL = await axios.post(
+//           `${BASE_URL}/stories/images/upload`,
+//           formData,
+//           config
+//         );
 
-        imageUrl = uploadedImageURL.data;
-      }
+//         imageUrl = uploadedImageURL.data;
+//       }
 
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`
-        }
-      };
+//       const config = {
+//         headers: {
+//           'Content-Type': 'application/json',
+//           Authorization: `Bearer ${userInfo.token}`
+//         }
+//       };
 
-      const { data } = await axios.post(`${BASE_URL}/stories/${storyId}/images`, { imageUrl }, config);
+//       const { data } = await axios.post(`${BASE_URL}/stories/${storyId}/images`, { imageUrl }, config);
 
-      dispatch({
-        type: STORY_IMAGE_UPLOAD_SUCCESS,
-        payload: data
-      });
-    } catch (error) {
-      axios.isAxiosError(error) &&
-        dispatch({
-          type: STORY_IMAGE_UPLOAD_FAIL,
-          payload:
-            error.response && error.response.data.message
-              ? error.response.data.message
-              : error.message
-        });
-    }
-  };
+//       dispatch({
+//         type: STORY_IMAGE_UPLOAD_SUCCESS,
+//         payload: data
+//       });
+//     } catch (error) {
+//       axios.isAxiosError(error) &&
+//         dispatch({
+//           type: STORY_IMAGE_UPLOAD_FAIL,
+//           payload:
+//             error.response && error.response.data.message
+//               ? error.response.data.message
+//               : error.message
+//         });
+//     }
+//   };
 
 export const listStoryImages =
   (storyId: number) => async (dispatch: Dispatch<StoryImagesListActionType>) => {

@@ -6,6 +6,7 @@ interface CollectionsListActionRequest {
 interface CollectionsListActionSuccess {
   type: 'COLLECTIONS_LIST_SUCCESS';
   payload: CollectionType[];
+  success?: boolean;
 }
 interface CollectionsListActionError {
   type: 'COLLECTIONS_LIST_FAIL';
@@ -13,6 +14,7 @@ interface CollectionsListActionError {
 }
 interface CollectionsListActionReset {
   type: 'COLLECTIONS_LIST_RESET';
+  success?: boolean;
 }
 
 type CollectionsListActionType =

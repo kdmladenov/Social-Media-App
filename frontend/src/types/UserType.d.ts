@@ -44,8 +44,8 @@ export default UserType;
 
 export interface UserShortType {
   userId: number;
-  firstName: string;
-  lastName: string;
-  avatar: string;
+  firstName?: string;
+  lastName?: string;
+  avatar?: string;
   friends?: { userId: number; firstName: string; lastName: string; avatar: string }[];
 }

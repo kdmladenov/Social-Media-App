@@ -2,6 +2,7 @@ interface ReactionType {
   reactionId: number;
   postId?: number;
   commentId?: number;
+  imageId?: number;
   userId: number;
   authorFirstName: string;
   authorLastName: string;

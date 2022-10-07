@@ -386,6 +386,9 @@ interface StoreType {
     error?: string;
     friendsRequestsList: {
       userId: number;
+      firstName: string;
+      lastName: string;
+      avatar: string;
       requestStatusId: number;
       requestStatus: string;
       createdAt: string | Date;

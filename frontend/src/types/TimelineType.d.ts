@@ -2,14 +2,15 @@ import React from 'react';
 import HistoryType from './HistoryType';
 
 export type TimelineItemType = React.FC<{
-  historyRecord: HistoryType;
-  deleteHistoryItem: (id: number) => void;
   children: React.ReactNode;
+  button: React.ReactNode;
+  text: string;
+  hoverText: string;
 }>;
 
 type TimelineType = React.FC<{
   children: React.ReactNode;
-  horizontal: boolean;
+  horizontal?: boolean;
 }> & { Item: TimelineItemType };
 
 export default TimelineType;

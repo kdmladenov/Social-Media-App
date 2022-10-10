@@ -15,3 +15,9 @@ export const commentsListPageSizeOptionsMap = [
   { label: 6, value: 'pageSize=6&' },
   { label: 12, value: 'pageSize=12&' }
 ];
+
+export const imagesListPageSizeOptionsMap = [
+  { label: 12, value: 'pageSize=12&' },
+  { label: 18, value: 'pageSize=18&' },
+  { label: 24, value: 'pageSize=24&' }
+];

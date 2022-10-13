@@ -6,7 +6,6 @@ import { forgotPassword } from '../../context/actions/userActions';
 import userForgottenPasswordInitialInputState from '../../data/inputs/userForgottenPasswordInitialInputState';
 import validateInputUser from '../../data/validations/userValidator';
 import useTypedSelector from '../../hooks/useTypedSelector';
-
 import './ForgottenPasswordScreen.css';
 
 

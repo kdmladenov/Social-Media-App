@@ -1,6 +1,6 @@
-const rolesEmun = {
+const rolesEnum = {
   basic: 'basic',
   admin: 'admin'
 };
 
-export default rolesEmun;
+export default rolesEnum;

@@ -11,6 +11,9 @@ export const PREVIOUS_SEARCHES_ARRAY_MAX_LENGTH = 5;
 // Slider
 export const SLIDER_IMAGE_1 = 'https://m.media-amazon.com/images/I/61lJ3xlQX2L._SX3000_.jpg';
 
+// Logo
+export const LOGO_URL = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkNqlwu8zxTt1fy6b2lZrYnQVUTTba15IX8Q&usqp=CAU';
+
 // Image gallery zoom
 export const IMAGE_ZOOM_RATIO = 0.3;
 
@@ -122,3 +125,7 @@ export const COLLECTION = {
   MAX_COLLECTION_LENGTH: 1000,
 };
 
+export const STORY = {
+  MIN_MESSAGE_LENGTH: 2,
+  MAX_MESSAGE_LENGTH: 1000
+};

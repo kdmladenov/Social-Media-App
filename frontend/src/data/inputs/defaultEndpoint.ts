@@ -22,8 +22,8 @@ const defaultEndpoint = {
   },
   friendsList: {
     page: 'page=1&',
-    pageSize: 'pageSize=12&',
-    sort: 'sort=firstName desc&',
+    pageSize: 'pageSize=10&',
+    sort: 'sort=firstName asc&',
     filter: [],
     search: ''
   },
@@ -44,6 +44,12 @@ const defaultEndpoint = {
     page: 'page=1&',
     pageSize: 'pageSize=12&',
     sort: 'sort=first_name asc&',
+    search: ''
+  },
+  photoList: {
+    page: 'page=1&',
+    pageSize: 'pageSize=12&',
+    sort: 'sort=createdAt desc&',
     search: ''
   }
 };

@@ -1,39 +1,38 @@
-
- const friendsPageSidebarButtons: { [key: string]: string }[] = [
-   {
-     icon: 'fa fa-user',
-     label: 'Home'
-   },
-   {
-     icon: 'fa fa-user',
-     label: 'Friend Requests Received',
-     nextSection: 'friendRequestsReceived',
-     leftIcon: 'fas fa-arrow-left'
-   },
-   {
-     icon: 'fa fa-user',
-     label: 'Friend Requests Sent',
-     nextSection: 'friendRequestsSent',
-     leftIcon: 'fas fa-arrow-left'
-   },
-   {
-     icon: 'fa fa-user',
-     label: 'Suggestions',
-     nextSection: 'suggestions',
-     leftIcon: 'fas fa-arrow-left'
-   },
-   {
-     icon: 'fa fa-user',
-     label: 'All Friends',
-     nextSection: 'allFriends',
-     leftIcon: 'fas fa-arrow-left'
-   },
-   {
-     icon: 'fa fa-user',
-     label: 'Birthdays',
-     nextSection: 'birthdays',
-     leftIcon: 'fas fa-arrow-left'
-   }
- ];
+const friendsPageSidebarButtons: { [key: string]: string }[] = [
+  {
+    icon: 'fa fa-user',
+    label: 'Home'
+  },
+  {
+    icon: 'fas fa-user-check',
+    label: 'Friend Requests Received',
+    nextSection: 'friendRequestsReceived'
+  },
+  {
+    icon: 'fas fa-user-check',
+    label: 'Friend Requests Sent',
+    nextSection: 'friendRequestsSent'
+  },
+  {
+    icon: 'fas fa-user-tag',
+    label: 'Suggestions',
+    nextSection: 'suggestions'
+  },
+  {
+    icon: 'fas fa-user-friends',
+    label: 'All Friends',
+    nextSection: 'allFriends'
+  },
+  {
+    icon: 'fa fa-history',
+    label: 'Timeline',
+    nextSection: 'timeline'
+  },
+  {
+    icon: 'fa fa-birthday-cake',
+    label: 'Birthdays',
+    nextSection: 'birthdays'
+  }
+];
 
 export default friendsPageSidebarButtons;

@@ -1,14 +1,18 @@
 .sidebar_right {
+  grid-area: right_sidebar;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-end;
   justify-content: flex-start;
   padding: 20px 0;
   width: 100%;
 }
 
 .sidebar_right .accordion {
-  border-radius: 10px 0 0 10px ;
+  width: 100%;
+  min-width: 300px;
+  max-width: 450px;
+  border-radius: 10px 0 0 10px;
   overflow-x: clip;
 }
 

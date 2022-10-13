@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { COMMENT } from '../../../data/constants';
 import getNestedComments from '../../../utils/getNestedComments';
@@ -114,10 +114,30 @@ const PostComments: React.FC<{
     imageComments?.[`${postId}/${imageId}`]?.length ||
     isFormVisible ? (
     <div className="post_comments">
-      {loading || loadingCreate || loadingDelete || loadingEdit ? (
+      {loading ||
+      loadingCreate ||
+      loadingDelete ||
+      loadingEdit ||
+      loadingImageCommentCreate ||
+      loadingImageCommentEdit ||
+      loadingImageCommentDelete ? (
         <Loader />
-      ) : error || errorCreate || errorDelete || errorEdit ? (
-        <Message type="error">{error || errorCreate || errorDelete || errorEdit}</Message>
+      ) : error ||
+        errorCreate ||
+        errorDelete ||
+        errorEdit ||
+        errorImageCommentCreate ||
+        errorImageCommentEdit ||
+        errorImageCommentDelete ? (
+        <Message type="error">
+          {error ||
+            errorCreate ||
+            errorDelete ||
+            errorEdit ||
+            errorImageCommentCreate ||
+            errorImageCommentEdit ||
+            errorImageCommentDelete}
+        </Message>
       ) : (
         <div className="comments_container flex_col">
           <InputBoxWithAvatar

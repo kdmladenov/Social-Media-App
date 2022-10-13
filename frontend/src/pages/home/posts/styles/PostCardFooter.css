@@ -37,6 +37,7 @@
   align-items: center;
   color: var(--gray_dark);
   gap: 5px;
+  font-size: 17px;
 }
 
 .post_footer .footer_button_group > .button_container:hover {

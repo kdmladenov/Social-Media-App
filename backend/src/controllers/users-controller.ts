@@ -222,7 +222,7 @@ usersController
   // @route GET /users/:userId/change-password',
   // @access Private - logged user
   .patch(
-    '/:userId/change-password',
+    '/:userId/password/change',
     authMiddleware,
     loggedUserGuard,
     validateBody('user', updatePasswordSchema),
@@ -253,11 +253,12 @@ usersController
 
   // Forgotten password with mail password reset
   .post(
-    '/forgotten-password',
+    '/password/forgotten',
     validateBody('user', forgottenPasswordSchema),
-    errorHandler(async (req: Request, res: Response) => {
+    // errorHandler(
+    async (req: Request, res: Response) => {
       const { email } = req.body;
-
+      console.log('object');
       const { error, result } = await usersServices.forgottenPassword(usersData)(email);
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
@@ -266,11 +267,12 @@ usersController
       } else {
         res.status(200).send(result);
       }
-    })
+    }
   )
+  // )
   // Reset password
   .post(
-    '/reset-password/:userId/:token',
+    '/password/reset/:userId/:token',
     validateBody('user', resetPasswordSchema),
     errorHandler(async (req: Request, res: Response) => {
       const { password, reenteredPassword } = req.body;

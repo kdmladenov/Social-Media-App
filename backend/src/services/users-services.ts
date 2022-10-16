@@ -6,7 +6,7 @@ import { DB_CONFIG, PRIVATE_KEY } from '../../config.js';
 
 import errors from '../constants/service-errors.js';
 import rolesEnum from '../constants/roles.enum.js';
-import { forgotPassword } from '../constants/constants.js';
+import { forgotPassword, SITE_NAME } from '../constants/constants.js';
 import UsersData from '../models/UsersData.js';
 import UserType from '../models/UserType.js';
 import RolesType from '../models/RolesType.js';
@@ -302,11 +302,11 @@ const forgottenPassword = (usersData: UsersData) => async (email: string) => {
     subject: 'Password reset link.',
     text: `Dear ${
       existingUser.firstName
-    },\nA request has been received to reset yor password. You can do that by clicking on the below link (valid for ${forgotPassword.tokenExpiration.slice(
+    },\n\nA request has been received to reset yor password. You can do that by clicking on the below link (valid for ${forgotPassword.tokenExpiration.slice(
       0,
       -1
     )} minutes).\n
-${link}\nIf you did not initiate the request, just ignore this email - your password will not be changed.`
+${link}\nIf you did not initiate the request, just ignore this email - your password will not be changed. \n\nAll the best from ${SITE_NAME}'s team!`
   };
   transporter.sendMail(options, (err, info) => {
     if (err) {
@@ -359,20 +359,19 @@ const resetPassword =
     const options = {
       from: DB_CONFIG.adminEmail,
       to: `${existingUser.email}`,
-      subject: 'Your password has been reset.',
-      text: `Dear ${existingUser.firstName},\nYour password has been reset.\nThank you!`
+      subject: 'Your password has been changed.',
+      text: `Dear ${existingUser.firstName},\n\nYour password has been changed.\n\nThank you!`
     };
 
     transporter.sendMail(options, (err, info) => {
-      if (err) {
-        return;
-      }
+      if (err) return;
+
       console.log(`Sent: + ${info.response}`);
     });
 
     return {
       error: null,
-      result: { email: existingUser.email, message: 'The password was successfully reset' }
+      result: { email: existingUser.email, message: 'The password was successfully changed' }
     };
   };
 

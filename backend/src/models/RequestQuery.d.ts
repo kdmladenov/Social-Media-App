@@ -5,8 +5,6 @@ interface RequestQuery {
   sort: string;
   page: number;
   pageSize: number;
-  ratingMin: number;
-  ratingMax: number;
   role: RolesType;
   userId: number
 }

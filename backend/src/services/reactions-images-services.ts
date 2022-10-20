@@ -220,13 +220,13 @@ const createPostImageCommentReaction =
 
 const updatePostImageCommentReaction =
   (reactionsImagesData: ReactionsImagesData) =>
-  async (reactionName: string, reactionId: number, userId: number, role: RolesType) => {
+  async (reactionName: string, commentId: number, userId: number, role: RolesType) => {
     const existingPostImageCommentReaction =
       await reactionsImagesData.getPostImageCommentReactionBy(
-        'reaction_post_image_comment_id',
-        +reactionId
+        'post_image_comment_id',
+        +commentId,
+        +userId
       );
-
     if (!existingPostImageCommentReaction) {
       return {
         error: errors.RECORD_NOT_FOUND,
@@ -243,7 +243,7 @@ const updatePostImageCommentReaction =
     }
 
     const updatedPostImageCommentReaction =
-      await reactionsImagesData.updatePostImageCommentReaction(reactionName, reactionId);
+      await reactionsImagesData.updatePostImageCommentReaction(reactionName, commentId);
 
     return {
       error: null,

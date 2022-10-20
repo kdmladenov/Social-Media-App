@@ -76,22 +76,22 @@ reactionsImagesController
   // )
 
   // @desc EDIT post image reaction
-  // @route PUT/reactions-images/post-images/:reactionPostImageId
+  // @route PUT/reactions-images/post-images/:reactionId
   // @access Private - logged users who have created the reaction or Admin
   .put(
-    '/post-images/:reactionPostImageId',
+    '/post-images/:reactionId',
     authMiddleware,
     loggedUserGuard,
     validateBody('reaction', updateReactionSchema),
     errorHandler(async (req: Request, res: Response) => {
       const { reactionName } = req.body;
-      const { reactionPostImageId } = req.params;
+      const { reactionId } = req.params;
       const { userId, role } = req.user;
 
       const { error, updatedPostImageReaction } =
         await reactionsImagesServices.updatePostImageReaction(reactionsImagesData)(
           reactionName,
-          +reactionPostImageId,
+          +reactionId,
           +userId,
           role
         );
@@ -110,19 +110,19 @@ reactionsImagesController
     })
   )
   // @desc DELETE post image reaction
-  // @route DELETE/post-images/:reactionPostImageId
+  // @route DELETE/post-images/:reactionId
   // @access Private - logged users who have created the reaction or Admin
   .delete(
-    '/post-images/:reactionPostImageId',
+    '/post-images/:reactionId',
     authMiddleware,
     loggedUserGuard,
     errorHandler(async (req: Request, res: Response) => {
-      const { reactionPostImageId } = req.params;
+      const { reactionId } = req.params;
       const { userId, role } = req.user;
 
       const { error, deletedPostImageReaction } =
         await reactionsImagesServices.deletePostImageReaction(reactionsImagesData)(
-          +reactionPostImageId,
+          +reactionId,
           +userId,
           role
         );
@@ -140,16 +140,16 @@ reactionsImagesController
       }
     })
   ) // @desc CREATE post image reaction
-  // @route POST/reactions-images/image-comments/:postImageCommentId
+  // @route POST/reactions-images/image-comments/:commentId
   // @access Private - logged users
   .post(
-    '/image-comments/:postImageCommentId',
+    '/image-comments/:commentId',
     authMiddleware,
     loggedUserGuard,
     validateBody('reaction', createReactionSchema),
     // errorHandler(
-      async (req: Request, res: Response) => {
-      const { postImageCommentId } = req.params;
+    async (req: Request, res: Response) => {
+      const { commentId } = req.params;
       const { reactionName } = req.body;
       const { userId } = req.user;
 
@@ -157,7 +157,7 @@ reactionsImagesController
         await reactionsImagesServices.createPostImageCommentReaction(
           commentsImagesData,
           reactionsImagesData
-        )(+userId, +postImageCommentId, reactionName);
+        )(+userId, +commentId, reactionName);
 
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
@@ -166,24 +166,25 @@ reactionsImagesController
       } else {
         res.status(201).send(createdPostImageCommentReaction);
       }
-    })
+    }
+  )
   // )
   // @desc GET All post image reactions
-  // @route GET/reactions-images/image-comments/:postImageCommentId
+  // @route GET/reactions-images/image-comments/:commentId
   // @access Private - logged users
   .get(
-    '/image-comments/:postImageCommentId',
+    '/image-comments/:commentId',
     authMiddleware,
     loggedUserGuard,
     // errorHandler(
     async (req: Request, res: Response) => {
-      const { postImageCommentId } = req.params;
+      const { commentId } = req.params;
 
       const { error, postImageCommentReactions } =
         await reactionsImagesServices.getAllPostImageCommentReactions(
           reactionsImagesData,
           commentsImagesData
-        )(+postImageCommentId);
+        )(+commentId);
 
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({
@@ -197,22 +198,23 @@ reactionsImagesController
   // )
 
   // @desc EDIT post image reaction
-  // @route PUT/reactions-images/image-comments/:reactionPostImageCommentId
+  // @route PUT/reactions-images/image-comments/:reactionId
   // @access Private - logged users who have created the reaction or Admin
   .put(
-    '/image-comments/:reactionPostImageCommentId',
+    '/image-comments/:commentId',
     authMiddleware,
     loggedUserGuard,
     validateBody('reaction', updateReactionSchema),
-    errorHandler(async (req: Request, res: Response) => {
+    // errorHandler(
+      async (req: Request, res: Response) => {
       const { reactionName } = req.body;
-      const { reactionPostImageCommentId } = req.params;
+      const { commentId } = req.params;
       const { userId, role } = req.user;
 
       const { error, updatedPostImageCommentReaction } =
         await reactionsImagesServices.updatePostImageCommentReaction(reactionsImagesData)(
           reactionName,
-          +reactionPostImageCommentId,
+          +commentId,
           +userId,
           role
         );
@@ -229,22 +231,22 @@ reactionsImagesController
         res.status(200).send(updatedPostImageCommentReaction);
       }
     })
-  )
+  // )
 
   // @desc DELETE post image reaction
-  // @route DELETE/image-comments/:reactionPostImageCommentId
+  // @route DELETE/image-comments/:reactionId
   // @access Private - logged users who have created the reaction or Admin
   .delete(
-    '/image-comments/:reactionPostImageCommentId',
+    '/image-comments/:reactionId',
     authMiddleware,
     loggedUserGuard,
     errorHandler(async (req: Request, res: Response) => {
-      const { reactionPostImageCommentId } = req.params;
+      const { reactionId } = req.params;
       const { userId, role } = req.user;
 
       const { error, deletedPostImageCommentReaction } =
         await reactionsImagesServices.deletePostImageCommentReaction(reactionsImagesData)(
-          +reactionPostImageCommentId,
+          +reactionId,
           +userId,
           role
         );

@@ -34,7 +34,7 @@ interface ReactionsImagesData {
   ) => Promise<ReactionType>;
   updatePostImageCommentReaction: (
     reactionName: string,
-    reactionId: number
+    commentId: number
   ) => Promise<ReactionType>;
   deletePostImageCommentReaction: (reactionId: number) => Promise<void>;
 }

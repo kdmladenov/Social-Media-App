@@ -3,7 +3,7 @@ import db from './pool.js';
 const getAllPostImageReactions = async (postId: number, imageId: number) => {
   const sql = `
   SELECT   
-    rpi.reaction_post_image_id as reactionPostImageId,
+    rpi.reaction_post_image_id as reactionId,
     rpi.post_id as postId,
     rpi.image_id as imageId,
     rpi.user_id as userId,
@@ -30,7 +30,7 @@ const getAllPostImageReactions = async (postId: number, imageId: number) => {
 const getPostImageReaction = async (postId: number, imageId: number, userId?: number) => {
   const sql = `
     SELECT   
-    rpi.reaction_post_image_id as reactionPostImageId,
+    rpi.reaction_post_image_id as reactionId,
     rpi.post_id as postId,
     rpi.image_id as imageId,
     rpi.user_id as userId,
@@ -60,7 +60,7 @@ const getPostImageReaction = async (postId: number, imageId: number, userId?: nu
 const getPostImageReactionBy = async (column: string, value: string | number, userId?: number) => {
   const sql = `
     SELECT   
-    rpi.reaction_post_image_id as reactionPostImageId,
+    rpi.reaction_post_image_id as reactionId,
     rpi.post_id as postId,
     rpi.image_id as imageId,
     rpi.user_id as userId,
@@ -105,31 +105,31 @@ const createPostImageReaction = async (
   return getPostImageReactionBy('reaction_post_image_id', +result.insertId);
 };
 
-const updatePostImageReaction = async (reactionName: string, reactionPostImageId: number) => {
+const updatePostImageReaction = async (reactionName: string, reactionId: number) => {
   const sql = `
     UPDATE reactions_post_images SET
       reaction_type_id = (SELECT reaction_type_id from reaction_types WHERE reaction_name = ?)
     WHERE reaction_post_image_id = ?
   `;
-  await db.query(sql, [reactionName, +reactionPostImageId]);
+  await db.query(sql, [reactionName, +reactionId]);
 
-  return getPostImageReactionBy('reaction_post_image_id', +reactionPostImageId);
+  return getPostImageReactionBy('reaction_post_image_id', +reactionId);
 };
 
-const deletePostImageReaction = async (reactionPostImageId: number) => {
+const deletePostImageReaction = async (reactionId: number) => {
   const sql = `
     UPDATE reactions_post_images SET
       is_deleted = 1
     WHERE reaction_post_image_id = ?
   `;
-  return await db.query(sql, [+reactionPostImageId]);
+  return await db.query(sql, [+reactionId]);
 };
 
-const getAllPostImageCommentReactions = async (postImageCommentId: number) => {
+const getAllPostImageCommentReactions = async (commentId: number) => {
   const sql = `
   SELECT   
-    rpic.reaction_post_image_comment_id as reactionPostImageCommentId,
-    rpic.post_image_comment_id as postImageCommentId,
+    rpic.reaction_post_image_comment_id as reactionId,
+    rpic.post_image_comment_id as commentId,
     rpic.user_id as userId,
     u.first_name as authorFirstName,
     u.last_name as authorLastName,
@@ -148,14 +148,14 @@ const getAllPostImageCommentReactions = async (postImageCommentId: number) => {
           GROUP BY reaction_type_id) as rt USING (reaction_type_id)
     WHERE rpic.is_deleted = 0 AND rpic.post_image_comment_id = ?
     `;
-  return db.query(sql, [+postImageCommentId]);
+  return db.query(sql, [+commentId]);
 };
 
-const getPostImageCommentReaction = async (postImageCommentId: number, userId?: number) => {
+const getPostImageCommentReaction = async (commentId: number, userId?: number) => {
   const sql = `
     SELECT   
-    rpic.reaction_post_image_comment_id as reactionPostImageCommentId,
-    rpic.post_image_comment_id as postImageCommentId,
+    rpic.reaction_post_image_comment_id as reactionId,
+    rpic.post_image_comment_id as commentId,
     rpic.user_id as userId,
     u.first_name as authorFirstName,
     u.last_name as authorLastName,
@@ -175,7 +175,7 @@ const getPostImageCommentReaction = async (postImageCommentId: number, userId?: 
     userId ? 'AND rpic.user_id = ?' : ''
   } AND rpic.is_deleted = 0
   `;
-  const result = await db.query(sql, [+postImageCommentId, userId || null]);
+  const result = await db.query(sql, [+commentId, userId || null]);
 
   return result[0];
 };
@@ -187,8 +187,8 @@ const getPostImageCommentReactionBy = async (
 ) => {
   const sql = `
     SELECT   
-    rpic.reaction_post_image_comment_id as reactionPostImageCommentId,
-    rpic.post_image_comment_id as postImageCommentId,
+    rpic.reaction_post_image_comment_id as reactionId,
+    rpic.post_image_comment_id as commentId,
     rpic.user_id as userId,
     u.first_name as authorFirstName,
     u.last_name as authorLastName,
@@ -213,7 +213,7 @@ const getPostImageCommentReactionBy = async (
 
 const createPostImageCommentReaction = async (
   userId: number,
-  postImageCommentId: number,
+  commentId: number,
   reactionName: string
 ) => {
   const sql = `
@@ -224,35 +224,29 @@ const createPostImageCommentReaction = async (
     )
     VALUES (?, ?, (SELECT reaction_type_id from reaction_types WHERE reaction_name = ?))
   `;
-  const result = await db.query(sql, [+userId, +postImageCommentId, reactionName]);
+  const result = await db.query(sql, [+userId, +commentId, reactionName]);
 
   return getPostImageCommentReactionBy('reaction_post_image_comment_id', +result.insertId);
 };
 
-const updatePostImageCommentReaction = async (
-  reactionName: string,
-  reactionPostImageCommentId: number
-) => {
+const updatePostImageCommentReaction = async (reactionName: string, commentId: number) => {
   const sql = `
     UPDATE reactions_post_images_comments SET
       reaction_type_id = (SELECT reaction_type_id from reaction_types WHERE reaction_name = ?)
-    WHERE reaction_post_image_comment_id = ?
+    WHERE post_image_comment_id = ?
   `;
-  await db.query(sql, [reactionName, +reactionPostImageCommentId]);
+  await db.query(sql, [reactionName, +commentId]);
 
-  return getPostImageCommentReactionBy(
-    'reaction_post_image_comment_id',
-    +reactionPostImageCommentId
-  );
+  return getPostImageCommentReactionBy('post_image_comment_id', +commentId);
 };
 
-const deletePostImageCommentReaction = async (reactionPostImageCommentId: number) => {
+const deletePostImageCommentReaction = async (reactionId: number) => {
   const sql = `
     UPDATE reactions_post_images_comments SET
       is_deleted = 1
     WHERE reaction_post_image_comment_id = ?
   `;
-  return await db.query(sql, [+reactionPostImageCommentId]);
+  return await db.query(sql, [+reactionId]);
 };
 
 export default {

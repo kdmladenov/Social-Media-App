@@ -68,7 +68,7 @@ const getAllMyStories = async (
         LIMIT ? OFFSET ?
         `;
 
-  return db.query(sql, [+userId, + pageSize, +offset]);
+  return db.query(sql, [+userId, +pageSize, +offset]);
 };
 
 const getBy = async (column: string, value: string | number, role: RolesType = 'basic') => {
@@ -106,24 +106,15 @@ const getBy = async (column: string, value: string | number, role: RolesType = '
   return result[0];
 };
 
-const create = async (story: StoryType) => {
+const create = async (image: string, userId: number) => {
   const sql = `
     INSERT INTO stories (
       user_id,
-      message,
-      image,
-      feeling_type_id,
-      location_id
+      image
     )
-    VALUES (?, ?, ?, (SELECT feeling_type_id from feeling_types WHERE feeling_type = ?), (SELECT location_id from locations WHERE city = ?))
+    VALUES (?, ?)
   `;
-  const result = await db.query(sql, [
-    +story.userId,
-    story.message || null,
-    story.image || 'storage/images/defaultImage.png',
-    story.feelingType || null,
-    story.city || null
-  ]);
+  const result = await db.query(sql, [+userId, image || 'storage/images/defaultImage.png']);
 
   return getBy('story_id', +result.insertId);
 };
@@ -138,7 +129,7 @@ const update = async (updatedStory: StoryType) => {
         feeling_type_id = (SELECT feeling_type_id from feeling_types WHERE feeling_type = ?),
         location_id = (SELECT location_id from locations WHERE city = ?)
         WHERE story_id = ?
-    `; 
+    `;
 
   await db.query(sql, [
     +updatedStory.userId || null,

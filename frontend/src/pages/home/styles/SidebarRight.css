@@ -33,3 +33,9 @@
   flex-direction: column;
   gap: 10px;
 }
+
+@media (max-width: 1024px) {
+  .sidebar_right {
+    display: none;
+  }
+}

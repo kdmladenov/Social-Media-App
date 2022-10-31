@@ -44,7 +44,7 @@
 } */
 
 .post_card .images.three {
-  grid-template-columns: 339px 339px;
+  grid-template-columns: 1fr 1fr;
   grid-template-rows: 490px 277px;
   grid-template-areas:
     'image1 image1'
@@ -53,7 +53,7 @@
 
 .post_card .images.four,
 .post_card .images.more {
-  grid-template-columns: 226px 226px 226px;
+  grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 490px 277px;
   grid-template-areas:
     'image1 image1 image1'
@@ -216,3 +216,6 @@
   top: 50%;
 }
 
+#modal .modal_container.post_images .image::-webkit-scrollbar {
+  display: none;
+}

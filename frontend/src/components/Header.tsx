@@ -7,7 +7,6 @@ import { getUserDetails, logout } from '../context/actions/userActions';
 import { userMenuMap } from '../data/inputs/headerMenuMaps';
 import useTypedSelector from '../hooks/useTypedSelector';
 
-import SearchBar from './UserSearchBar';
 import Login from './Login';
 import DropDown from './Dropdown';
 import Avatar from './Avatar';
@@ -37,6 +36,17 @@ const Header: React.FC = () => {
         </NavLink>
         <div className="search">
           <UserSearchBar />
+        </div>
+        <div className="search_dropdown">
+          <DropDown
+            button={
+              <div className="search_btn">
+                <i className="fa fa-search" />
+              </div>
+            }
+          >
+            <UserSearchBar />
+          </DropDown>
         </div>
       </div>
 

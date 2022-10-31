@@ -4,8 +4,8 @@ header {
   display: grid;
   width: 100%;
   max-width: 100vw;
-  grid-auto-rows: 60px;
-  grid-auto-columns: 1fr 680px 1fr;
+  grid-template-rows: 60px;
+  grid-template-columns: 1fr 680px 1fr;
   grid-template-areas: 'logo_search  button_nav user_menus';
   gap: 40px;
   background-color: var(--white);
@@ -13,7 +13,6 @@ header {
   top: 0;
   z-index: 100;
   padding: 0 10px;
-
 }
 
 /* Logo and search bar (left side) */
@@ -37,8 +36,44 @@ header .search {
   height: 36px;
   width: 250px;
 }
-/* Button navigation (middle) */
 
+/* Search Dropdown  */
+header .search_dropdown {
+  display: none;
+}
+
+header .search_dropdown .dropdown .header {
+  width: 45px;
+}
+
+header .search_dropdown .dropdown .body {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
+header .search_dropdown .dropdown .body .search_bar {
+  box-shadow: none;
+}
+
+header .search_dropdown .search_btn {
+  width: 45px;
+  height: 45px;
+  outline: none;
+  border: none;
+  font-size: 20px;
+  background: var(--gray);
+  color: var(--black);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Button navigation (middle) */
 header .button_nav {
   grid-area: button_nav;
 }
@@ -47,9 +82,10 @@ header .button_nav {
 header .header_menu_btn_group {
   grid-area: user_menus;
   display: flex;
-  justify-content: center;
+  justify-content: right;
   align-items: center;
   gap: 10px;
+  padding-right: 20px;
 }
 
 header .header_menu_btn {
@@ -66,12 +102,21 @@ header .header_menu_btn {
   justify-content: center;
   align-items: center;
 }
+header .header_menu_btn .dropdown {
+  justify-content: center;
+}
+
+header .header_menu_btn .dropdown .body {
+  justify-content: center;
+  position: fixed;
+  top: 60px;
+  right: 0;
+}
 
 header .header_menu_btn:hover {
   box-shadow: var(--box_shadow_angle);
 }
 
-header .menu_admin ul,
 header .menu_user ul {
   display: flex;
   flex-direction: column;
@@ -80,13 +125,11 @@ header .menu_user ul {
   justify-content: left;
 }
 
-header .menu_admin a li,
 header .menu_user a li,
 header .menu_user div {
   white-space: nowrap;
 }
 
-header .menu_admin a li:hover,
 header .menu_user a li:hover,
 header ul.menu_user div:hover {
   background-color: var(--gray_background);
@@ -97,38 +140,17 @@ header ul.menu_user div {
   border-top: 2px solid var(--gray);
 }
 
-header .header_menu_btn .badge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  width: fit-content;
-  height: 24px;
-  line-height: 16px;
-  font-size: 12px;
-  background: var(--cheetos);
-  color: var(--white);
-  border: 3px solid var(--white);
-  border-radius: 12px;
-  padding: 0px 6px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   header {
-    grid-auto-columns: 1fr;
-    grid-template-areas:
-      'logo   user_menus'
-      'search search';
+    grid-template-columns: 100px 1fr 100px;
     justify-content: center;
   }
 
-  .search {
-    padding: 0 10px;
+  header .search {
+    display: none;
   }
 
-  .logo_mega_menu_group {
-    width: 160px;
+  header .search_dropdown {
+    display: flex;
   }
 }

@@ -1,14 +1,14 @@
 .profile_page .profile_header {
   position: relative;
   height: fit-content;
-  width: 100%;
+  width: 100vw;
   box-shadow: var(--box_shadow);
 }
 
 .profile_page .profile_header .container,
 .profile_content {
-  width: 1190px;
-  max-width: 1190px;
+  width: 100vw;
+  max-width: 1200px;
 }
 
 .profile_page .profile_header .container {
@@ -30,7 +30,8 @@
 .profile_page .profile_header .cover {
   position: relative;
   height: 400px;
-  width: 1240px;
+  width: 100vw;
+  max-width: 1240px;
   background: var(--white);
 }
 
@@ -80,4 +81,10 @@
 .profile_page .profile_header .friends_avatars .avatar {
   margin-right: -5px;
   flex-direction: row-reverse;
+}
+
+@media (max-width: 1200px) {
+  .profile_page .profile_header .info.flex {
+    padding: 0 20px;
+  }
 }

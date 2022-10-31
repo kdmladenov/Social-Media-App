@@ -1,11 +1,13 @@
 .profile_posts {
   display: grid;
   grid-template-columns: 490px 680px;
+  grid-template-areas: 'sidebar posts';
   gap: 20px;
   justify-content: flex-start;
 }
 
 .profile_posts .sidebar {
+  grid-area: sidebar;
   height: fit-content;
   gap: 20px;
   position: sticky;
@@ -13,5 +15,26 @@
 }
 
 .profile_posts .posts {
+  grid-area: posts;
   gap: 20px;
+}
+
+@media (max-width: 1200px) {
+  .profile_posts {
+    grid-template-columns: 680px;
+    grid-template-areas:
+      'sidebar'
+      'posts';
+    justify-content: center;
+  }
+  .profile_posts .photo_list_container,
+  .profile_posts .friend_list {
+    display: none;
+  }
+}
+
+@media (max-width: 680px) {
+  .profile_posts {
+    grid-template-columns: 100%;
+  }
 }

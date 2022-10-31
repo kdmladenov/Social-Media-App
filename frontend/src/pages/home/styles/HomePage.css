@@ -28,3 +28,22 @@
     margin: 0 20px;
   }
 }
+
+@media (max-width: 1024px) {
+  .home_page {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'home';
+    gap: 0;
+    justify-content: center;
+  }
+  .home_page .home_content {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 680px) {
+  .home_page,
+  .home_page .home_content {
+    width: 100vw;
+  }
+}

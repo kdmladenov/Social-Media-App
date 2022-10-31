@@ -53,7 +53,7 @@
   object-fit: cover;
 }
 
-.sidebar_left .accordion .profile_card .avatar.current_user {
+.sidebar_left .accordion .profile_card .picture {
   position: absolute;
   top: 160px;
 }

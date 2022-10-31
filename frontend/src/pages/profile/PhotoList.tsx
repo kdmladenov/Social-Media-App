@@ -48,7 +48,7 @@ const PhotoList: React.FC<{ screen: string, user: UserType }> = ({ screen = '', 
           />
         )}
       </div>
-      <div className="photo_list">
+      <div className="photo_list flex">
         {userImages?.map((photo) => (
           <img
             src={photo.image?.startsWith('http') ? photo.image : `${BASE_URL}/${photo.image}`}

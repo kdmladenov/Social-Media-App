@@ -74,7 +74,6 @@
   text-align: center;
 }
 
-
 /* Add Item button */
 .profile_about .profile_about_card .profile_info li button.add_profile_info {
   color: var(--blue);
@@ -102,4 +101,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media (max-width: 680px) {
+  .profile_about .profile_about_card {
+    grid-template-columns: 200px 1fr;
+    padding: 10px 0px;
+    gap: 0;
+  }
+  .profile_about .profile_about_card .sidebar {
+    padding: 10px;
+    width: 200px;
+  }
 }

@@ -1,6 +1,7 @@
 .photo_list_container {
   padding: 15px;
   height: fit-content;
+  width: 100%;
 }
 
 .photo_list_container .header {
@@ -22,19 +23,17 @@
 }
 
 .photo_list_container .photo_list {
-  display: grid;
-  grid-template-columns: repeat(6, 185px);
-  grid-auto-rows: 185px;
-  gap: 10px;
+  width: 100%;
+  height: fit-content;
+  flex-wrap: wrap;
+  gap: 5px;
   padding: 0;
+  justify-content: flex-start;
 }
 
-.photo_list_container.profile_posts_screen .photo_list {
-  grid-template-columns: repeat(3, 150px);
-  grid-auto-rows: 150px;
-  overflow: clip;
-  border-radius: 10px;
-  gap: 5px;
+.photo_list_container .photo_list img {
+  width: 150px;
+  height: 150px;
 }
 
 .photo_list img {

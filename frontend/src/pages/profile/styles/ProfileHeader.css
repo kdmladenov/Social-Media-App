@@ -51,7 +51,7 @@
   height: 300px;
   width: 100%;
   justify-content: space-between;
-  margin: -100px 0 0 0;
+  margin-top: -150px;
 }
 
 .profile_page .profile_header .info .avatar_name h1 {
@@ -86,5 +86,36 @@
 @media (max-width: 1200px) {
   .profile_page .profile_header .info.flex {
     padding: 0 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile_page .profile_header .cover .button_container {
+    right: 10px;
+    min-width: 35px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .profile_page .profile_header .cover img {
+    border-radius: 0px;
+  }
+
+  .profile_page .profile_header .info.flex {
+    justify-content: center;
+    height: fit-content;
+  }
+
+  .profile_page .profile_header .cover .button_container span {
+    display: none;
+  }
+
+  .profile_page .profile_header .info .avatar_name {
+    flex-direction: column;
+    gap: 0;
+  }
+  .profile_page .profile_header .info .avatar_name .details {
+    align-items: flex-start;
+    padding: 10px;
   }
 }

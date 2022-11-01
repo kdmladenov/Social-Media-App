@@ -36,12 +36,15 @@ const SidebarLeft = () => {
                   crossOrigin="anonymous"
                 />
               </div>
-              <Avatar
-                classes="image_only current_user"
-                imageUrl={user?.avatar}
-                firstName={user?.firstName}
-                lastName={user?.lastName}
-              />
+              <div className="picture" onClick={() => navigate(`/profile/${user?.userId}/posts`)}>
+                <Avatar
+                  classes="image_only current_user"
+                  imageUrl={user?.avatar}
+                  firstName={user?.firstName}
+                  lastName={user?.lastName}
+                />
+              </div>
+
               <h3>{`${user?.firstName} ${user?.lastName}`}</h3>
               <h3>
                 {
@@ -74,8 +77,7 @@ const SidebarLeft = () => {
                   )}
                 </div>
               </div>
-
-              <Button classes="white" onClick={() => navigate('/profile/posts')}>
+              <Button classes="white" onClick={() => navigate(`/profile/${user?.userId}/posts`)}>
                 Profile
               </Button>
             </div>

@@ -11,6 +11,8 @@ import Loader from './Loader';
 import Message from './Message';
 import Button from './Button';
 import Tooltip from './Tooltip';
+import Divider from './Divider';
+import { TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_PASSWORD } from '../data/constants';
 
 const Login: React.FC = () => {
   const dispatch = useDispatch();
@@ -40,7 +42,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="login_form">
+    <div className="login_form" onClick={(e) => e.stopPropagation()}>
       <h1>Sign In</h1>
       {loading && <Loader />}
       {error && <Message type="error">{error}</Message>}
@@ -82,6 +84,15 @@ const Login: React.FC = () => {
         Forgot your password?
         <Link to={'/forgotPassword'}> Reset</Link>
       </div>
+      <Divider>or</Divider>
+      <Button
+        classes="test_account_btn"
+        onClick={() =>
+          dispatch(login({ email: TEST_ACCOUNT_EMAIL, password: TEST_ACCOUNT_PASSWORD }))
+        }
+      >
+        Log in with a test user
+      </Button>
     </div>
   );
 };

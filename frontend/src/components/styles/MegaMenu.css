@@ -156,7 +156,7 @@
   box-shadow: none;
 }
 
-@media (max-width: 1024px) {
+/* @media (max-width: 1024px) {
   .mega_menu {
     top: 120px;
   }
@@ -178,4 +178,4 @@
   .mega_menu h2 {
     padding-left: 40px;
   }
-}
+} */

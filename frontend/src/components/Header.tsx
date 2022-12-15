@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import './styles/Header.css';
@@ -16,11 +16,17 @@ import { LOGO_URL } from '../data/constants';
 
 const Header: React.FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { pathname } = useLocation();
 
   const { userInfo } = useTypedSelector((state) => state.userLogin);
 
   const { loading, error, user } = useTypedSelector((state) => state.userDetails);
+
+  const logoutHandler = () => {
+    navigate('/');
+    dispatch(logout());
+  };
 
   useEffect(() => {
     if (!user?.email) {
@@ -50,7 +56,7 @@ const Header: React.FC = () => {
         </div>
       </div>
 
-      <ButtonNav currentPath={pathname} screen="home" userId={userInfo?.userId} />
+      {userInfo?.token && <ButtonNav currentPath={pathname} screen="home" userId={userInfo?.userId} />}
 
       <div className="header_menu_btn_group">
         <DropDown
@@ -73,7 +79,7 @@ const Header: React.FC = () => {
                   <li key={index}>{link.label}</li>
                 </NavLink>
               ))}
-              <div onClick={() => dispatch(logout())}>Log out</div>
+              <div onClick={() => logoutHandler()}>Log out</div>
             </ul>
           ) : (
             <Login />

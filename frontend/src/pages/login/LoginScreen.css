@@ -8,7 +8,7 @@
   padding: 30px 50px;
   height: fit-content;
   flex-direction: column;
-  gap: 30px;
+  gap: 0px;
 }
 
 .login_screen .login_container .form_component {

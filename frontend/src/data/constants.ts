@@ -24,6 +24,9 @@ export const RATING_STAR_COUNT = 5;
 export const THROTTLE_DELAY = 1000;
 export const RESET_BTN_THRESHOLD_SHOW_CHAR_COUNT = 3;
 
+export const TEST_ACCOUNT_EMAIL = 'kdmladenov@outlook.com';
+export const TEST_ACCOUNT_PASSWORD = 'Sekretenklu4';
+
 export const USER = {
   MIN_FIRST_NAME_LENGTH: 2,
   MAX_FIRST_NAME_LENGTH: 100,

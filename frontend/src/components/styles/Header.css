@@ -106,7 +106,7 @@ header .header_menu_btn .dropdown {
   justify-content: center;
 }
 
-header .header_menu_btn .dropdown .body {
+header .header_menu_btn_group .dropdown .body {
   justify-content: center;
   position: fixed;
   top: 60px;
@@ -152,5 +152,17 @@ header ul.menu_user div {
 
   header .search_dropdown {
     display: flex;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    grid-template-columns: 100px 1fr 50px;
+    gap: 5px;
+    padding: 0;
+  }
+
+  header .button_nav .tab {
+    padding: 14px 5px;
   }
 }

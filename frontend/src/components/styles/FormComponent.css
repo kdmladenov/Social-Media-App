@@ -116,9 +116,18 @@
   width: 150px;
 }
 
-@media (max-width: 768px) {
+.form_component .test_user_btn {
+  height: 70px;
+  justify-content: center;
+}
+.form_component .test_user_btn .divider{
+  z-index: 10;
+  margin: 20px 0;
+}
+
+/* @media (max-width: 768px) {
   .form_component .button_group {
     flex-direction: column;
     gap: 10px;
   }
-}
+} */

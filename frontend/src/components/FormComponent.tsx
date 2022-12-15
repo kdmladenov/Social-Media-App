@@ -12,6 +12,9 @@ import UserType from '../types/UserType';
 import PostType from '../types/PostType';
 import WorkplaceType from '../types/WorkplaceType';
 import SchoolType from '../types/SchoolType';
+import Divider from './Divider';
+import { login } from '../context/actions/userActions';
+import { TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_PASSWORD } from '../data/constants';
 
 const FormComponent: React.FC<FormComponentProps> = ({
   inputData,
@@ -177,6 +180,11 @@ const FormComponent: React.FC<FormComponentProps> = ({
     setIsResourceUpdated(true);
   };
 
+    const testAccountLoginHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+      dispatch(login({ email: TEST_ACCOUNT_EMAIL, password: TEST_ACCOUNT_PASSWORD }));
+    };
+
+
   useEffect(() => {
     if (getDetailsAction) {
       if (isResourceUpdated && resourceId) {
@@ -243,6 +251,14 @@ const FormComponent: React.FC<FormComponentProps> = ({
             </Button>
           )}
       </div>
+      {screen === 'login' && (
+        <div className="test_user_btn flex_col">
+          <Divider>or</Divider>
+          <Button classes="rounded green" onClick={(e) => testAccountLoginHandler(e)}>
+            Log in with a test user
+          </Button>
+        </div>
+      )}
     </form>
   );
 };

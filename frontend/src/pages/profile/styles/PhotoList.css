@@ -25,15 +25,16 @@
 .photo_list_container .photo_list {
   width: 100%;
   height: fit-content;
-  flex-wrap: wrap;
   gap: 5px;
   padding: 0;
   justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
 .photo_list_container .photo_list img {
   width: 150px;
   height: 150px;
+  min-width: 150px;
 }
 
 .photo_list img {
@@ -134,4 +135,16 @@
   right: auto;
   left: 10px;
   background: transparent;
+}
+
+@media (max-width: 768px) {
+  .photo_list_container {
+    padding: 13px;
+  }
+  .photo_list_container .photo_list img {
+    width: 30vw;
+    height: 30vw;
+    min-width: 30vw;
+    justify-content: space-between;
+  }
 }

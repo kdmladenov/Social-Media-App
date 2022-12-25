@@ -32,7 +32,7 @@ import {
   POST_UPDATE_REQUEST,
   POST_UPDATE_SUCCESS
 } from '../constants/postConstants';
-import { BASE_URL } from '../../data/constants';
+import { BASE_URL, GOOGLE_DRIVE_PUBLIC_URL } from '../../data/constants';
 import StoreType from '../../types/context/StoreType';
 import { Dispatch } from 'redux';
 import PostsMyListActionType from '../../types/context/actions/PostMyListActionType';
@@ -281,7 +281,9 @@ export const uploadPostImages =
 
         const { data } = await axios.post(`${BASE_URL}/images/posts/upload`, formData, config);
 
-        data?.forEach((image: ImageFileType) => images.push(image.path));
+        data?.forEach((image: ImageFileType) =>
+          images.push(`${GOOGLE_DRIVE_PUBLIC_URL}${image.id}`)
+        );
       }
 
       dispatch({

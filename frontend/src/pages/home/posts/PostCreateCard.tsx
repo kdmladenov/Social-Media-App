@@ -65,7 +65,7 @@ const PostCreateCard: React.FC = () => {
     newPost?.images?.length && dispatch(createPost(user?.userId, newPost));
     setIsModalOpen(false);
   };
-  
+
   useEffect(() => {
     if (successImagesUpload) {
       setNewPost({ ...newPost, images: uploadedPostImages });
@@ -96,17 +96,23 @@ const PostCreateCard: React.FC = () => {
       {isModalOpen && (
         <Modal classes="post_create flex_col" setIsOpenModal={setIsModalOpen}>
           <div className="title flex">
-            <span>
-              {section === 'main'
-                ? 'Create post'
-                : section === 'feelings'
-                ? 'How are you feeling?'
-                : section === 'tag_friends'
-                ? 'Tag friends'
-                : section === 'locations'
-                ? 'Search for location'
-                : ''}
-            </span>
+            {newPost?.images?.length && section === 'main' ? (
+              <Button classes="blue create_post_button" onClick={createPostHandler}>
+                Create Post
+              </Button>
+            ) : (
+              <span>
+                {section === 'main'
+                  ? 'Create post'
+                  : section === 'feelings'
+                  ? 'How are you feeling?'
+                  : section === 'tag_friends'
+                  ? 'Tag friends'
+                  : section === 'locations'
+                  ? 'Search for location'
+                  : ''}
+              </span>
+            )}
           </div>
           {section === 'main' ? (
             <>
@@ -166,7 +172,6 @@ const PostCreateCard: React.FC = () => {
                       {newPost?.images.map((image, index) => (
                         <li className={`image${index + 1}`} key={index}>
                           <img
-                            crossOrigin="anonymous"
                             src={
                               typeof image === 'string' && image?.slice(0, 4) === 'http'
                                 ? image
@@ -181,9 +186,6 @@ const PostCreateCard: React.FC = () => {
                       ))}
                     </ul>
                   </div>
-                  <Button classes="blue create_post_button" onClick={createPostHandler}>
-                    Post
-                  </Button>
                 </>
               ) : (
                 <PhotoUploadForm

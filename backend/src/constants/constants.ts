@@ -7,8 +7,8 @@ export const GOOGLE_DRIVE_FOLDER_IDS = {
   profile_covers: '1HpxMgkGdWzDObtUHr93pKwJ2-0OdbtXP'
 };
 
-export const GOOGLE_DRIVE_KEY_FILE_PATH = '../../google-drive-credentials.json';
-  // '/Users/krasymladenov/Desktop/Social-Media-App/backend/google-drive-credentials.json';
+export const GOOGLE_DRIVE_KEY_FILE_PATH =
+  '/Users/krasymladenov/Repo/Social-Media-App/backend/google-drive-credentials.json';
 
 export const user = {
   MIN_FIRST_NAME_LENGTH: 2,

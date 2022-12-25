@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
-import { IMAGE } from '../data/constants';
+import { ACCEPTED_FILE_FORMATS, IMAGE } from '../data/constants';
 import PostCreateActionType from '../types/context/actions/PostCreateActionType';
 import PostImagesUploadActionType from '../types/context/actions/PostImagesUploadActionType';
 import StoryCreateActionType from '../types/context/actions/StoryCreateActionType';
 import UserAvatarUpdateActionType from '../types/context/actions/UserAvatarUpdateActionType';
 import UserCoverUpdateActionType from '../types/context/actions/UserCoverUpdateActionType';
 import StoreType from '../types/context/StoreType';
+import { validateSelectedFile } from '../utils/validateSelectedFile';
 import Button from './Button';
 import Divider from './Divider';
 
@@ -41,13 +42,21 @@ const PhotoUploadForm: React.FC<{
   const dispatch = useDispatch();
   const [imageURL, setImageURL] = useState('');
   const [dragActive, setDragActive] = useState(false);
+  const [message, setMessage] = useState('');
 
   const isUrlValid = IMAGE.IMAGE_URL_REGEX.test(imageURL);
 
-  const uploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(updateAction(resourceId, 'file_upload', e));
+  const uploadImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = (event.target as HTMLInputElement).files;
+    let areAllFilesValid = true;
+    if (selectedFiles?.length !== 0) {
+      setMessage('');
+      for (const singleFile of selectedFiles!) {
+        areAllFilesValid = areAllFilesValid && validateSelectedFile(singleFile, setMessage);
+      }
+      areAllFilesValid && dispatch(updateAction(resourceId, 'file_upload', event));
+    }
   };
-
   const handleDrag = (e: React.DragEvent<HTMLFormElement> | React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -62,9 +71,16 @@ const PhotoUploadForm: React.FC<{
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
+
+    const selectedFiles = (e as React.DragEvent<HTMLDivElement>).dataTransfer.files;
+    let areAllFilesValid = true;
+
     if (e?.dataTransfer?.files?.[0]) {
-      dispatch(updateAction(resourceId, 'file_upload', e));
-      setImageURL('');
+      setMessage('');
+      for (const singleFile of selectedFiles!) {
+        areAllFilesValid = areAllFilesValid && validateSelectedFile(singleFile, setMessage);
+      }
+      areAllFilesValid && dispatch(updateAction(resourceId, 'file_upload', e));
     }
   };
 
@@ -102,6 +118,7 @@ const PhotoUploadForm: React.FC<{
             <p>Add Photos</p>
             <span>or</span>
             <span>drag and drop</span>
+            <span className='error_message'>{message}</span>
           </label>
           <input
             id="upload"
@@ -109,7 +126,7 @@ const PhotoUploadForm: React.FC<{
             multiple={multiple}
             name={name}
             onChange={uploadImage}
-            accept={'image/jpeg, image/jpg, image/png'}
+            accept={ACCEPTED_FILE_FORMATS}
           />
           {dragActive && (
             <div

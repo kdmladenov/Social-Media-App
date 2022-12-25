@@ -2,6 +2,14 @@ export const BASE_URL = 'http://localhost:5555';
 
 export const STORE_NAME = 'MyShop';
 
+export const GOOGLE_DRIVE_PUBLIC_URL = 'https://drive.google.com/uc?export=view&id=';
+export const MIN_FILE_SIZE = 1024; // 1MB
+export const MAX_FILE_SIZE = 51200; // 50MB
+
+export const ACCEPTED_FILE_FORMATS =
+  'image/png, image/jpg, image/jpeg, video/mp4, video/quicktime, video/mov, video/mwv, video/avi, video/mkv, video/flv';
+
+
 // History
 export const MIN_HISTORY_LIST_COUNT = 3;
 

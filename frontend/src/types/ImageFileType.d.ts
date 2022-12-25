@@ -8,6 +8,9 @@ interface ImageFileType {
   filename: string;
   path: string;
   size: number;
+  id: string;
+  name: string;
+  mimeType: string;
 }
 
 export default ImageFileType;

@@ -115,7 +115,6 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
             key={image?.imageId}
           >
             <img
-              crossOrigin="anonymous"
               src={image?.image?.startsWith('http') ? image?.image : `${BASE_URL}/${image?.image}`}
               alt="post"
             />

@@ -1,6 +1,6 @@
 import { google } from 'googleapis';
 import stream from 'stream';
-import { GOOGLE_DRIVE_KEY_FILE_PATH } from '../constants/constants';
+import { GOOGLE_DRIVE_KEY_FILE_PATH } from '../constants/constants.js';
 
 
 const auth = new google.auth.GoogleAuth({

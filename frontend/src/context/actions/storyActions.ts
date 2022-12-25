@@ -16,12 +16,6 @@ import {
   STORY_IMAGE_DELETE_FAIL,
   STORY_IMAGE_DELETE_REQUEST,
   STORY_IMAGE_DELETE_SUCCESS,
-  STORY_IMAGE_SET_MAIN_FAIL,
-  STORY_IMAGE_SET_MAIN_REQUEST,
-  STORY_IMAGE_SET_MAIN_SUCCESS,
-  STORY_IMAGE_UPLOAD_FAIL,
-  STORY_IMAGE_UPLOAD_REQUEST,
-  STORY_IMAGE_UPLOAD_SUCCESS,
   STORY_MY_LIST_FAIL,
   STORY_MY_LIST_REQUEST,
   STORY_MY_LIST_SUCCESS,
@@ -70,19 +64,6 @@ export const listMyStories =
         payload: data
       });
 
-      // // update localStorage totalMyStoryCount
-      // if (
-      //   !localStorage.getItem('totalMyStoryCount') ||
-      //   data?.[0]?.totalDBItems > +localStorage.getItem('totalMyStoryCount')!
-      // ) {
-      //   localStorage.setItem('totalMyStoryCount', data?.[0]?.totalDBItems);
-      // }
-      // if (!localStorage.getItem('allStoriesList')) {
-      //   const { data: allStoryList } = await axios.get(
-      //     `${BASE_URL}/stories?pageSize=${localStorage.getItem('totalMyStoryCount')}`
-      //   );
-      //   localStorage.setItem('allStoriesList', JSON.stringify(allStoryList));
-      // }
     } catch (error) {
       axios.isAxiosError(error) &&
         dispatch({
@@ -192,46 +173,6 @@ export const restoreStory =
     }
   };
 
-// export const createStory =
-//   (_: number, storyData: StoryType) =>
-//   async (dispatch: Dispatch<StoryCreateActionType>, getState: () => StoreType) => {
-//     try {
-//       dispatch({
-//         type: STORY_CREATE_REQUEST
-//       });
-//       const {
-//         userLogin: { userInfo }
-//       } = getState();
-
-//       const config = {
-//         headers: {
-//           'Content-Type': 'application/json',
-//           Authorization: `Bearer ${userInfo.token}`
-//         }
-//       };
-
-//       const { data } = await axios.post(`${BASE_URL}/stories`, storyData, config);
-
-//       dispatch({
-//         type: STORY_CREATE_SUCCESS,
-//         payload: data
-//       });
-//       // for Sidebar input map
-//       const { data: allStoryList } = await axios.get(
-//         `${BASE_URL}/stories?pageSize=${localStorage.getItem('totalMyStoryCount')}`
-//       );
-//       localStorage.setItem('allStoriesList', JSON.stringify(allStoryList));
-//     } catch (error) {
-//       axios.isAxiosError(error) &&
-//         dispatch({
-//           type: STORY_CREATE_FAIL,
-//           payload:
-//             error.response && error.response.data.message
-//               ? error.response.data.message
-//               : error.message
-//         });
-//     }
-//   };
 
 export const createStory =
   (
@@ -356,77 +297,6 @@ export const updateStory =
     }
   };
 
-// export const uploadStoryImage =
-//   (
-//     storyId: number,
-//     mode: string,
-//     event:
-//       | React.ChangeEvent<HTMLInputElement>
-//       | React.MouseEvent<HTMLButtonElement>
-//       | React.KeyboardEvent<HTMLInputElement>,
-
-//     imageAddress?: string
-//   ) =>
-//   async (dispatch: Dispatch<StoryImageUploadActionType>, getState: () => StoreType) => {
-//     // mode: 'file_upload' or 'add_image_url'
-//     let imageUrl = imageAddress || '';
-
-//     try {
-//       dispatch({
-//         type: STORY_IMAGE_UPLOAD_REQUEST
-//       });
-
-//       const {
-//         userLogin: { userInfo }
-//       } = getState();
-
-//       if (mode === 'file_upload') {
-//         // Case file upload
-//         const file = (event.target as HTMLInputElement).files?.[0];
-//         const formData = new FormData();
-//         formData.append('image', file!);
-
-//         const config = {
-//           headers: {
-//             'Content-Type': 'multipart/form-data',
-//             Authorization: `Bearer ${userInfo.token}`
-//           }
-//         };
-
-//         const uploadedImageURL = await axios.post(
-//           `${BASE_URL}/stories/images/upload`,
-//           formData,
-//           config
-//         );
-
-//         imageUrl = uploadedImageURL.data;
-//       }
-
-//       const config = {
-//         headers: {
-//           'Content-Type': 'application/json',
-//           Authorization: `Bearer ${userInfo.token}`
-//         }
-//       };
-
-//       const { data } = await axios.post(`${BASE_URL}/stories/${storyId}/images`, { imageUrl }, config);
-
-//       dispatch({
-//         type: STORY_IMAGE_UPLOAD_SUCCESS,
-//         payload: data
-//       });
-//     } catch (error) {
-//       axios.isAxiosError(error) &&
-//         dispatch({
-//           type: STORY_IMAGE_UPLOAD_FAIL,
-//           payload:
-//             error.response && error.response.data.message
-//               ? error.response.data.message
-//               : error.message
-//         });
-//     }
-//   };
-
 export const listStoryImages =
   (storyId: number) => async (dispatch: Dispatch<StoryImagesListActionType>) => {
     try {
@@ -482,37 +352,3 @@ export const deleteStoryImage =
     }
   };
 
-export const setImageAsMain =
-  (storyImageId: number) =>
-  async (dispatch: Dispatch<StoryImageSetMainActionType>, getState: () => StoreType) => {
-    try {
-      dispatch({
-        type: STORY_IMAGE_SET_MAIN_REQUEST
-      });
-
-      const {
-        userLogin: { userInfo }
-      } = getState();
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${userInfo.token}`
-        }
-      };
-
-      await axios.put(`${BASE_URL}/stories/${storyImageId}/images/main`, {}, config);
-
-      dispatch({
-        type: STORY_IMAGE_SET_MAIN_SUCCESS
-      });
-    } catch (error) {
-      axios.isAxiosError(error) &&
-        dispatch({
-          type: STORY_IMAGE_SET_MAIN_FAIL,
-          payload:
-            error.response && error.response.data.message
-              ? error.response.data.message
-              : error.message
-        });
-    }
-  };

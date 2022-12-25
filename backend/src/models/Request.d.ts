@@ -6,5 +6,6 @@ declare namespace Express {
       role: RolesType;
     };
     file: { [key: string]: string };
+    files: Multer.File[];
   }
 }

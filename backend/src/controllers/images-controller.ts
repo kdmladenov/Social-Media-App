@@ -27,7 +27,8 @@ import uploadPostImages from '../middleware/upload-post-images.js';
 import multer from 'multer';
 import addPostImagesSchema from '../validator/add-post-images-schema.js';
 import RequestQuery from '../models/RequestQuery.js';
-import { paging } from '../constants/constants.js';
+import { GOOGLE_DRIVE_FOLDER_IDS, paging } from '../constants/constants.js';
+import { uploadFile } from '../helpers/uploadFile.js';
 
 const imagesController = express.Router();
 
@@ -39,36 +40,42 @@ imagesController
     '/posts/upload',
     authMiddleware,
     loggedUserGuard,
+    uploadPostImages,
     // validateFile('uploads', uploadFileSchema),
     // errorHandler(
     async (req: Request, res: Response) => {
+      // TO DO / Finish backend validation
       // to move to middleware
-      uploadPostImages(req, res, function (err) {
-        if (err instanceof multer.MulterError) {
-          // A Multer error occurred when uploading.
-          res
-            .status(500)
-            .send({ error: { message: `Multer uploading error: ${err.message}` } })
-            .end();
-          return;
-        } else if (err) {
-          // An unknown error occurred when uploading.
-          if (err.name == 'ExtensionError') {
-            res
-              .status(413)
-              .send({ error: { message: err.message } })
-              .end();
-          } else {
-            res
-              .status(500)
-              .send({ error: { message: `unknown uploading error: ${err.message}` } })
-              .end();
-          }
-          return;
-        }
-
-        res.status(200).send(req.files);
-      });
+      // uploadPostImages(req, res, function (err) {
+      //   if (err instanceof multer.MulterError) {
+      //     // A Multer error occurred when uploading.
+      //     res
+      //       .status(500)
+      //       .send({ error: { message: `Multer uploading error: ${err.message}` } })
+      //       .end();
+      //     return;
+      //   } else if (err) {
+      //     // An unknown error occurred when uploading.
+      //     if (err.name == 'ExtensionError') {
+      //       res
+      //         .status(413)
+      //         .send({ error: { message: err.message } })
+      //         .end();
+      //     } else {
+      //       res
+      //         .status(500)
+      //         .send({ error: { message: `unknown uploading error: ${err.message}` } })
+      //         .end();
+      //     }
+      //     return;
+      //   }
+      //   res.status(200).send(req.files);
+      // });
+      const { files } = req;
+      const uploadedFiles = await Promise.all(
+        files?.map(async (file) => await uploadFile(file, GOOGLE_DRIVE_FOLDER_IDS.posts))
+      );
+      res.status(200).send(uploadedFiles);
     }
   )
   // )

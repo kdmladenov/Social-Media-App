@@ -1,5 +1,15 @@
 export const SITE_NAME = 'Social media site'
 
+export const GOOGLE_DRIVE_FOLDER_IDS = {
+  posts: '1eFlj9Quba6z9clm1v234L0Cgfdlmvm1B',
+  stories: '1mdQjJEM1BIZnutRBFVPklTcXRWKWuze6',
+  profile_avatars: '10RAOCwNRz3ECUFinoTSkZ1oO73ejtTuV',
+  profile_covers: '1HpxMgkGdWzDObtUHr93pKwJ2-0OdbtXP'
+};
+
+export const GOOGLE_DRIVE_KEY_FILE_PATH = '../../google-drive-credentials.json';
+  // '/Users/krasymladenov/Desktop/Social-Media-App/backend/google-drive-credentials.json';
+
 export const user = {
   MIN_FIRST_NAME_LENGTH: 2,
   MAX_FIRST_NAME_LENGTH: 100,

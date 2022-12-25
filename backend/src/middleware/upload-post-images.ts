@@ -1,25 +1,17 @@
 import multer from 'multer';
-import path from 'path';
 
-const postImages = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, 'storage/post-images');
-  },
-  filename(req, file, cb) {
-    const filename = Date.now() + path.extname(file.originalname);
-
-    cb(null, filename);
-  },
-});
+// TO DO finish backend validation in controller
 
 export default multer({
-  storage: postImages,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 1MB
+  limits: { fileSize: 50 * 1024 * 1024 }, // 1MB
   fileFilter: (req, file, cb) => {
+    console.log(file.mimetype, 'file.mimetype');
     if (
       file.mimetype == 'image/png' ||
       file.mimetype == 'image/jpg' ||
-      file.mimetype == 'image/jpeg'
+      file.mimetype == 'image/jpeg' ||
+      file.mimetype == 'image/bmp' ||
+      file.mimetype == 'video/*'
     ) {
       cb(null, true);
     } else {

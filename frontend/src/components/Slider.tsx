@@ -66,7 +66,6 @@ const Item: SliderItemType = ({
     <div className="slide_container">
       <div className="image flex">
         <img
-          crossOrigin="anonymous"
           src={item?.image?.startsWith('http') ? item?.image : `${BASE_URL}/${item?.image}`}
           alt="story"
           className="image"

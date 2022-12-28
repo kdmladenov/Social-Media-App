@@ -3,11 +3,10 @@ export const BASE_URL = 'http://localhost:5555';
 export const STORE_NAME = 'MyShop';
 
 export const GOOGLE_DRIVE_PUBLIC_URL = 'https://drive.google.com/uc?export=view&id=';
-export const MIN_FILE_SIZE = 1024; // 1MB
-export const MAX_FILE_SIZE = 51200; // 50MB
+export const MIN_FILE_SIZE = 10.24; // 0.01MB
+export const MAX_FILE_SIZE = 5120; // 5MB
 
-export const ACCEPTED_FILE_FORMATS =
-  'image/png, image/jpg, image/jpeg, video/mp4, video/quicktime, video/mov, video/mwv, video/avi, video/mkv, video/flv';
+export const DEFAULT_UPLOAD_PHOTO_MESSAGE = `(${MIN_FILE_SIZE / 1024}-${MAX_FILE_SIZE / 1024} MB size limit)`;
 
 
 // History

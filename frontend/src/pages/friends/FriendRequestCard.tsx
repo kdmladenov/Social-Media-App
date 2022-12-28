@@ -101,7 +101,6 @@ const FriendRequestCard: React.FC<{ user: UserShortType; horizontal?: boolean; t
         <img
           src={user?.avatar?.startsWith('http') ? user?.avatar : `${BASE_URL}/${user?.avatar}`}
           alt={`${user?.firstName} ${user?.lastName}`}
-          crossOrigin="anonymous"
         />
       </div>
       <div className="info">

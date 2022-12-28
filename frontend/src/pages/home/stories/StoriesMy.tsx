@@ -60,7 +60,6 @@ const StoriesMy = () => {
                     }
                     alt={story?.userFirstName}
                     className="image"
-                    crossOrigin="anonymous"
                   />
                 </div>
                 <Avatar classes="image_only" imageUrl={story?.userAvatar} />

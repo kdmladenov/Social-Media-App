@@ -323,13 +323,6 @@ export const createPost =
 
       const { data } = await axios.post(`${BASE_URL}/posts`, createPostData, config);
 
-      // Empty post created and Images have been successfully uploaded or image address is available
-      // const { data: newPostImages } = await axios.post(
-      //   `${BASE_URL}/images/${newPost.postId}/posts`,
-      //   { images },
-      //   config
-      // );
-
       dispatch({
         type: POST_CREATE_SUCCESS,
         payload: data

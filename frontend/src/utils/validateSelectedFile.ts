@@ -7,7 +7,7 @@ export const validateSelectedFile = (
   const fileSizeKiloBytes = selectedFile.size / 1024;
 
   if (fileSizeKiloBytes < MIN_FILE_SIZE) {
-    setMessage(`The file size is less than ${MIN_FILE_SIZE/1024} MB`);
+    setMessage(`The file size is less than ${MIN_FILE_SIZE / 1024} MB`);
     return false;
   }
   if (fileSizeKiloBytes > MAX_FILE_SIZE) {

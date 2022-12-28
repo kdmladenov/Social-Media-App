@@ -53,7 +53,6 @@ const PhotoList: React.FC<{ screen: string, user: UserType }> = ({ screen = '', 
           <img
             src={photo.image?.startsWith('http') ? photo.image : `${BASE_URL}/${photo.image}`}
             alt={photo.image || 'image'}
-            crossOrigin="anonymous"
             onClick={() => imageModalHandler(photo?.imageId)}
             key={photo?.imageId}
           />

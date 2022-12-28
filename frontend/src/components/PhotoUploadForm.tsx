@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
-import { ACCEPTED_FILE_FORMATS, IMAGE } from '../data/constants';
+import { DEFAULT_UPLOAD_PHOTO_MESSAGE, IMAGE } from '../data/constants';
 import PostCreateActionType from '../types/context/actions/PostCreateActionType';
 import PostImagesUploadActionType from '../types/context/actions/PostImagesUploadActionType';
 import StoryCreateActionType from '../types/context/actions/StoryCreateActionType';
@@ -42,15 +42,14 @@ const PhotoUploadForm: React.FC<{
   const dispatch = useDispatch();
   const [imageURL, setImageURL] = useState('');
   const [dragActive, setDragActive] = useState(false);
-  const [message, setMessage] = useState('');
-
+  const [message, setMessage] = useState(DEFAULT_UPLOAD_PHOTO_MESSAGE);
   const isUrlValid = IMAGE.IMAGE_URL_REGEX.test(imageURL);
 
   const uploadImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = (event.target as HTMLInputElement).files;
     let areAllFilesValid = true;
     if (selectedFiles?.length !== 0) {
-      setMessage('');
+      setMessage(DEFAULT_UPLOAD_PHOTO_MESSAGE);
       for (const singleFile of selectedFiles!) {
         areAllFilesValid = areAllFilesValid && validateSelectedFile(singleFile, setMessage);
       }
@@ -76,7 +75,7 @@ const PhotoUploadForm: React.FC<{
     let areAllFilesValid = true;
 
     if (e?.dataTransfer?.files?.[0]) {
-      setMessage('');
+      setMessage(DEFAULT_UPLOAD_PHOTO_MESSAGE);
       for (const singleFile of selectedFiles!) {
         areAllFilesValid = areAllFilesValid && validateSelectedFile(singleFile, setMessage);
       }
@@ -118,7 +117,9 @@ const PhotoUploadForm: React.FC<{
             <p>Add Photos</p>
             <span>or</span>
             <span>drag and drop</span>
-            <span className='error_message'>{message}</span>
+            <span className={`${message !== DEFAULT_UPLOAD_PHOTO_MESSAGE ? 'error_message' : ''}`}>
+              {message}
+            </span>
           </label>
           <input
             id="upload"
@@ -126,7 +127,7 @@ const PhotoUploadForm: React.FC<{
             multiple={multiple}
             name={name}
             onChange={uploadImage}
-            accept={ACCEPTED_FILE_FORMATS}
+            accept={'image/*'}
           />
           {dragActive && (
             <div

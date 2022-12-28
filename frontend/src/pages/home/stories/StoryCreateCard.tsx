@@ -44,7 +44,6 @@ const StoryCreateCard = () => {
           <img
             src={user?.avatar?.startsWith('http') ? user?.avatar : `${BASE_URL}/${user?.avatar}`}
             alt={user?.firstName || 'image'}
-            crossOrigin="anonymous"
           />
         </div>
         <div className="icon flex">

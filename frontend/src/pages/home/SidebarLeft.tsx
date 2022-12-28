@@ -33,7 +33,6 @@ const SidebarLeft = () => {
                 <img
                   src={user?.cover?.startsWith('http') ? user?.cover : `${BASE_URL}/${user?.cover}`}
                   alt={`${user?.firstName} ${user?.lastName}`}
-                  crossOrigin="anonymous"
                 />
               </div>
               <div className="picture" onClick={() => navigate(`/profile/${user?.userId}/posts`)}>

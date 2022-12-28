@@ -32,7 +32,6 @@ const ProfileHeader: React.FC<{ user: UserType; section?: string }> = ({ user, s
             <img
               src={user?.cover?.startsWith('http') ? user?.cover : `${BASE_URL}/${user?.cover}`}
               alt={`${user?.firstName} ${user?.lastName}`}
-              crossOrigin="anonymous"
             />
           ) : (
             <></>

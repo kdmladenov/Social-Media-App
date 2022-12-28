@@ -1,4 +1,4 @@
-export const SITE_NAME = 'Social media site'
+export const SITE_NAME = 'Social media site';
 
 export const GOOGLE_DRIVE_FOLDER_IDS = {
   posts: '1eFlj9Quba6z9clm1v234L0Cgfdlmvm1B',
@@ -9,6 +9,16 @@ export const GOOGLE_DRIVE_FOLDER_IDS = {
 
 export const GOOGLE_DRIVE_KEY_FILE_PATH =
   '/Users/krasymladenov/Repo/Social-Media-App/backend/google-drive-credentials.json';
+
+export const GOOGLE_DRIVE_PUBLIC_URL = 'https://drive.google.com/uc?export=view&id=';
+
+export const uploads = {
+  VALID_FILE_FORMATS: ['jpg', 'png', 'jpeg', 'bmp'],
+  MAX_FILE_SIZE: 5120000, // 5 MB
+  MIN_FILE_SIZE: 1024, // 0.01 MB
+  DEFAULT_IMAGE_URL: 'storage/images/defaultImage.png',
+  MULTIPLE_IMAGES_MAX_COUNT : 10
+};
 
 export const user = {
   MIN_FIRST_NAME_LENGTH: 2,
@@ -73,12 +83,12 @@ export const paging = {
   DEFAULT_LOCATIONS_PAGESIZE: 6,
   DEFAULT_IMAGES_PAGESIZE: 15,
   MIN_IMAGES_PAGESIZE: 9,
-  MAX_IMAGES_PAGESIZE: 20,
+  MAX_IMAGES_PAGESIZE: 20
 };
 
 export const post = {
   MIN_MESSAGE_LENGTH: 1,
-  MAX_MESSAGE_LENGTH: 10000,
+  MAX_MESSAGE_LENGTH: 10000
 };
 
 export const story = {
@@ -103,14 +113,7 @@ export const workplace = {
   MIN_COMPANY_NAME_LENGTH: 1,
   MAX_COMPANY_NAME_LENGTH: 1000,
   MIN_POSITION_LENGTH: 1,
-  MAX_POSITION_LENGTH: 1000,
-};
-
-export const uploads = {
-  VALID_FILE_FORMATS: ['jpg', 'png', 'jpeg'],
-  MAX_FILE_SIZE: 102400, //   divide by 1000 for KB
-  MIN_FILE_SIZE: 0,
-  DEFAULT_IMAGE_URL: 'storage/images/defaultImage.png'
+  MAX_POSITION_LENGTH: 1000
 };
 
 export const forgotPassword = {
@@ -123,7 +126,6 @@ export const comments = {
   MIN_CONTENT_LENGTH: 2,
   MAX_CONTENT_LENGTH: 1000
 };
-
 
 export const suggestionWeights = {
   friend: 1,

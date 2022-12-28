@@ -7,9 +7,15 @@ export default (resource: string, scheme: { [key: string]: Function }) =>
     const errorsObj: { [key: string]: { [key: string]: string } } = errorStrings;
 
     Object.keys(scheme).forEach((key) => {
-      if (!scheme[key](req?.file?.[key])) {
-        errors[key] = errorsObj?.[resource]?.[key];
-      }
+      // if (!scheme[key](req?.file?.[key])) {
+      //   errors[key] = errorsObj?.[resource]?.[key];
+      // }
+            if (!scheme.size(req?.file?.size)) {
+              errors[key] = errorsObj?.[resource]?.size;
+            }
+            if (!scheme.type(req?.file?.mimetype)) {
+              errors[key] = errorsObj?.[resource]?.type;
+            }
     });
 
     if (Object.keys(errors).length > 0) {

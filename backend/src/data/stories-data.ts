@@ -3,6 +3,7 @@ import rolesEnum from '../constants/roles.enum.js';
 import filterQueryHandler from '../helpers/filterQueryHandler.js';
 import RolesType from '../models/RolesType.js';
 import StoryType from '../models/StoryType.js';
+import { DEFAULT_IMAGE_URL } from '../constants/constants.js';
 
 const getAllMyStories = async (
   userId: number,
@@ -114,7 +115,7 @@ const create = async (image: string, userId: number) => {
     )
     VALUES (?, ?)
   `;
-  const result = await db.query(sql, [+userId, image || 'storage/images/defaultImage.png']);
+  const result = await db.query(sql, [+userId, image || DEFAULT_IMAGE_URL]);
 
   return getBy('story_id', +result.insertId);
 };
@@ -134,7 +135,7 @@ const update = async (updatedStory: StoryType) => {
   await db.query(sql, [
     +updatedStory.userId || null,
     updatedStory.message || null,
-    updatedStory.image || 'storage/images/defaultImage.png',
+    updatedStory.image || DEFAULT_IMAGE_URL,
     updatedStory.feelingType || null,
     updatedStory.city || null,
     +updatedStory.storyId

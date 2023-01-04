@@ -50,12 +50,6 @@ app.use('/saved-posts', savedPostsController);
 app.use('/workplaces', workplacesController);
 app.use('/locations', locationsController);
 
-app.use('/storage/images', express.static('storage/images'));
-app.use('/storage/avatars', express.static('storage/avatars'));
-app.use('/storage/covers', express.static('storage/covers'));
-app.use('/storage/stories', express.static('storage/stories'));
-app.use('/storage/post-images', express.static('storage/post-images'));
-
 app.all('*', (req, res) => res.status(404).send({ message: 'Resource not found!' }));
 
 app.use((err: HttpException, req: Request, res: Response, next: NextFunction) => {

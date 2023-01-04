@@ -5,7 +5,6 @@ import { uploads } from '../constants/constants.js';
 export default multer({
   limits: { fileSize: uploads.MAX_FILE_SIZE }, // 5MB
   fileFilter: (req, file, cb) => {
-    console.log(file.mimetype, 'file.mimetype');
     if (
       file.mimetype == 'image/png' ||
       file.mimetype == 'image/jpg' ||

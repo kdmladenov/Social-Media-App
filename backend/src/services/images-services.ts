@@ -2,7 +2,7 @@ import errors from '../constants/service-errors.js';
 import ImagesData from '../models/ImagesData.js';
 import PostsData from '../models/PostsData.js';
 import UsersData from '../models/UsersData.js';
-import { user as userConstants } from '../constants/constants.js';
+import { DEFAULT_AVATAR } from '../constants/constants.js';
 import Image from '../models/Image.js';
 import RolesType from '../models/RolesType.js';
 import rolesEnum from '../constants/roles.enum.js';
@@ -146,7 +146,7 @@ const deleteUserAvatar = (usersData: UsersData) => async (userId: number) => {
     };
   }
 
-  const updatedUser = { ...existingUser, avatar: userConstants.DEFAULT_AVATAR };
+  const updatedUser = { ...existingUser, avatar: DEFAULT_AVATAR };
   await usersData.updateUser(updatedUser);
 
   return {

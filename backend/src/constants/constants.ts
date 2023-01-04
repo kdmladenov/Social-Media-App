@@ -12,12 +12,14 @@ export const GOOGLE_DRIVE_KEY_FILE_PATH =
 
 export const GOOGLE_DRIVE_PUBLIC_URL = 'https://drive.google.com/uc?export=view&id=';
 
+export const DEFAULT_IMAGE_URL = 'storage/images/defaultImage.png';
+export const DEFAULT_AVATAR = `storage/avatars/defaultAvatar.png`;
+
 export const uploads = {
   VALID_FILE_FORMATS: ['jpg', 'png', 'jpeg', 'bmp'],
   MAX_FILE_SIZE: 5120000, // 5 MB
   MIN_FILE_SIZE: 1024, // 0.01 MB
-  DEFAULT_IMAGE_URL: 'storage/images/defaultImage.png',
-  MULTIPLE_IMAGES_MAX_COUNT : 10
+  MULTIPLE_IMAGES_MAX_COUNT: 10
 };
 
 export const user = {
@@ -33,7 +35,6 @@ export const user = {
   MAX_PASSWORD_LENGTH: 20,
   EMAIL_REGEX: /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/,
   PHONE_REGEX: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
-  DEFAULT_AVATAR: `storage/avatars/defaultAvatar.png`,
   PASSWORD_REGEX: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, // letters, numbers and at least 1 uppercase
   MIN_ABOUT_ME_LENGTH: 10,
   MAX_ABOUT_ME_LENGTH: 1000

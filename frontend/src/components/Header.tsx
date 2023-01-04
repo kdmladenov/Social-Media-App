@@ -74,7 +74,7 @@ const Header: React.FC = () => {
         >
           {userInfo?.token ? (
             <ul className="menu_user">
-              {userMenuMap.map((link, index) => (
+              {userMenuMap(user.userId).map((link, index) => (
                 <NavLink to={link.path} key={link.path}>
                   <li key={index}>{link.label}</li>
                 </NavLink>

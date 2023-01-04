@@ -180,10 +180,9 @@ const FormComponent: React.FC<FormComponentProps> = ({
     setIsResourceUpdated(true);
   };
 
-    const testAccountLoginHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-      dispatch(login({ email: TEST_ACCOUNT_EMAIL, password: TEST_ACCOUNT_PASSWORD }));
-    };
-
+  const testAccountLoginHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    dispatch(login({ email: TEST_ACCOUNT_EMAIL, password: TEST_ACCOUNT_PASSWORD }));
+  };
 
   useEffect(() => {
     if (getDetailsAction) {

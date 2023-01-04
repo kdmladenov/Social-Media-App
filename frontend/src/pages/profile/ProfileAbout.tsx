@@ -150,7 +150,7 @@ const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
                 addButton
               }) =>
                 user[subsectionKey as keyof UserType] && inputData ? (
-                  <li className="info_item flex" key={resourceId}>
+                  <li className="info_item flex" key={`${subsectionKey}${resourceId}`}>
                     <div className="info flex">
                       <i className={icon}></i>
                       <div className="info_details flex_col">
@@ -198,17 +198,30 @@ const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
                     </DropDown>
                   </li>
                 ) : title ? (
-                  <li>
+                  <li key={`title-${title}`}>
                     <h3>{title}</h3>
                   </li>
                 ) : addButton ? (
-                  <li>
-                    <h3>{addButton}</h3>
+                  <li key={`${label}${resourceId}`}>
+                    <Button
+                      onClick={() =>
+                        itemEditCreateHandler(
+                          addButton.inputData,
+                          subsectionKey!,
+                          resourceId,
+                          resource,
+                          'create'
+                        )
+                      }
+                      classes="text add_profile_info flex"
+                    >
+                      <span>{`Add a ${addButton.label}`}</span>
+                    </Button>
                   </li>
                 ) : (
                   inputData &&
                   section !== 'Work and Education' && (
-                    <li>
+                    <li key={`${subsectionKey}${resourceId}`}>
                       <Button
                         onClick={() =>
                           itemEditCreateHandler(

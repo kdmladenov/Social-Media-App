@@ -1,23 +1,7 @@
 import profileUpdateInitialInputState from '../data/inputs/profileUpdateInitialInputState';
-import FormInputDataType from '../types/FormInputDataType';
-import SchoolType from '../types/SchoolType';
+import ProfileItemType, { createButtonType } from '../types/ProfileItemType';
 import UserType from '../types/UserType';
-import WorkplaceType from '../types/WorkplaceType';
 import getDate from './getDate';
-
-interface ProfileItemType {
-  subsectionKey?: keyof UserType;
-  label?: string;
-  icon?: string;
-  spanText?: string;
-  labelText?: string;
-  inputData?: FormInputDataType;
-  resource?: UserType | SchoolType | WorkplaceType;
-  resourceId?: number;
-  subResourceId?: number;
-  title?: string;
-  addButton?: string;
-}
 
 const getProfileAboutInfoItems = (user: UserType): { [key: string]: ProfileItemType[] } => {
   const {
@@ -84,6 +68,24 @@ const getProfileAboutInfoItems = (user: UserType): { [key: string]: ProfileItemT
       };
     });
 
+  const createButtonMap: { [key: string]: createButtonType } = {
+    workplace: {
+      subsectionKey: 'workplace',
+      label: 'workplace',
+      inputData: profileUpdateInitialInputState.workplaces
+    },
+    college: {
+      subsectionKey: 'schools',
+      label: 'college',
+      inputData: profileUpdateInitialInputState.schools
+    },
+    'high school': {
+      subsectionKey: 'schools',
+      label: 'high school',
+      inputData: profileUpdateInitialInputState.schools
+    }
+  };
+
   return {
     Overview: [
       ...(mappedWorkplaces?.slice(0, 1) || []),
@@ -119,13 +121,13 @@ const getProfileAboutInfoItems = (user: UserType): { [key: string]: ProfileItemT
     ],
     'Work and Education': [
       { title: 'Work' },
-      { addButton: 'addButton' },
+      { addButton: createButtonMap['workplace'] },
       ...(mappedWorkplaces || []),
       { title: 'College' },
-      { addButton: 'addButton' },
+      { addButton: createButtonMap['college'] },
       ...(mappedColleges || []),
       { title: 'High school' },
-      { addButton: 'addButton' },
+      { addButton: createButtonMap['high school'] },
       ...(mappedHighSchools || [])
     ],
     'Places Lived': [
@@ -178,9 +180,9 @@ const getProfileAboutInfoItems = (user: UserType): { [key: string]: ProfileItemT
         subsectionKey: 'dateOfBirth',
         label: 'date of birth',
         icon: 'fas fa-birthday-cake',
-        spanText: dateOfBirth && `${getDate(dateOfBirth, 0, false, false)}, ${new Date(
-          dateOfBirth
-        ).getFullYear()}`,
+        spanText:
+          dateOfBirth &&
+          `${getDate(dateOfBirth, 0, false, false)}, ${new Date(dateOfBirth).getFullYear()}`,
         labelText: 'Date of birth',
         inputData: profileUpdateInitialInputState.dateOfBirth
       }

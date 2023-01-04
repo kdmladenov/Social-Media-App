@@ -28,7 +28,7 @@ import {
 } from '../constants/schoolConstants';
 
 export const createSchool =
-  ( createData: SchoolType) =>
+  (createData: SchoolType) =>
   async (dispatch: Dispatch<SchoolCreateActionType>, getState: () => StoreType) => {
     try {
       dispatch({ type: SCHOOL_CREATE_REQUEST });
@@ -104,7 +104,6 @@ export const updateSchool =
       dispatch({
         type: SCHOOL_UPDATE_REQUEST
       });
-
       const {
         userLogin: { userInfo }
       } = getState();

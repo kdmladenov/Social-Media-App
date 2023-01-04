@@ -70,13 +70,25 @@
 .profile_about .profile_about_card .profile_info li.info_item i {
   font-size: 25px;
   width: 30px;
-  color: var(--gray_dark);
+  color: var(--dory);
   text-align: center;
+}
+
+.profile_about .profile_about_card .profile_info li.info_item .dropdown {
+  font-size: 15px;
+  width: 30px;
+  color: var(--dory);
+  text-align: center;
+  visibility: hidden;
+}
+
+.profile_about .profile_about_card .profile_info li.info_item:hover .dropdown {
+  visibility: visible;
 }
 
 /* Add Item button */
 .profile_about .profile_about_card .profile_info li button.add_profile_info {
-  color: var(--blue);
+  color: var(--dory);
   display: flex;
   justify-content: center;
   align-items: center;

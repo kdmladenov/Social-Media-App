@@ -1,7 +1,6 @@
 import { school as SCHOOL, locations as LOCATIONS } from '../constants/constants.js';
 
 export default {
-  userId: (value: number) => typeof value === 'number',
   schoolName: (value: string) =>
     typeof value === 'string' &&
     value.length >= SCHOOL.MIN_SCHOOL_LENGTH &&
@@ -21,10 +20,10 @@ export default {
     (typeof value === 'string' &&
       value.length >= LOCATIONS.MIN_COUNTRY_LENGTH &&
       value.length <= LOCATIONS.MAX_COUNTRY_LENGTH),
-  startYear: (value: number) => typeof value === 'number' && new Date().getFullYear() >= value,
-  endYear: (value: number) =>
+  startYear: (value: string) => typeof value === 'string' && new Date().getFullYear() >= +value,
+  endYear: (value: string) =>
     !value ||
-    (typeof value === 'number' && typeof value === 'number' && new Date().getFullYear() >= value),
+    (typeof value === 'string' && new Date().getFullYear() >= +value),
   isDeleted: (value: number) =>
     !value || (typeof value === 'boolean' && !value) || typeof value === 'boolean'
 };

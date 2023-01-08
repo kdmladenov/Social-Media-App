@@ -258,7 +258,7 @@ usersController
     // errorHandler(
     async (req: Request, res: Response) => {
       const { email } = req.body;
-      console.log('object');
+
       const { error, result } = await usersServices.forgottenPassword(usersData)(email);
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({

@@ -22,9 +22,9 @@ export default {
     (typeof value === 'string' &&
       value.length >= LOCATIONS.MIN_COUNTRY_LENGTH &&
       value.length <= LOCATIONS.MAX_COUNTRY_LENGTH),
-  startDate: (value: number) =>
+  startDate: (value: string) =>
     !value || (typeof value === 'string' && new Date() >= new Date(value)),
-  endDate: (value: number) =>
+  endDate: (value: string) =>
     !value || (typeof value === 'string' && new Date() >= new Date(value)),
   isDeleted: (value: number) =>
     !value || (typeof value === 'boolean' && !value) || typeof value === 'boolean'

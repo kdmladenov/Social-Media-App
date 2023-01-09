@@ -243,8 +243,6 @@ const Reactions: React.FC<{
         });
       }
     } else {
-      console.log('first');
-      console.log(postImageReactions, 'postImageReactions');
       setCurrentReactionButton(reactionButtons[0]);
       setReactionInState(
         (type === 'post'

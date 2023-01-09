@@ -53,7 +53,7 @@ const ProfilePage: React.FC = () => {
         {section === 'posts' ? (
           <ProfilePosts user={user} />
         ) : section === 'about' ? (
-          <ProfileAbout user={user} />
+          <ProfileAbout userProfile={user} />
         ) : section === 'friends' ? (
           <FriendList user={user} screen="profile_friends_screen" />
         ) : (

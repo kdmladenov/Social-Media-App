@@ -298,7 +298,7 @@ interface StoreType {
     loading: boolean;
     error?: string;
     success?: boolean;
-    school: SchoolType;
+    user: UserType;
   };
   schoolDetails: {
     loading: boolean;
@@ -314,13 +314,14 @@ interface StoreType {
   schoolDelete: {
     loading: boolean;
     error?: string;
+    user: UserType;
     success?: boolean;
   };
   schoolUpdate: {
     loading: boolean;
     error?: string;
     success?: boolean;
-    school: SchoolType;
+    user: UserType;
   };
 
   savedPostCreate: {
@@ -425,7 +426,7 @@ interface StoreType {
     loading: boolean;
     error?: string;
     success?: boolean;
-    workplace: WorkplaceType;
+    user: UserType;
   };
   workplaceDetails: {
     loading: boolean;
@@ -442,12 +443,13 @@ interface StoreType {
     loading: boolean;
     error?: string;
     success?: boolean;
+    user: UserType;
   };
   workplaceUpdate: {
     loading: boolean;
     error?: string;
     success?: boolean;
-    workplace: WorkplaceType;
+    user: UserType;
   };
   locationCreate: {
     loading: boolean;

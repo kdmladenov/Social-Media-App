@@ -1,4 +1,3 @@
-
 import SchoolCreateActionType from '../../types/context/actions/SchoolCreateActionType';
 import SchoolDeleteActionType from '../../types/context/actions/SchoolDeleteActionType';
 import SchoolDetailsActionType from '../../types/context/actions/SchoolDetailsActionType';
@@ -21,18 +20,16 @@ import {
   SCHOOL_CREATE_SUCCESS,
   SCHOOL_UPDATE_FAIL,
   SCHOOL_UPDATE_REQUEST,
-  SCHOOL_UPDATE_RESET,
-  SCHOOL_UPDATE_SUCCESS
+  SCHOOL_UPDATE_SUCCESS,
+  SCHOOL_UPDATE_RESET
 } from '../constants/schoolConstants';
-
-
 
 export const schoolCreateReducer = (state = {}, action: SchoolCreateActionType) => {
   switch (action.type) {
     case SCHOOL_CREATE_REQUEST:
       return { loading: true };
     case SCHOOL_CREATE_SUCCESS:
-      return { loading: false, success: true, school: action.payload };
+      return { loading: false, success: true, user: action.payload };
     case SCHOOL_CREATE_FAIL:
       return { loading: false, error: action.payload };
     default:
@@ -60,7 +57,7 @@ export const schoolUpdateReducer = (state = {}, action: SchoolUpdateActionType) 
     case SCHOOL_UPDATE_REQUEST:
       return { loading: true };
     case SCHOOL_UPDATE_SUCCESS:
-      return { loading: false, school: action.payload, success: true };
+      return { loading: false, user: action.payload, success: true };
     case SCHOOL_UPDATE_FAIL:
       return { loading: false, error: action.payload };
     case SCHOOL_UPDATE_RESET:
@@ -90,7 +87,7 @@ export const schoolDeleteReducer = (state = {}, action: SchoolDeleteActionType) 
     case SCHOOL_DELETE_REQUEST:
       return { loading: true };
     case SCHOOL_DELETE_SUCCESS:
-      return { loading: false, success: true };
+      return { loading: false, user: action.payload, success: true };
     case SCHOOL_DELETE_FAIL:
       return { loading: false, error: action.payload };
     default:

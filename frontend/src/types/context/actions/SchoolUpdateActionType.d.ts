@@ -1,11 +1,11 @@
-import SchoolType from '../../SchoolType';
+import UserType from '../../UserType';
 
 interface SchoolUpdateActionRequest {
   type: 'SCHOOL_UPDATE_REQUEST';
 }
 interface SchoolUpdateActionSuccess {
   type: 'SCHOOL_UPDATE_SUCCESS';
-  payload: SchoolType;
+  payload: UserType;
 }
 interface SchoolUpdateActionError {
   type: 'SCHOOL_UPDATE_FAIL';

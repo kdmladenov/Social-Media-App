@@ -70,7 +70,7 @@ const getProfileAboutInfoItems = (user: UserType): { [key: string]: ProfileItemT
 
   const createButtonMap: { [key: string]: createButtonType } = {
     workplace: {
-      subsectionKey: 'workplace',
+      subsectionKey: 'workplaces',
       label: 'workplace',
       inputData: profileUpdateInitialInputState.workplaces
     },

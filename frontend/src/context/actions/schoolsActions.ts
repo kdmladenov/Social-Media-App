@@ -28,7 +28,7 @@ import {
 } from '../constants/schoolConstants';
 
 export const createSchool =
-  (createData: SchoolType) =>
+  (_: number, createData: SchoolType) =>
   async (dispatch: Dispatch<SchoolCreateActionType>, getState: () => StoreType) => {
     try {
       dispatch({ type: SCHOOL_CREATE_REQUEST });
@@ -45,7 +45,8 @@ export const createSchool =
         }
       };
 
-      const { data } = await axios.post(`${BASE_URL}/schools`, createData, config);
+      await axios.post(`${BASE_URL}/schools`, createData, config);
+      const { data } = await axios.get(`${BASE_URL}/users/${userInfo?.userId}`, config);
 
       dispatch({
         type: SCHOOL_CREATE_SUCCESS,
@@ -115,11 +116,13 @@ export const updateSchool =
         }
       };
 
-      const { data } = await axios.put(
+      await axios.put(
         `${BASE_URL}/schools/${schoolId}`,
         updatedSchoolData,
         config
       );
+
+      const { data } = await axios.get(`${BASE_URL}/users/${userInfo?.userId}`, config);
 
       dispatch({
         type: SCHOOL_UPDATE_SUCCESS,
@@ -192,9 +195,11 @@ export const deleteSchool =
       };
 
       await axios.delete(`${BASE_URL}/schools/${schoolId}`, config);
+      const { data } = await axios.get(`${BASE_URL}/users/${userInfo?.userId}`, config);
 
       dispatch({
-        type: SCHOOL_DELETE_SUCCESS
+        type: SCHOOL_DELETE_SUCCESS,
+        payload: data
       });
     } catch (error) {
       axios.isAxiosError(error) &&

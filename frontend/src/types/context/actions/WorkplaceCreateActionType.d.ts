@@ -1,11 +1,11 @@
-import WorkplaceType from '../../WorkplaceType';
+import UserType from '../../UserType';
 
 interface WorkplaceCreateActionRequest {
   type: 'WORKPLACE_CREATE_REQUEST';
 }
 interface WorkplaceCreateActionSuccess {
   type: 'WORKPLACE_CREATE_SUCCESS';
-  payload: WorkplaceType;
+  payload: UserType;
 }
 interface WorkplaceCreateActionError {
   type: 'WORKPLACE_CREATE_FAIL';

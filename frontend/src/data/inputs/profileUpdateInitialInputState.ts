@@ -227,6 +227,21 @@ const profileUpdateInitialInputState: {
       valid: true,
       touched: false
     },
+    schoolType: {
+      formElement: 'select',
+      label: 'School type',
+      placeholder: 'School type ...',
+      options: ['College', 'High school'].map((itemValue) => ({
+        label: `${itemValue}`,
+        value: `${itemValue}`
+      })),
+      value: '',
+      validations: {
+        required: true
+      },
+      valid: true,
+      touched: false
+    },
     degree: {
       label: 'Degree',
       type: 'text',

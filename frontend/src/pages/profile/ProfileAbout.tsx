@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../../components/Button';
 import ConfirmMessage from '../../components/ConfirmMessage';
 import DropDown from '../../components/Dropdown';
@@ -28,42 +28,62 @@ import getProfileAboutInfoItems from '../../utils/getProfileAboutInfoItems';
 import FriendList from './FriendList';
 import PhotoList from './PhotoList';
 import './styles/ProfileAbout.css';
+import ProfileItemType from '../../types/ProfileItemType';
+import { useDispatch } from 'react-redux';
 
-const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
-  const [section, setSection] = useState<keyof typeof profileInfoItemsMap>('Overview');
+const ProfileAbout: React.FC<{ userProfile: UserType }> = ({ userProfile }) => {
+  const [section, setSection] = useState<string>('Overview');
+  const [profileInfoItems, setProfileInfoItems] = useState<ProfileItemType[]>();
+  const [user, setUser] = useState(userProfile);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(<></>);
 
-  const { success: successUserProfileUpdate } = useTypedSelector(
+  const dispatch = useDispatch();
+
+  const { success: successUserUpdate, user: updatedUser } = useTypedSelector(
     (state) => state.userUpdateProfile
   );
-  const { success: successSchoolUpdate } = useTypedSelector((state) => state.schoolUpdate);
-  const { success: successWorkplaceUpdate } = useTypedSelector((state) => state.workplaceUpdate);
+  const { success: successSchoolUpdate, user: userUpdatedSchool } = useTypedSelector(
+    (state) => state.schoolUpdate
+  );
+  const { success: successSchoolCreate, user: userCreatedSchool } = useTypedSelector(
+    (state) => state.schoolCreate
+  );
+  const { success: successSchoolDelete, user: userDeletedSchool } = useTypedSelector(
+    (state) => state.schoolDelete
+  );
+  const { success: successWorkplaceCreate, user: userCreatedWorkplace } = useTypedSelector(
+    (state) => state.workplaceCreate
+  );
+  const { success: successWorkplaceUpdate, user: userUpdatedWorkplace } = useTypedSelector(
+    (state) => state.workplaceUpdate
+  );
+  const { success: successWorkplaceDelete, user: userDeletedWorkplace } = useTypedSelector(
+    (state) => state.workplaceDelete
+  );
 
   const itemEditCreateHandler = (
     inputData: FormInputDataType,
-    subsectionKey: keyof UserType,
+    subsectionKey: string,
+    mode = 'update',
     resourceId?: number,
-    resource?: UserType | SchoolType | WorkplaceType | PostType,
-    mode = 'edit'
+    resource?: UserType | SchoolType | WorkplaceType | PostType
   ) => {
     setIsModalOpen(true);
+
     setModalContent(
       <FormComponent
         inputData={inputData}
         updateAction={
-          subsectionKey === 'workplaces'
+          mode === 'update' &&
+          (subsectionKey === 'workplaces'
             ? updateWorkplace
             : subsectionKey === 'schools'
             ? updateSchool
-            : updateUserProfile
+            : updateUserProfile)
         }
         createAction={
-          subsectionKey === 'workplaces'
-            ? createWorkplace
-            : subsectionKey === 'schools'
-            ? createSchool
-            : updateUserProfile
+          mode === 'create' && (subsectionKey === 'workplaces' ? createWorkplace : createSchool)
         }
         getDetailsAction={
           subsectionKey === 'workplaces'
@@ -78,7 +98,7 @@ const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
             ? successWorkplaceUpdate
             : subsectionKey === 'schools'
             ? successSchoolUpdate
-            : successUserProfileUpdate
+            : successUserUpdate
         }
         resource={resource || user}
         validateInput={validateInputUser}
@@ -111,7 +131,48 @@ const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
     );
   };
 
-  const profileInfoItemsMap = getProfileAboutInfoItems(user);
+  useEffect(() => {
+    if (
+      successUserUpdate ||
+      successSchoolUpdate ||
+      successSchoolCreate ||
+      successSchoolDelete ||
+      successWorkplaceCreate ||
+      successWorkplaceUpdate ||
+      successWorkplaceDelete
+    ) {
+      setIsModalOpen(false);
+    }
+    if (successUserUpdate) setUser(updatedUser);
+
+    if (successSchoolUpdate) setUser(userUpdatedSchool);
+    if (successSchoolCreate) setUser(userCreatedSchool);
+    if (successSchoolDelete) setUser(userDeletedSchool);
+
+    if (successWorkplaceUpdate) setUser(userUpdatedWorkplace);
+    if (successWorkplaceCreate) setUser(userCreatedWorkplace);
+    if (successWorkplaceDelete) setUser(userDeletedWorkplace);
+
+    setProfileInfoItems(getProfileAboutInfoItems(user)[section]);
+  }, [
+    dispatch,
+    successUserUpdate,
+    successSchoolUpdate,
+    successSchoolCreate,
+    updatedUser,
+    successSchoolDelete,
+    successWorkplaceCreate,
+    successWorkplaceUpdate,
+    successWorkplaceDelete,
+    userCreatedSchool,
+    userCreatedWorkplace,
+    userDeletedSchool,
+    userDeletedWorkplace,
+    userUpdatedSchool,
+    userUpdatedWorkplace,
+    user,
+    section
+  ]);
 
   return (
     <div className="profile_about flex_col">
@@ -136,19 +197,22 @@ const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
         </aside>
         <div className="profile_info">
           <ul className="info_list flex_col">
-            {profileInfoItemsMap[section].map(
-              ({
-                subsectionKey,
-                label,
-                icon,
-                spanText,
-                labelText,
-                inputData,
-                resourceId,
-                resource,
-                title,
-                addButton
-              }) =>
+            {profileInfoItems?.map(
+              (
+                {
+                  subsectionKey,
+                  label,
+                  icon,
+                  spanText,
+                  labelText,
+                  inputData,
+                  resourceId,
+                  resource,
+                  title,
+                  addButton
+                },
+                index
+              ) =>
                 user[subsectionKey as keyof UserType] && inputData ? (
                   <li className="info_item flex" key={`${subsectionKey}${resourceId}`}>
                     <div className="info flex">
@@ -172,9 +236,9 @@ const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
                             itemEditCreateHandler(
                               inputData,
                               subsectionKey!,
+                              'update',
                               resourceId,
-                              resource,
-                              'edit'
+                              resource
                             )
                           }
                         >
@@ -201,15 +265,13 @@ const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
                   <li key={`title-${title}`}>
                     <h3>{title}</h3>
                   </li>
-                ) : addButton ? (
-                  <li key={`${label}${resourceId}`}>
+                ) : addButton?.label ? (
+                  <li key={`${addButton.label}${index}`}>
                     <Button
                       onClick={() =>
                         itemEditCreateHandler(
                           addButton.inputData,
-                          subsectionKey!,
-                          resourceId,
-                          resource,
+                          addButton.subsectionKey,
                           'create'
                         )
                       }
@@ -227,9 +289,9 @@ const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
                           itemEditCreateHandler(
                             inputData,
                             subsectionKey!,
+                            'update',
                             resourceId,
-                            resource,
-                            'create'
+                            resource
                           )
                         }
                         classes="text add_profile_info flex"

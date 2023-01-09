@@ -32,7 +32,7 @@ export const workplaceCreateReducer = (state = {}, action: WorkplaceCreateAction
     case WORKPLACE_CREATE_REQUEST:
       return { loading: true };
     case WORKPLACE_CREATE_SUCCESS:
-      return { loading: false, success: true, workplace: action.payload };
+      return { loading: false, success: true, user: action.payload };
     case WORKPLACE_CREATE_FAIL:
       return { loading: false, error: action.payload };
     default:
@@ -60,7 +60,7 @@ export const workplaceUpdateReducer = (state = {}, action: WorkplaceUpdateAction
     case WORKPLACE_UPDATE_REQUEST:
       return { loading: true };
     case WORKPLACE_UPDATE_SUCCESS:
-      return { loading: false, workplace: action.payload, success: true };
+      return { loading: false, user: action.payload, success: true };
     case WORKPLACE_UPDATE_FAIL:
       return { loading: false, error: action.payload };
     case WORKPLACE_UPDATE_RESET:
@@ -90,7 +90,7 @@ export const workplaceDeleteReducer = (state = {}, action: WorkplaceDeleteAction
     case WORKPLACE_DELETE_REQUEST:
       return { loading: true };
     case WORKPLACE_DELETE_SUCCESS:
-      return { loading: false, success: true };
+      return { loading: false, success: true, user: action.payload };
     case WORKPLACE_DELETE_FAIL:
       return { loading: false, error: action.payload };
     default:

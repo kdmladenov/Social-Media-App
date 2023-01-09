@@ -28,11 +28,10 @@ import {
 } from '../constants/workplaceConstants';
 
 export const createWorkplace =
-  ( createData: WorkplaceType) =>
+  (_: number, createData: WorkplaceType) =>
   async (dispatch: Dispatch<WorkplaceCreateActionType>, getState: () => StoreType) => {
     try {
       dispatch({ type: WORKPLACE_CREATE_REQUEST });
-
 
       const {
         userLogin: { userInfo }
@@ -45,7 +44,8 @@ export const createWorkplace =
         }
       };
 
-      const { data } = await axios.post(`${BASE_URL}/workplaces`, createData, config);
+      await axios.post(`${BASE_URL}/workplaces`, createData, config);
+      const { data } = await axios.get(`${BASE_URL}/users/${userInfo?.userId}`, config);
 
       dispatch({
         type: WORKPLACE_CREATE_SUCCESS,
@@ -115,11 +115,8 @@ export const updateWorkplace =
         }
       };
 
-      const { data } = await axios.put(
-        `${BASE_URL}/workplaces/${workplaceId}`,
-        updatedWorkplaceData,
-        config
-      );
+      await axios.put(`${BASE_URL}/workplaces/${workplaceId}`, updatedWorkplaceData, config);
+      const { data } = await axios.get(`${BASE_URL}/users/${userInfo?.userId}`, config);
 
       dispatch({
         type: WORKPLACE_UPDATE_SUCCESS,
@@ -192,9 +189,11 @@ export const deleteWorkplace =
       };
 
       await axios.delete(`${BASE_URL}/workplaces/${workplaceId}`, config);
+      const { data } = await axios.get(`${BASE_URL}/users/${userInfo?.userId}`, config);
 
       dispatch({
-        type: WORKPLACE_DELETE_SUCCESS
+        type: WORKPLACE_DELETE_SUCCESS,
+        payload: data
       });
     } catch (error) {
       axios.isAxiosError(error) &&

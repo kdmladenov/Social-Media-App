@@ -487,7 +487,7 @@ export const deleteCommentReaction =
             Authorization: `Bearer ${userInfo.token}`
           }
         };
-console.log('aaaaaaaaaaa')
+
         const { data } = await axios.post(
           `${BASE_URL}/reactions-images/image-comments/${commentId}`,
           { reactionName },

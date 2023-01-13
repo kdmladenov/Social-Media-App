@@ -48,7 +48,7 @@
   width: 100%;
   padding: 0 20px;
   align-items: flex-start;
-  justify-content: flex-start;
+  justify-content: space-between;
   z-index: 10000;
 }
 #modal .modal_container.story_create .slider_container{

@@ -17,6 +17,9 @@ export type SliderItemType = React.FC<{
     imageId?: number;
     storyId?: number;
     message?: string;
+    messageSize?: string;
+    messageColor?: string;
+    messageBackground?: string;
     userId?: number;
     userFirstName?: string;
     userLastName?: string;

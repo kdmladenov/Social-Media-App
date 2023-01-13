@@ -7,6 +7,9 @@ interface FormToRenderType {
       value: string;
     }[];
     label: string;
+    min?: number;
+    max?: number;
+    step?: number;
     type?: string;
     placeholder: string;
     value: string;

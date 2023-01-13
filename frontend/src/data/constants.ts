@@ -136,6 +136,11 @@ export const COLLECTION = {
 };
 
 export const STORY = {
-  MIN_MESSAGE_LENGTH: 2,
-  MAX_MESSAGE_LENGTH: 1000
+  MIN_MESSAGE_LENGTH: 1,
+  MAX_MESSAGE_LENGTH: 10000,
+  MIN_MESSAGE_SIZE: 20,
+  MAX_MESSAGE_SIZE: 40,
+  MESSAGE_SIZE_STEP: 1,
+  MESSAGE_COLORS: ['white', 'black', 'red', 'yellow', 'blue', 'green'],
+  MESSAGE_BACKGROUNDS: ['transparent', 'white', 'black', 'red', 'yellow', 'blue', 'green']
 };

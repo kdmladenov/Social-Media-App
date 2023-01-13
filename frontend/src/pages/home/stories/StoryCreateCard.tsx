@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Avatar from '../../../components/Avatar';
 import Button from '../../../components/Button';
 import FormComponent from '../../../components/FormComponent';
 import Modal from '../../../components/Modal';
 import PhotoUploadForm from '../../../components/PhotoUploadForm';
 import Slider from '../../../components/Slider';
-import { createStory, updateStory } from '../../../context/actions/storyActions';
+import { createStory, listMyStories, updateStory } from '../../../context/actions/storyActions';
+import { STORY_CREATE_RESET, STORY_UPDATE_RESET } from '../../../context/constants/storyConstants';
 import { BASE_URL } from '../../../data/constants';
-import addStoryMessageInitialInputState from '../../../data/inputs/addPostMessageInitialInputState';
+import addStoryMessageInitialInputState from '../../../data/inputs/addStoryMessageInitialInputState';
 import useTypedSelector from '../../../hooks/useTypedSelector';
 import StoryType from '../../../types/StoryType';
+import StoryMessageForm from './StoryMessageForm';
 import './styles/StoryCreateCard.css';
 
 const StoryCreateCard = () => {
+  const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newStory, setNewStory] = useState<StoryType>();
+  const [newStory, setNewStory] = useState<StoryType | null>(null);
   const [editStoryMode, setEditStoryMode] = useState<string>('');
 
   const { success: successCreate, story: createdStory } = useTypedSelector(
@@ -26,12 +30,16 @@ const StoryCreateCard = () => {
   const { user } = useTypedSelector((state) => state.userDetails);
 
   useEffect(() => {
-    if (successCreate) {
-      setNewStory(createdStory);
-    } else if (successUpdate) {
-      setNewStory(updatedStory);
+    if (successCreate) setNewStory(createdStory);
+    if (successUpdate) setIsModalOpen(false);
+    if ((successCreate || successUpdate) && !isModalOpen) dispatch(listMyStories());
+    if (!isModalOpen) {
+      setEditStoryMode('');
+      setNewStory(null);
+      dispatch({ type: STORY_CREATE_RESET });
+      dispatch({ type: STORY_UPDATE_RESET });
     }
-  }, [updatedStory, createdStory, successCreate, successUpdate]);
+  }, [updatedStory, createdStory, successCreate, successUpdate, isModalOpen, dispatch]);
 
   return (
     <>
@@ -62,18 +70,22 @@ const StoryCreateCard = () => {
               lastName={user?.lastName}
             />
             {newStory?.image ? (
-              <Button onClick={() => setEditStoryMode('add_message')}>Add text</Button>
+              <Button
+                classes={'blue rounded'}
+                onClick={() => setEditStoryMode(!editStoryMode ? 'add_message' : '')}
+              >
+                Add text
+              </Button>
             ) : (
               <></>
             )}
           </div>
           {editStoryMode === 'add_message' ? (
             <div className="message">
-              <FormComponent
+              <StoryMessageForm
                 inputData={addStoryMessageInitialInputState}
                 resourceId={newStory?.storyId}
                 updateAction={updateStory}
-                mode={'update'}
               />
             </div>
           ) : (

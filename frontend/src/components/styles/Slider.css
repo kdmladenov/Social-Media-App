@@ -37,7 +37,11 @@
   top: 40px;
   z-index: 1000;
 }
-
+.slider_container .slide .image .message span{
+  padding: 5px 10px;
+  border-radius: 15px;
+  box-shadow: var(--box_shadow_3);
+}
 /* Arrow buttons */
 .slider_container .slider_btn {
   width: 60px;

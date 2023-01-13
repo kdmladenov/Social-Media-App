@@ -9,6 +9,9 @@ interface FormInputDataType {
       value: string;
     }[];
     type?: string;
+    max?: number;
+    min?: number;
+    step?: number;
     placeholder: string;
     value: string;
     validations: ValidationsType;

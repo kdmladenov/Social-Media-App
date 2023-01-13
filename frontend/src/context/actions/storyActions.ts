@@ -35,10 +35,8 @@ import StoryRestoreActionType from '../../types/context/actions/StoryRestoreActi
 import StoryType from '../../types/StoryType';
 import StoryCreateActionType from '../../types/context/actions/StoryCreateActionType';
 import StoryUpdateActionType from '../../types/context/actions/StoryUpdateActionType';
-import StoryImageUploadActionType from '../../types/context/actions/StoryImageUploadActionType';
 import StoryImagesListActionType from '../../types/context/actions/StoryImagesListActionType';
 import StoryImageDeleteActionType from '../../types/context/actions/StoryImageDeleteActionType';
-import StoryImageSetMainActionType from '../../types/context/actions/StoryImageSetMainActionType';
 import StoryDetailsActionType from '../../types/context/actions/StoryDetailsActionType';
 
 export const listMyStories =
@@ -275,16 +273,6 @@ export const updateStory =
         type: STORY_UPDATE_SUCCESS,
         payload: data
       });
-      // // update the state everywhere
-      dispatch({
-        type: STORY_DETAILS_SUCCESS,
-        payload: data
-      });
-      // for Sidebar input map
-      const { data: allStoryList } = await axios.get(
-        `${BASE_URL}/stories?pageSize=${localStorage.getItem('totalMyStoryCount')}`
-      );
-      localStorage.setItem('allStoriesList', JSON.stringify(allStoryList));
     } catch (error) {
       axios.isAxiosError(error) &&
         dispatch({

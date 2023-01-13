@@ -75,7 +75,15 @@ const Item: SliderItemType = ({
         />
         {item?.message ? (
           <div className="message">
-            <span>{item?.message}</span>
+            <span
+              style={{
+                color: `${item?.messageColor}`,
+                fontSize: `${item?.messageSize}px`,
+                backgroundColor: `${item?.messageBackground}`
+              }}
+            >
+              {item?.message}
+            </span>
           </div>
         ) : (
           <></>

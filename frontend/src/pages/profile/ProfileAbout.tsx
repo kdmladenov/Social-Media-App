@@ -30,37 +30,32 @@ import PhotoList from './PhotoList';
 import './styles/ProfileAbout.css';
 import ProfileItemType from '../../types/ProfileItemType';
 import { useDispatch } from 'react-redux';
+import { USER_UPDATE_PROFILE_RESET } from '../../context/constants/userConstants';
+import {
+  WORKPLACE_CREATE_RESET,
+  WORKPLACE_DELETE_RESET,
+  WORKPLACE_UPDATE_RESET
+} from '../../context/constants/workplaceConstants';
+import {
+  SCHOOL_CREATE_RESET,
+  SCHOOL_DELETE_RESET,
+  SCHOOL_UPDATE_RESET
+} from '../../context/constants/schoolConstants';
 
-const ProfileAbout: React.FC<{ userProfile: UserType }> = ({ userProfile }) => {
+const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
+  const dispatch = useDispatch();
   const [section, setSection] = useState<string>('Overview');
   const [profileInfoItems, setProfileInfoItems] = useState<ProfileItemType[]>();
-  const [user, setUser] = useState(userProfile);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(<></>);
 
-  const dispatch = useDispatch();
-
-  const { success: successUserUpdate, user: updatedUser } = useTypedSelector(
-    (state) => state.userUpdateProfile
-  );
-  const { success: successSchoolUpdate, user: userUpdatedSchool } = useTypedSelector(
-    (state) => state.schoolUpdate
-  );
-  const { success: successSchoolCreate, user: userCreatedSchool } = useTypedSelector(
-    (state) => state.schoolCreate
-  );
-  const { success: successSchoolDelete, user: userDeletedSchool } = useTypedSelector(
-    (state) => state.schoolDelete
-  );
-  const { success: successWorkplaceCreate, user: userCreatedWorkplace } = useTypedSelector(
-    (state) => state.workplaceCreate
-  );
-  const { success: successWorkplaceUpdate, user: userUpdatedWorkplace } = useTypedSelector(
-    (state) => state.workplaceUpdate
-  );
-  const { success: successWorkplaceDelete, user: userDeletedWorkplace } = useTypedSelector(
-    (state) => state.workplaceDelete
-  );
+  const { success: successUserUpdate } = useTypedSelector((state) => state.userUpdateProfile);
+  const { success: successSchoolUpdate } = useTypedSelector((state) => state.schoolUpdate);
+  const { success: successSchoolCreate } = useTypedSelector((state) => state.schoolCreate);
+  const { success: successSchoolDelete } = useTypedSelector((state) => state.schoolDelete);
+  const { success: successWorkplaceCreate } = useTypedSelector((state) => state.workplaceCreate);
+  const { success: successWorkplaceUpdate } = useTypedSelector((state) => state.workplaceUpdate);
+  const { success: successWorkplaceDelete } = useTypedSelector((state) => state.workplaceDelete);
 
   const itemEditCreateHandler = (
     inputData: FormInputDataType,
@@ -142,34 +137,35 @@ const ProfileAbout: React.FC<{ userProfile: UserType }> = ({ userProfile }) => {
       successWorkplaceDelete
     ) {
       setIsModalOpen(false);
+      dispatch(getUserDetails(+user.userId));
+      dispatch({
+        type: successUserUpdate
+          ? USER_UPDATE_PROFILE_RESET
+          : successWorkplaceUpdate
+          ? WORKPLACE_UPDATE_RESET
+          : successWorkplaceCreate
+          ? WORKPLACE_CREATE_RESET
+          : successWorkplaceDelete
+          ? WORKPLACE_DELETE_RESET
+          : successSchoolUpdate
+          ? SCHOOL_UPDATE_RESET
+          : successSchoolCreate
+          ? SCHOOL_CREATE_RESET
+          : successSchoolDelete
+          ? SCHOOL_DELETE_RESET
+          : ''
+      });
     }
-    if (successUserUpdate) setUser(updatedUser);
-
-    if (successSchoolUpdate) setUser(userUpdatedSchool);
-    if (successSchoolCreate) setUser(userCreatedSchool);
-    if (successSchoolDelete) setUser(userDeletedSchool);
-
-    if (successWorkplaceUpdate) setUser(userUpdatedWorkplace);
-    if (successWorkplaceCreate) setUser(userCreatedWorkplace);
-    if (successWorkplaceDelete) setUser(userDeletedWorkplace);
-
     setProfileInfoItems(getProfileAboutInfoItems(user)[section]);
   }, [
     dispatch,
     successUserUpdate,
     successSchoolUpdate,
     successSchoolCreate,
-    updatedUser,
     successSchoolDelete,
     successWorkplaceCreate,
     successWorkplaceUpdate,
     successWorkplaceDelete,
-    userCreatedSchool,
-    userCreatedWorkplace,
-    userDeletedSchool,
-    userDeletedWorkplace,
-    userUpdatedSchool,
-    userUpdatedWorkplace,
     user,
     section
   ]);

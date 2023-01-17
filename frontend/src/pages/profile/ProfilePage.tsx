@@ -3,8 +3,6 @@ import { useDispatch } from 'react-redux';
 import './styles/ProfilePage.css';
 import { getUserDetails } from '../../context/actions/userActions';
 import useTypedSelector from '../../hooks/useTypedSelector';
-import Loader from '../../components/Loader';
-import Message from '../../components/Message';
 import { useParams } from 'react-router-dom';
 import ProfilePosts from './ProfilePosts';
 import ProfileAbout from './ProfileAbout';
@@ -16,7 +14,7 @@ const ProfilePage: React.FC = () => {
   const dispatch = useDispatch();
   const { userId, section } = useParams();
 
-  const { user, loading, error } = useTypedSelector((state) => state.userDetails);
+  const { user} = useTypedSelector((state) => state.userDetails);
 
   const { success: successUpdateAvatar } = useTypedSelector((state) => state.userAvatarUpdate);
   const { success: successDeleteAvatar } = useTypedSelector((state) => state.userAvatarDelete);
@@ -39,21 +37,17 @@ const ProfilePage: React.FC = () => {
     successUpdateCover,
     section,
     userId,
-    user?.userId
+    user
   ]);
 
-  return loading ? (
-    <Loader />
-  ) : error ? (
-    <Message type="error">{error}</Message>
-  ) : (
+  return user?.userId ? (
     <main className="profile_page flex_col">
       <ProfileHeader user={user} section={section} />
       <section className="profile_content">
         {section === 'posts' ? (
           <ProfilePosts user={user} />
         ) : section === 'about' ? (
-          <ProfileAbout userProfile={user} />
+          <ProfileAbout user={user} />
         ) : section === 'friends' ? (
           <FriendList user={user} screen="profile_friends_screen" />
         ) : (
@@ -61,6 +55,8 @@ const ProfilePage: React.FC = () => {
         )}
       </section>
     </main>
+  ) : (
+    <h1>No profile to show</h1>
   );
 };
 

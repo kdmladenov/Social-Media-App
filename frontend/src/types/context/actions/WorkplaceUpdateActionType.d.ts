@@ -1,11 +1,11 @@
-import UserType from '../../UserType';
+import WorkplaceType from '../../WorkplaceType';
 
 interface WorkplaceUpdateActionRequest {
   type: 'WORKPLACE_UPDATE_REQUEST';
 }
 interface WorkplaceUpdateActionSuccess {
   type: 'WORKPLACE_UPDATE_SUCCESS';
-  payload: UserType;
+  payload: WorkplaceType;
 }
 interface WorkplaceUpdateActionError {
   type: 'WORKPLACE_UPDATE_FAIL';

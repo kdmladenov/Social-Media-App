@@ -44,8 +44,7 @@ export const createWorkplace =
         }
       };
 
-      await axios.post(`${BASE_URL}/workplaces`, createData, config);
-      const { data } = await axios.get(`${BASE_URL}/users/${userInfo?.userId}`, config);
+      const { data } = await axios.post(`${BASE_URL}/workplaces`, createData, config);
 
       dispatch({
         type: WORKPLACE_CREATE_SUCCESS,
@@ -97,7 +96,7 @@ export const getWorkplaceDetails =
   };
 
 export const updateWorkplace =
-  (workplaceId: number, updatedWorkplaceData: WorkplaceType) =>
+  (workplaceId: number, updatedWorkplace: WorkplaceType) =>
   async (dispatch: Dispatch<WorkplaceUpdateActionType>, getState: () => StoreType) => {
     try {
       dispatch({
@@ -115,8 +114,11 @@ export const updateWorkplace =
         }
       };
 
-      await axios.put(`${BASE_URL}/workplaces/${workplaceId}`, updatedWorkplaceData, config);
-      const { data } = await axios.get(`${BASE_URL}/users/${userInfo?.userId}`, config);
+      const { data } = await axios.put(
+        `${BASE_URL}/workplaces/${workplaceId}`,
+        updatedWorkplace,
+        config
+      );
 
       dispatch({
         type: WORKPLACE_UPDATE_SUCCESS,
@@ -188,8 +190,7 @@ export const deleteWorkplace =
         }
       };
 
-      await axios.delete(`${BASE_URL}/workplaces/${workplaceId}`, config);
-      const { data } = await axios.get(`${BASE_URL}/users/${userInfo?.userId}`, config);
+      const { data } = await axios.delete(`${BASE_URL}/workplaces/${workplaceId}`, config);
 
       dispatch({
         type: WORKPLACE_DELETE_SUCCESS,

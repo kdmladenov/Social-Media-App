@@ -110,7 +110,7 @@ export const userUpdateProfileReducer = (state = {}, action: UserUpdateProfileAc
     case USER_UPDATE_PROFILE_FAIL:
       return { loading: false, error: action.payload };
     case USER_UPDATE_PROFILE_RESET:
-      return { user: [] };
+      return {};
     default:
       return state;
   }
@@ -222,7 +222,10 @@ export const passwordResetReducer = (state = {}, action: PasswordResetActionType
   }
 };
 
-export const userImagesListReducer = (state = { userImages: [] }, action: UserImagesListActionType) => {
+export const userImagesListReducer = (
+  state = { userImages: [] },
+  action: UserImagesListActionType
+) => {
   switch (action.type) {
     case USER_IMAGES_LIST_REQUEST:
       return { loading: true };

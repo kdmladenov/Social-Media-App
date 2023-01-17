@@ -21,7 +21,9 @@ import {
   SCHOOL_UPDATE_FAIL,
   SCHOOL_UPDATE_REQUEST,
   SCHOOL_UPDATE_SUCCESS,
-  SCHOOL_UPDATE_RESET
+  SCHOOL_UPDATE_RESET,
+  SCHOOL_CREATE_RESET,
+  SCHOOL_DELETE_RESET
 } from '../constants/schoolConstants';
 
 export const schoolCreateReducer = (state = {}, action: SchoolCreateActionType) => {
@@ -29,9 +31,11 @@ export const schoolCreateReducer = (state = {}, action: SchoolCreateActionType) 
     case SCHOOL_CREATE_REQUEST:
       return { loading: true };
     case SCHOOL_CREATE_SUCCESS:
-      return { loading: false, success: true, user: action.payload };
+      return { loading: false, success: true, school: action.payload };
     case SCHOOL_CREATE_FAIL:
       return { loading: false, error: action.payload };
+    case SCHOOL_CREATE_RESET:
+      return {};
     default:
       return state;
   }
@@ -57,11 +61,11 @@ export const schoolUpdateReducer = (state = {}, action: SchoolUpdateActionType) 
     case SCHOOL_UPDATE_REQUEST:
       return { loading: true };
     case SCHOOL_UPDATE_SUCCESS:
-      return { loading: false, user: action.payload, success: true };
+      return { loading: false, school: action.payload, success: true };
     case SCHOOL_UPDATE_FAIL:
       return { loading: false, error: action.payload };
     case SCHOOL_UPDATE_RESET:
-      return { school: {} };
+      return { };
     default:
       return state;
   }
@@ -87,9 +91,11 @@ export const schoolDeleteReducer = (state = {}, action: SchoolDeleteActionType) 
     case SCHOOL_DELETE_REQUEST:
       return { loading: true };
     case SCHOOL_DELETE_SUCCESS:
-      return { loading: false, user: action.payload, success: true };
+      return { loading: false, school: action.payload, success: true };
     case SCHOOL_DELETE_FAIL:
       return { loading: false, error: action.payload };
+    case SCHOOL_DELETE_RESET:
+      return {};
     default:
       return state;
   }

@@ -45,8 +45,7 @@ export const createSchool =
         }
       };
 
-      await axios.post(`${BASE_URL}/schools`, createData, config);
-      const { data } = await axios.get(`${BASE_URL}/users/${userInfo?.userId}`, config);
+      const { data } = await axios.post(`${BASE_URL}/schools`, createData, config);
 
       dispatch({
         type: SCHOOL_CREATE_SUCCESS,
@@ -116,13 +115,11 @@ export const updateSchool =
         }
       };
 
-      await axios.put(
+      const { data } = await axios.put(
         `${BASE_URL}/schools/${schoolId}`,
         updatedSchoolData,
         config
       );
-
-      const { data } = await axios.get(`${BASE_URL}/users/${userInfo?.userId}`, config);
 
       dispatch({
         type: SCHOOL_UPDATE_SUCCESS,
@@ -194,8 +191,7 @@ export const deleteSchool =
         }
       };
 
-      await axios.delete(`${BASE_URL}/schools/${schoolId}`, config);
-      const { data } = await axios.get(`${BASE_URL}/users/${userInfo?.userId}`, config);
+      const { data } = await axios.delete(`${BASE_URL}/schools/${schoolId}`, config);
 
       dispatch({
         type: SCHOOL_DELETE_SUCCESS,

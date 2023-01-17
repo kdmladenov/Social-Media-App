@@ -7,6 +7,28 @@
   border: 1px solid var(--gray);
 }
 
+.post_card .post_header{
+  width: 100%;
+  max-height: 50px;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.post_card .post_header .dropdown .body li{
+  white-space: nowrap;
+  padding: 0 5px;
+}
+.post_card .post_header .dropdown .body li:hover{
+  cursor: pointer;
+  background-color: var(--gray_background);
+}
+
+.post_card p.message{
+  color: var(--black);
+  font-weight: 500;
+  font-size: 18px;
+}
+
 .post_card .images {
   margin: 0 -15px;
   /* width: 100%; */

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Avatar from '../../../components/Avatar';
 import Button from '../../../components/Button';
-import FormComponent from '../../../components/FormComponent';
 import Modal from '../../../components/Modal';
 import PhotoUploadForm from '../../../components/PhotoUploadForm';
 import Slider from '../../../components/Slider';
@@ -21,6 +20,11 @@ const StoryCreateCard = () => {
   const [newStory, setNewStory] = useState<StoryType | null>(null);
   const [editStoryMode, setEditStoryMode] = useState<string>('');
 
+  const openStoryFormHandler = () => {
+    setIsModalOpen(true);
+    setEditStoryMode('photo_upload');
+  };
+
   const { success: successCreate, story: createdStory } = useTypedSelector(
     (state) => state.storyCreate
   );
@@ -33,24 +37,32 @@ const StoryCreateCard = () => {
     if (successCreate) setNewStory(createdStory);
     if (successUpdate) setIsModalOpen(false);
     if ((successCreate || successUpdate) && !isModalOpen) dispatch(listMyStories());
-    if (!isModalOpen) {
+    if (editStoryMode && !isModalOpen) {
       setEditStoryMode('');
       setNewStory(null);
       dispatch({ type: STORY_CREATE_RESET });
       dispatch({ type: STORY_UPDATE_RESET });
     }
-  }, [updatedStory, createdStory, successCreate, successUpdate, isModalOpen, dispatch]);
+  }, [
+    updatedStory,
+    createdStory,
+    successCreate,
+    successUpdate,
+    isModalOpen,
+    editStoryMode,
+    dispatch
+  ]);
 
   return (
     <>
       <li
         className="story_create_card  card flex_col"
         key="story_create"
-        onClick={() => setIsModalOpen(true)}
+        onClick={openStoryFormHandler}
       >
         <div className="story_image">
           <img
-            src={user?.avatar?.startsWith('http') ? user?.avatar : `${BASE_URL}/${user?.avatar}`}
+            src={user?.avatar}
             alt={user?.firstName || 'image'}
           />
         </div>

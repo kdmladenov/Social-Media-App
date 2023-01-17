@@ -13,6 +13,7 @@
 
 .post_footer .reactions_shares {
   border-bottom: 2px solid var(--gray);
+  justify-content: flex-start;
 }
 
 .post_footer .reactions_shares .reactions {

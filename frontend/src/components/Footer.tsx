@@ -13,18 +13,8 @@ const Footer: React.FC = () => {
           </Tooltip>
         </button>
         <button>
-          <Tooltip direction="top" text="Gitlab">
-            <i className="fab fa-gitlab" />
-          </Tooltip>
-        </button>
-        <button>
           <Tooltip direction="top" text="Linkedin">
             <i className="fab fa-linkedin" />
-          </Tooltip>
-        </button>
-        <button>
-          <Tooltip direction="top" text="Facebook">
-            <i className="fab fa-facebook" />
           </Tooltip>
         </button>
       </div>

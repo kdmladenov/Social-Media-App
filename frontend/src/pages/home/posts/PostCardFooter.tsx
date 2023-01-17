@@ -17,7 +17,6 @@ const PostCardFooter: React.FC<{
     <div className="post_footer flex_col">
       <div className="reactions_shares flex">
         <ReactionsList type={type} resourceId={postId} subResourceId={imageId} />
-        <h3># Shares</h3>
       </div>
       <div className="footer_button_group flex">
         <Reactions type={type} resourceId={postId} subResourceId={imageId} />
@@ -25,10 +24,10 @@ const PostCardFooter: React.FC<{
           <i className="fa fa-comment"></i>
           <span>Comment</span>
         </Button>
-        <Button key="Share">
+        {/* <Button key="Share">
           <i className="fa fa-share"></i>
           <span>Share</span>
-        </Button>
+        </Button> */}
       </div>
       <PostComments
         type={type}

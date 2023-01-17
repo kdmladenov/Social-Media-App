@@ -1,7 +1,7 @@
-.show_more_button button{
+.show_more_button span.show_btn{
   border: none;
   margin: 0;
-  font-size: 13px;
+  font-size: inherit;
   text-decoration: none;
   text-transform: none;
   letter-spacing: normal;
@@ -15,7 +15,7 @@
   width: auto;
 }
 
-.show_more_button button:hover {
+.show_more_button span.show_btn:hover {
   color: rgb(243, 7, 7);
   border-bottom: 1px solid rgb(243, 7, 7);
 }

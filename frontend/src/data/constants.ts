@@ -6,8 +6,9 @@ export const GOOGLE_DRIVE_PUBLIC_URL = 'https://drive.google.com/uc?export=view&
 export const MIN_FILE_SIZE = 10.24; // 0.01MB
 export const MAX_FILE_SIZE = 5120; // 5MB
 
-export const DEFAULT_UPLOAD_PHOTO_MESSAGE = `(${MIN_FILE_SIZE / 1024}-${MAX_FILE_SIZE / 1024} MB size limit)`;
-
+export const DEFAULT_UPLOAD_PHOTO_MESSAGE = `(${MIN_FILE_SIZE / 1024}-${
+  MAX_FILE_SIZE / 1024
+} MB size limit)`;
 
 // History
 export const MIN_HISTORY_LIST_COUNT = 3;
@@ -19,7 +20,8 @@ export const PREVIOUS_SEARCHES_ARRAY_MAX_LENGTH = 5;
 export const SLIDER_IMAGE_1 = 'https://m.media-amazon.com/images/I/61lJ3xlQX2L._SX3000_.jpg';
 
 // Logo
-export const LOGO_URL = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkNqlwu8zxTt1fy6b2lZrYnQVUTTba15IX8Q&usqp=CAU';
+export const LOGO_URL =
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkNqlwu8zxTt1fy6b2lZrYnQVUTTba15IX8Q&usqp=CAU';
 
 // Image gallery zoom
 export const IMAGE_ZOOM_RATIO = 0.3;
@@ -95,7 +97,8 @@ export const POST = {
   MIN_NAME_LENGTH: 2,
   MAX_NAME_LENGTH: 250,
   MIN_MESSAGE_LENGTH: 2,
-  MAX_MESSAGE_LENGTH: 250,
+  MAX_MESSAGE_LENGTH: 10000,
+  MESSAGE_CHARS_SHOWN: 250,
   MIN_BRAND_LENGTH: 2,
   MAX_BRAND_LENGTH: 100,
   MIN_DESCRIPTION_LENGTH: 6,
@@ -129,10 +132,9 @@ export const IMAGE = {
   IMAGE_URL_REGEX: /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|png)/g
 };
 
-
 export const COLLECTION = {
   MIN_COLLECTION_LENGTH: 2,
-  MAX_COLLECTION_LENGTH: 1000,
+  MAX_COLLECTION_LENGTH: 1000
 };
 
 export const STORY = {

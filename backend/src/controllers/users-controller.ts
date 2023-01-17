@@ -123,12 +123,12 @@ usersController
 
       const update = req.body;
 
-      const { error, result } = await usersServices.update(usersData, locationsData)(
-        update,
-        +userId,
-        role,
-        isProfileOwner
-      );
+      const { error, result } = await usersServices.update(
+        usersData,
+        locationsData,
+        schoolsData,
+        workplacesData
+      )(update, +userId, role, isProfileOwner);
 
       if (error === errors.RECORD_NOT_FOUND) {
         res.status(404).send({

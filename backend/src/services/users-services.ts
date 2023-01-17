@@ -140,7 +140,7 @@ const changePassword =
 
 // update profile
 const update =
-  (usersData: UsersData, locationsData: LocationsData) =>
+  (usersData: UsersData, locationsData: LocationsData, schoolsData: SchoolsData, workplacesData: WorkplacesData) =>
   async (userUpdate: UserType, userId: number, role: RolesType, isProfileOwner: boolean) => {
     let existingUser = await usersData.getBy('user_id', userId, true);
     if (!existingUser) {
@@ -203,9 +203,12 @@ const update =
 
     await usersData.updateUser(updatedData);
 
+    const { schools } = await schoolsServices.getAllMySchools(schoolsData)(+userId);
+    const { workplaces } = await workplacesServices.getAllMyWorkplaces(workplacesData)(+userId);
+
     return {
       error: null,
-      result: updatedData
+      result: { ...updatedData, schools: schools, workplaces: workplaces }
     };
   };
 

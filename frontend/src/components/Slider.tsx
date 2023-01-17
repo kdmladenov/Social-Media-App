@@ -66,7 +66,7 @@ const Item: SliderItemType = ({
     <div className="slide_container">
       <div className="image flex">
         <img
-          src={item?.image?.startsWith('http') ? item?.image : `${BASE_URL}/${item?.image}`}
+          src={item?.image}
           alt="story"
           className="image"
           style={{
@@ -92,9 +92,7 @@ const Item: SliderItemType = ({
       <div
         className="blurred_background"
         style={{
-          backgroundImage: `url(${
-            item?.image?.startsWith('http') ? item?.image : `${BASE_URL}/${item?.image}`
-          })`
+          backgroundImage: `url(${item?.image})`
         }}
       />
       {button_controls && (

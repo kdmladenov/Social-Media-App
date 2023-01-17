@@ -51,7 +51,7 @@ const PhotoList: React.FC<{ screen: string, user: UserType }> = ({ screen = '', 
       <div className="photo_list flex">
         {userImages?.map((photo) => (
           <img
-            src={photo.image?.startsWith('http') ? photo.image : `${BASE_URL}/${photo.image}`}
+            src={photo.image}
             alt={photo.image || 'image'}
             onClick={() => imageModalHandler(photo?.imageId)}
             key={photo?.imageId}

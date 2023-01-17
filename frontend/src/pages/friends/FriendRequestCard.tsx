@@ -99,7 +99,7 @@ const FriendRequestCard: React.FC<{ user: UserShortType; horizontal?: boolean; t
     >
       <div className="request_avatar">
         <img
-          src={user?.avatar?.startsWith('http') ? user?.avatar : `${BASE_URL}/${user?.avatar}`}
+          src={user?.avatar}
           alt={`${user?.firstName} ${user?.lastName}`}
         />
       </div>

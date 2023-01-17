@@ -52,15 +52,7 @@ const StoriesMy = () => {
                 onClick={() => storyModalHandler(story.storyId)}
               >
                 <div className="story_image">
-                  <img
-                    src={
-                      story?.image?.startsWith('http')
-                        ? story?.image
-                        : `${BASE_URL}/${story?.image}`
-                    }
-                    alt={story?.userFirstName}
-                    className="image"
-                  />
+                  <img src={story?.image} alt={story?.userFirstName} className="image" />
                 </div>
                 <Avatar classes="image_only" imageUrl={story?.userAvatar} />
                 <span className="author_name">{`${story?.userFirstName} ${story?.userLastName}`}</span>
@@ -114,7 +106,7 @@ const StoriesMy = () => {
                 setSlideIndex={setSelectedStoryIndex}
               >
                 {stories?.map((story) => (
-                  <Slider.Item item={story} key={story?.storyId}/>
+                  <Slider.Item item={story} key={story?.storyId} />
                 ))}
               </Slider>
             </div>

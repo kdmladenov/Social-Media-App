@@ -22,11 +22,7 @@ const Avatar: React.FC<AvatarProps> = ({
     <div className={`avatar  ${classes ? classes : ''}`}>
       <div className="image ">
         {imageUrl ? (
-          <img
-            src={imageUrl?.startsWith('http') ? imageUrl : `${BASE_URL}/${imageUrl}`}
-            alt={firstName || 'image'}
-
-          />
+          <img src={imageUrl} alt={firstName || 'image'} />
         ) : firstName ? (
           <div
             className="initials"

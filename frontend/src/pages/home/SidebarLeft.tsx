@@ -31,7 +31,7 @@ const SidebarLeft = () => {
             <div className="profile_card">
               <div className="cover">
                 <img
-                  src={user?.cover?.startsWith('http') ? user?.cover : `${BASE_URL}/${user?.cover}`}
+                  src={user?.cover}
                   alt={`${user?.firstName} ${user?.lastName}`}
                 />
               </div>

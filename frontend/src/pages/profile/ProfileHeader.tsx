@@ -21,18 +21,13 @@ const ProfileHeader: React.FC<{ user: UserType; section?: string }> = ({ user, s
       <div
         className="blurred_background"
         style={{
-          backgroundImage: `linear-gradient(to bottom, transparent, white, white), url(${
-            user?.cover?.startsWith('http') ? user?.cover : `${BASE_URL}/${user?.cover}`
-          })`
+          backgroundImage: `linear-gradient(to bottom, transparent, white, white), url(${user?.cover})`
         }}
       />
       <div className="container flex_col">
         <div className="cover">
           {user?.cover ? (
-            <img
-              src={user?.cover?.startsWith('http') ? user?.cover : `${BASE_URL}/${user?.cover}`}
-              alt={`${user?.firstName} ${user?.lastName}`}
-            />
+            <img src={user?.cover} alt={`${user?.firstName} ${user?.lastName}`} />
           ) : (
             <></>
           )}

@@ -1,7 +1,6 @@
 import React from 'react';
 
 import './styles/Avatar.css';
-import { BASE_URL } from '../data/constants';
 import getRandomNumber from '../utils/getRandomNumber';
 import AvatarProps from '../types/components/AvatarProps';
 

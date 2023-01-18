@@ -7,7 +7,6 @@ import PhotoUploadForm from '../../../components/PhotoUploadForm';
 import Slider from '../../../components/Slider';
 import { createStory, listMyStories, updateStory } from '../../../context/actions/storyActions';
 import { STORY_CREATE_RESET, STORY_UPDATE_RESET } from '../../../context/constants/storyConstants';
-import { BASE_URL } from '../../../data/constants';
 import addStoryMessageInitialInputState from '../../../data/inputs/addStoryMessageInitialInputState';
 import useTypedSelector from '../../../hooks/useTypedSelector';
 import StoryType from '../../../types/StoryType';

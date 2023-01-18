@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import UserType from '../../types/UserType';
-import { BASE_URL } from '../../data/constants';
 import Button from '../../components/Button';
 import ProfileAvatar from './ProfileAvatar';
 import Avatar from '../../components/Avatar';

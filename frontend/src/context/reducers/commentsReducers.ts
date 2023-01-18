@@ -55,8 +55,6 @@ export const commentCreateReducer = (state = { comment: {} }, action: CommentCre
 };
 
 export const commentsListReducer = (state = { comments: {} }, action: CommentsListActionType) => {
-  //  state.postComments: {postId: comment}
-
   switch (action.type) {
     case COMMENT_LIST_REQUEST:
       return { loading: true };
@@ -102,7 +100,10 @@ export const commentDeleteReducer = (state = {}, action: CommentDeleteActionType
   }
 };
 
-export const imageCommentCreateReducer = (state = { imageComment: {} }, action: ImageCommentCreateActionType) => {
+export const imageCommentCreateReducer = (
+  state = { imageComment: {} },
+  action: ImageCommentCreateActionType
+) => {
   switch (action.type) {
     case IMAGE_COMMENT_CREATE_REQUEST:
       return { loading: true };
@@ -121,8 +122,6 @@ export const imageCommentsListReducer = (
   state = { imageComments: {} },
   action: ImageCommentsListActionType
 ) => {
-  //  state.postComments: {postId: imageComment}
-
   switch (action.type) {
     case IMAGE_COMMENT_LIST_REQUEST:
       return { loading: true };

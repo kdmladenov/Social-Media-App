@@ -28,11 +28,9 @@ const FriendList: React.FC<{ screen: string; user: UserType }> = ({ screen = '',
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(<></>);
 
-  const { loading, error, friends } = useTypedSelector((state) => state.friendsList);
+  const { friends } = useTypedSelector((state) => state.friendsList);
   const { success: unfriendSuccess } = useTypedSelector((state) => state.friendUnfriend);
   const { userInfo } = useTypedSelector((state) => state.userLogin);
-
-  
 
   const unfriendHandler = (friendUserId: number, messageEnding: string) => {
     setIsModalOpen(true);

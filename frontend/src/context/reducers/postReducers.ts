@@ -22,9 +22,6 @@ import {
   POST_IMAGE_SET_MAIN_FAIL,
   POST_IMAGE_SET_MAIN_REQUEST,
   POST_IMAGE_SET_MAIN_SUCCESS,
-  POST_IMAGE_UPLOAD_FAIL,
-  POST_IMAGE_UPLOAD_REQUEST,
-  POST_IMAGE_UPLOAD_SUCCESS,
   POST_MY_LIST_FAIL,
   POST_MY_LIST_REQUEST,
   POST_MY_LIST_SUCCESS,
@@ -146,19 +143,6 @@ export const postUpdateReducer = (state = { post: {} }, action: PostUpdateAction
       return state;
   }
 };
-
-// export const postImageUploadReducer = (state = {}, action: PostImageUploadActionType) => {
-//   switch (action.type) {
-//     case POST_IMAGE_UPLOAD_REQUEST:
-//       return { loading: true };
-//     case POST_IMAGE_UPLOAD_SUCCESS:
-//       return { loading: false, success: true, post: action.payload };
-//     case POST_IMAGE_UPLOAD_FAIL:
-//       return { loading: false, error: action.payload };
-//     default:
-//       return state;
-//   }
-// };
 
 export const postImagesListReducer = (
   state = { postImages: [] },

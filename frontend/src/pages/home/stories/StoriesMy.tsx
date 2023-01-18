@@ -8,7 +8,6 @@ import Message from '../../../components/Message';
 import Modal from '../../../components/Modal';
 import Slider from '../../../components/Slider';
 import { listMyStories } from '../../../context/actions/storyActions';
-import { BASE_URL } from '../../../data/constants';
 import defaultEndpoint from '../../../data/inputs/defaultEndpoint';
 import useTypedSelector from '../../../hooks/useTypedSelector';
 import getTimeDuration from '../../../utils/getTimeDuration';

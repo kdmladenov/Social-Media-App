@@ -7,12 +7,12 @@ const ShowMoreButton: React.FC<{ text?: string; breakpoint: number }> = ({ text,
   const numberOfChars = showMore ? text?.length : breakpoint;
 
   return (
-    <div className="show_more_button">
+    <p className="show_more_button">
       <span>{text?.slice(0, numberOfChars)} </span>
-      <span className='show_btn' onClick={() => setShowMore(!showMore)}>
+      <span className="show_btn" onClick={() => setShowMore(!showMore)}>
         {!showMore ? ' ...show more' : ' ...show less'}
       </span>
-    </div>
+    </p>
   );
 };
 

@@ -48,7 +48,7 @@ export const USER = {
   MIN_PASSWORD_LENGTH: 8,
   MAX_PASSWORD_LENGTH: 20,
   EMAIL_REGEX: /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/,
-  PHONE_REGEX: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
+  PHONE_REGEX: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/,
   DEFAULT_AVATAR: `storage/avatars/defaultAvatar.png`,
   PASSWORD_REGEX: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, // letters, numbers and at least 1 uppercase
   MIN_ABOUT_ME_LENGTH: 10,
@@ -128,7 +128,7 @@ export const COMMENT = {
 };
 
 export const IMAGE = {
-  IMAGE_URL_PATTERN: `(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|png)`,
+  IMAGE_URL_PATTERN: `(http(s?):)([/|.|w|s|-])*.(?:jpg|jpeg|png)`,
   IMAGE_URL_REGEX: /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|png)/g
 };
 

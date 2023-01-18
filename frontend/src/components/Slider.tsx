@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { BASE_URL } from '../data/constants';
 import SliderType, { SliderItemType } from '../types/components/SliderTypeProps';
 import Button from './Button';
 

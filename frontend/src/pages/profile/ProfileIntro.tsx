@@ -1,6 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Button from '../../components/Button';
 import UserType from '../../types/UserType';
 import getProfileAboutInfoItems from '../../utils/getProfileAboutInfoItems';
 import './styles/ProfileIntro.css';

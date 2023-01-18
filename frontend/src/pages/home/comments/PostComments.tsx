@@ -31,11 +31,7 @@ const PostComments: React.FC<{
   const { user: currentUserDetails } = useTypedSelector((state) => state.userDetails);
 
   const { comments, loading, error } = useTypedSelector((state) => state.commentsList);
-  const {
-    imageComments,
-    loading: loadingImageComments,
-    error: errorImageComments
-  } = useTypedSelector((state) => state.imageCommentsList);
+  const { imageComments } = useTypedSelector((state) => state.imageCommentsList);
 
   const {
     success: successCreate,

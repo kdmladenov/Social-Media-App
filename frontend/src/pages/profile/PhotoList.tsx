@@ -5,7 +5,6 @@ import Modal from '../../components/Modal';
 import Pagination from '../../components/Pagination';
 import Slider from '../../components/Slider';
 import { listUserImages } from '../../context/actions/userActions';
-import { BASE_URL } from '../../data/constants';
 import defaultEndpoint from '../../data/inputs/defaultEndpoint';
 import { imagesListPageSizeOptionsMap } from '../../data/inputs/pageSizeOptionsMap';
 import { imagesListSortOptionsMap } from '../../data/inputs/sortDropdownOptionsMaps';

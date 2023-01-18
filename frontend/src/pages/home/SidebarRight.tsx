@@ -58,14 +58,14 @@ const SidebarRight: React.FC = () => {
           </Accordion.Header>
           <Accordion.Body>
             {friends?.map((friend) => (
-              <li onClick={() => navigate(`/profile/${friend.userId}/posts`)} key={friend?.userId}>
+              <div onClick={() => navigate(`/profile/${friend.userId}/posts`)} key={friend?.userId}>
                 <Avatar
                   imageUrl={friend.avatar}
                   firstName={friend.firstName}
                   lastName={friend.lastName}
                   key={friend.userId}
                 />
-              </li>
+              </div>
             ))}
           </Accordion.Body>
         </Accordion.Item>

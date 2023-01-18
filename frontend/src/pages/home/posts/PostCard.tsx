@@ -104,9 +104,9 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
         <Avatar imageUrl={userAvatar} firstName={userFirstName} lastName={userLastName} />
         {dropDown ? dropDown : !isPostSaved && postCardDropdown}
       </div>
-      <p className="message">
-        <ShowMoreButton text={message} breakpoint={POST.MESSAGE_CHARS_SHOWN} />
-      </p>
+
+      <ShowMoreButton text={message} breakpoint={POST.MESSAGE_CHARS_SHOWN} />
+
       <ul className={`images ${getImagesClass(images)}`}>
         {images?.map((image, index) => (
           <li

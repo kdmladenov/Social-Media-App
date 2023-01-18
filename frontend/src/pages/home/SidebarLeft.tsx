@@ -4,7 +4,6 @@ import Accordion from '../../components/Accordion';
 import Avatar from '../../components/Avatar';
 import Button from '../../components/Button';
 import Divider from '../../components/Divider';
-import { BASE_URL } from '../../data/constants';
 import useTypedSelector from '../../hooks/useTypedSelector';
 
 import './styles/SidebarLeft.css';

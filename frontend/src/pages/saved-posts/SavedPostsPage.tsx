@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Button from '../../components/Button';
 import useTypedSelector from '../../hooks/useTypedSelector';
@@ -31,11 +31,7 @@ const SavedPostsPage = () => {
   const [modalContent, setModalContent] = useState(<></>);
 
   const { loading, error, savedPosts } = useTypedSelector((state) => state.savedPostsList);
-  const {
-    loading: loadingCollection,
-    error: errorCollection,
-    collections
-  } = useTypedSelector((state) => state.collectionsList);
+  const { collections } = useTypedSelector((state) => state.collectionsList);
 
   const { success: savedPostDeleteSuccess } = useTypedSelector((state) => state.savedPostDelete);
   const { success: savedPostUpdateSuccess } = useTypedSelector((state) => state.savedPostUpdate);

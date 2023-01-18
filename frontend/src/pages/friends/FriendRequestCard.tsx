@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { BASE_URL } from '../../data/constants';
 import getMutualFriends from '../../utils/getMutualFriends';
 import useTypedSelector from '../../hooks/useTypedSelector';
 import { UserShortType } from '../../types/UserType';

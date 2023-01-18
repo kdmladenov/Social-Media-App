@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -18,10 +18,11 @@ const Header: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const [showSearchBar, setShowSearchBar] = useState(false);
 
   const { userInfo } = useTypedSelector((state) => state.userLogin);
 
-  const { loading, error, user } = useTypedSelector((state) => state.userDetails);
+  const { user } = useTypedSelector((state) => state.userDetails);
 
   const logoutHandler = () => {
     navigate('/');
@@ -40,23 +41,18 @@ const Header: React.FC = () => {
         <NavLink to="/" className="header_logo">
           <img src={LOGO_URL} alt="logo" />
         </NavLink>
-        <div className="search">
+        <div className={`search ${showSearchBar ? 'show' : ''}`}>
           <UserSearchBar />
         </div>
-        <div className="search_dropdown">
-          <DropDown
-            button={
-              <div className="search_btn">
-                <i className="fa fa-search" />
-              </div>
-            }
-          >
-            <UserSearchBar />
-          </DropDown>
-        </div>
+
+        <button className="show_search_bar_btn" onClick={() => setShowSearchBar(!showSearchBar)}>
+          <i className="fa fa-search" />
+        </button>
       </div>
 
-      {userInfo?.token && <ButtonNav currentPath={pathname} screen="home" userId={userInfo?.userId} />}
+      {userInfo?.token && (
+        <ButtonNav currentPath={pathname} screen="home" userId={userInfo?.userId} />
+      )}
 
       <div className="header_menu_btn_group">
         <DropDown

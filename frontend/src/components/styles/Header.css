@@ -36,41 +36,8 @@ header .search {
   height: 36px;
   width: 250px;
 }
-
-/* Search Dropdown  */
-header .search_dropdown {
+header .show_search_bar_btn {
   display: none;
-}
-
-header .search_dropdown .dropdown .header {
-  width: 45px;
-}
-
-header .search_dropdown .dropdown .body {
-  position: fixed;
-  top: 60px;
-  left: 0;
-  background: none;
-  border: none;
-  box-shadow: none;
-}
-
-header .search_dropdown .dropdown .body .search_bar {
-  box-shadow: none;
-}
-
-header .search_dropdown .search_btn {
-  width: 45px;
-  height: 45px;
-  outline: none;
-  border: none;
-  font-size: 20px;
-  background: var(--gray);
-  color: var(--black);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 /* Button navigation (middle) */
@@ -150,8 +117,28 @@ header ul.menu_user div {
     display: none;
   }
 
-  header .search_dropdown {
+  header .search.show {
+    display: block;
+    position: fixed;
+    top: 65px;
+    left: 5px;
+    background: none;
+    border: none;
+    box-shadow: none;
+  }
+
+  header .show_search_bar_btn {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 45px;
+    height: 45px;
+    outline: none;
+    border: none;
+    font-size: 20px;
+    background: var(--gray);
+    color: var(--black);
+    border-radius: 50%;
   }
 }
 

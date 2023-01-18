@@ -11,7 +11,6 @@ import { useNavigate } from 'react-router-dom';
 import Avatar from './Avatar';
 import { useDispatch } from 'react-redux';
 import { listUsers } from '../context/actions/userActions';
-import { listFriendRequests } from '../context/actions/friendsActions';
 import UserType from '../types/UserType';
 import useOutsideClick from '../hooks/useOutsideClick';
 
@@ -21,14 +20,7 @@ const UserSearchBar: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [endpoint, setEndpoint] = useState(defaultEndpoint['usersList']);
 
-  // const { friendsRequestsList } = useTypedSelector((state) => state.friendsRequestsList);
   const { users } = useTypedSelector((state) => state.userList);
-  // const { user: currentUser } = useTypedSelector((state) => state.userDetails);
-
-  // const usersWithRequestStatus = users?.map((user) => {
-  //   return {friendsRequestsList?.find((userWithRequest) => userWithRequest.userId === user.userId)
-  //     ?.requestStatus === 'approved' ? 'friend' : '';}
-  // });
 
   const buttonPressHandler = (user: UserType) => {
     navigate(`/profile/${user?.userId}/posts`);
@@ -57,7 +49,6 @@ const UserSearchBar: React.FC = () => {
   useEffect(() => {
     const { page, pageSize, sort, search } = endpoint;
     dispatch(listUsers(`${page}${pageSize}${sort}${search}`));
-    // dispatch(listFriendRequests());
   }, [dispatch, endpoint]);
 
   return (

@@ -117,7 +117,11 @@ export const updateSchool =
 
       const { data } = await axios.put(
         `${BASE_URL}/schools/${schoolId}`,
-        updatedSchoolData,
+        {
+          ...updatedSchoolData,
+          startYear: +updatedSchoolData.startYear,
+          endYear: +updatedSchoolData.endYear
+        },
         config
       );
 

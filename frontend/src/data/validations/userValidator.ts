@@ -85,7 +85,11 @@ const validate = {
   startDate: (value: string) =>
     !value || (typeof value === 'string' && new Date() >= new Date(value)),
   endDate: (value: string, match?: string) =>
-    !value || (typeof value === 'string' && match && new Date(value) >= new Date(match)),
+    !value ||
+    (typeof value === 'string' &&
+      match &&
+      new Date(value) >= new Date(match) &&
+      new Date() >= new Date(value)),
   schoolName: (value: string) =>
     typeof value === 'string' &&
     value.length >= SCHOOL.MIN_SCHOOL_LENGTH &&
@@ -309,7 +313,7 @@ const validateInputUser = {
     }
 
     if (!validate.endDate(value, match)) {
-      return ' must be after the start date';
+      return ' must be a date in the past and after the start date';
     }
     return '';
   },
@@ -354,7 +358,7 @@ const validateInputUser = {
       return ' is required!';
     }
     if (!validate.endYear(value, match)) {
-      return ` must be a year before or equal to the start year`;
+      return ` must be a past year before or equal to the start year`;
     }
     return '';
   }

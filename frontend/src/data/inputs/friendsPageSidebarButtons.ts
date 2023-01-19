@@ -1,8 +1,8 @@
 const friendsPageSidebarButtons: { [key: string]: string }[] = [
-  {
-    icon: 'fa fa-user',
-    label: 'Home'
-  },
+  // {
+  //   icon: 'fa fa-user',
+  //   label: 'Home'
+  // },
   {
     icon: 'fas fa-user-check',
     label: 'Friend Requests Received',
@@ -25,12 +25,12 @@ const friendsPageSidebarButtons: { [key: string]: string }[] = [
   },
   {
     icon: 'fa fa-history',
-    label: 'Timeline',
+    label: 'Friendship History',
     nextSection: 'timeline'
   },
   {
     icon: 'fa fa-birthday-cake',
-    label: 'Birthdays',
+    label: 'Upcoming Birthdays',
     nextSection: 'birthdays'
   }
 ];

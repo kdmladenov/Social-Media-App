@@ -15,21 +15,16 @@ import {
 } from '../../context/actions/friendsActions';
 import './styles/FriendsPage.css';
 import { listUsers } from '../../context/actions/userActions';
-import Timeline from '../../components/Timeline';
-import getDate from '../../utils/getDate';
-import Tooltip from '../../components/Tooltip';
-import { useNavigate } from 'react-router-dom';
 import {
   getFriendsHeaderText,
   getFriendsNoResultText,
-  getFriendsTimelineCardType,
-  getFriendsTimelineType,
   getUsersWithRequestStatusType
 } from '../../utils/getFriendsPageText';
+import FriendshipTimeline from './FriendshipTimeline';
+import BirthdaysTimeline from './BirthdaysTimeline';
 
 const FriendsPage = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [section, setSection] = useState('home');
   const [friendsEndpoint, setFriendsEndpoint] = useState(defaultEndpoint['friendsList']);
   const [usersEndpoint, setUsersEndpoint] = useState(defaultEndpoint['usersList']);
@@ -48,12 +43,6 @@ const FriendsPage = () => {
   const { success: updateSuccess } = useTypedSelector((state) => state.friendRequestStatusUpdate);
 
   const headerText = getFriendsHeaderText(section, usersEndpoint.search, users?.length);
-
-  const friendsWithBirthDays = friends?.filter(
-    (friend) =>
-      new Date(friend.dateOfBirth).getMonth() === new Date().getMonth() &&
-      new Date(friend.dateOfBirth).getDate() === new Date().getDate()
-  );
 
   const usersWithRequestStatus = users?.map((user) => {
     const usersWithRequest = friendsRequestsList?.find(
@@ -226,36 +215,9 @@ const FriendsPage = () => {
                   <FriendRequestCard user={user} type="request_sent" />
                 ))
               ) : section === 'timeline' && friendsRequestsList?.length ? (
-                <Timeline>
-                  {friendsRequestsList?.map((request) => (
-                    <Timeline.Item
-                      key={request.userId}
-                      text={`${getFriendsTimelineType(
-                        request.requestStatus,
-                        request.type
-                      )} ${getDate(request?.updatedAt || request?.createdAt, 0, false)}`}
-                      hoverText={`${request?.firstName}'s profile`}
-                      button={
-                        <span
-                          className="btn"
-                          onClick={() => navigate(`/profile/${request.userId}/posts`)}
-                        >
-                          <Tooltip text="profile">
-                            <i className="fa fa-user" />
-                          </Tooltip>
-                        </span>
-                      }
-                    >
-                      <FriendRequestCard
-                        user={request}
-                        horizontal={true}
-                        type={`${getFriendsTimelineCardType(request.requestStatus, request.type)}`}
-                      />
-                    </Timeline.Item>
-                  ))}
-                </Timeline>
-              ) : section === 'birthdays' && friendsWithBirthDays?.length ? (
-                friendsWithBirthDays?.map((user) => <FriendRequestCard user={user} type="friend" />)
+                <FriendshipTimeline friendsRequestsList={friendsRequestsList} />
+              ) : section === 'birthdays' && friends?.length ? (
+                <BirthdaysTimeline friends={friends} />
               ) : section === 'suggestions' && friendsSuggestions?.length ? (
                 friendsSuggestions?.map((user) => (
                   <FriendRequestCard user={user} type="friend_suggestion" />

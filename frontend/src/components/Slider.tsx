@@ -102,9 +102,6 @@ const Item: SliderItemType = ({
           <Button classes="icon" onClick={() => setZoom(zoom - 0.25)}>
             <i className="fas fa-search-minus" />
           </Button>
-          <Button classes="icon">
-            <i className="fas fa-tag" />
-          </Button>
           <Button classes="icon" onClick={() => setIsFullScreen(!isFullScreen)}>
             <i className={`fas fa-${isFullScreen ? 'compress' : 'expand'}`} />
           </Button>

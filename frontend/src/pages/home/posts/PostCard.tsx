@@ -128,18 +128,20 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
         >
           <>
             <aside className="post_images_sidebar flex_col">
-              <div className="post_header flex">
-                <Avatar imageUrl={userAvatar} firstName={userFirstName} lastName={userLastName} />
-                {dropDown ? dropDown : !isPostSaved && postCardDropdown}
+              <div className="sidebar_container">
+                <div className="post_header flex">
+                  <Avatar imageUrl={userAvatar} firstName={userFirstName} lastName={userLastName} />
+                  {dropDown ? dropDown : !isPostSaved && postCardDropdown}
+                </div>
+                <p className="message">
+                  <ShowMoreButton text={message} breakpoint={POST.MESSAGE_CHARS_SHOWN} />
+                </p>
+                <PostCardFooter
+                  postId={postId}
+                  imageId={images[selectedPostImageIndex].imageId}
+                  type="image"
+                />
               </div>
-              <p className="message">
-                <ShowMoreButton text={message} breakpoint={POST.MESSAGE_CHARS_SHOWN} />
-              </p>
-              <PostCardFooter
-                postId={postId}
-                imageId={images[selectedPostImageIndex].imageId}
-                type="image"
-              />
             </aside>
             <div className="post_images_container">
               <Slider

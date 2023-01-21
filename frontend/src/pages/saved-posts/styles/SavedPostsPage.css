@@ -1,7 +1,7 @@
 .saved_post_page {
   position: relative;
   display: grid;
-  grid-template-columns: 360px 1fr;
+  grid-template-columns: 344px 1fr;
   grid-template-areas: 'sidebar saved_posts_container';
 }
 
@@ -133,6 +133,7 @@
   align-items: center;
   padding: 20px 0;
   width: 680px;
+  max-width: 100vw;
   gap: 20px 0;
 }
 
@@ -167,6 +168,10 @@
 }
 
 /* Modals */
+#modal .modal_container .create_collection,
+#modal .modal_container .update_collection {
+  width: 100%;
+}
 
 #modal .modal_container .create_collection .message,
 #modal .modal_container .update_collection .message {
@@ -176,4 +181,13 @@
   color: var(--gray-dark);
   font-size: 20px;
   padding: 0 20px;
+}
+
+@media (max-width: 1024px) {
+  .saved_post_page {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'sidebar'
+      'saved_posts_container';
+  }
 }

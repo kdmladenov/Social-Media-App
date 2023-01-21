@@ -10,8 +10,6 @@
   grid-area: sidebar;
   height: fit-content;
   gap: 20px;
-  position: sticky;
-  top: 80px;
 }
 
 .profile_posts .posts {

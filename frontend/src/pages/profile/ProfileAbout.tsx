@@ -41,6 +41,7 @@ import {
   SCHOOL_DELETE_RESET,
   SCHOOL_UPDATE_RESET
 } from '../../context/constants/schoolConstants';
+import Carousel from '../../components/Carousel';
 
 const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
   const dispatch = useDispatch();
@@ -56,6 +57,22 @@ const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
   const { success: successWorkplaceCreate } = useTypedSelector((state) => state.workplaceCreate);
   const { success: successWorkplaceUpdate } = useTypedSelector((state) => state.workplaceUpdate);
   const { success: successWorkplaceDelete } = useTypedSelector((state) => state.workplaceDelete);
+
+  const sidebarButtons = [
+    'Overview',
+    'Work and Education',
+    'Places Lived',
+    'Contact and basic info',
+    'Details about you'
+  ].map((sectionName) => (
+    <Button
+      classes={`${section === sectionName ? 'blue_light' : 'white'}`}
+      onClick={() => setSection(sectionName)}
+      key={sectionName}
+    >
+      {sectionName}
+    </Button>
+  ));
 
   const itemEditCreateHandler = (
     inputData: FormInputDataType,
@@ -175,21 +192,8 @@ const ProfileAbout: React.FC<{ user: UserType }> = ({ user }) => {
       <div className="profile_about_card card">
         <aside className="sidebar flex_col">
           <h1>About</h1>
-          {[
-            'Overview',
-            'Work and Education',
-            'Places Lived',
-            'Contact and basic info',
-            'Details about you'
-          ].map((sectionName) => (
-            <Button
-              classes={`${section === sectionName ? 'blue_light' : 'white'}`}
-              onClick={() => setSection(sectionName)}
-              key={sectionName}
-            >
-              {sectionName}
-            </Button>
-          ))}
+          <div className="vertical_buttons flex_col">{sidebarButtons}</div>
+          <Carousel>{sidebarButtons}</Carousel>
         </aside>
         <div className="profile_info">
           <ul className="info_list flex_col">

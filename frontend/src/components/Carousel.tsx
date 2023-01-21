@@ -30,7 +30,7 @@ const Carousel: React.FC<CarouselProps> = ({ title, children }) => {
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
-      <div className="carousel_header">{title}</div>
+      {title && <div className="carousel_header">{title}</div>}
       <div className={`carousel_slider ${!showControls && 'hidden_scrollbar'}`} ref={sliderRef}>
         {children}
       </div>

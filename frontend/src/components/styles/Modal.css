@@ -40,7 +40,8 @@
   border-radius: 50%;
   cursor: pointer;
   color: var(--white);
-  background: var(--gray);
+  background: var(--black);
+  opacity: 40%;
 }
 
 #modal .modal_container button.close_modal_btn:hover {
@@ -70,17 +71,9 @@
   align-items: center;
 }
 
-/* Story */
-#modal .modal_container.story {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 10001;
-  background-color: var(--black);
-  width: 100%;
-  height: 100%;
-  transform: translate(0, 0);
-  border-radius: 0px;
+@media (max-width: 1024px) {
+  #modal .modal_container {
+      min-width: 375px;
+      max-width: 100vw;
+  }
 }

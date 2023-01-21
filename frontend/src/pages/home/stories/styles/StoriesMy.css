@@ -23,7 +23,6 @@
 .stories_my .carousel_container li,
 .stories_my .carousel_container li .story_image {
   height: 200px;
-  height: 200px;
   min-width: 130px;
   width: 130px;
 }
@@ -111,6 +110,17 @@
   grid-template-columns: 360px 1fr;
   grid-template-rows: 1fr;
   grid-template-areas: 'sidebar stories_container';
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10001;
+  background-color: var(--black);
+  width: 100%;
+  height: 100%;
+  transform: translate(0, 0);
+  border-radius: 0px;
 }
 
 #modal .modal_container.story button.close_modal_btn {
@@ -165,8 +175,10 @@
 #modal .modal_container.story .stories_container .slider_container ul,
 #modal .modal_container.story .stories_container .slider_container ul li,
 #modal .modal_container.story .stories_container .slider_container ul li .slide_container {
-  width: 500px;
-  height: 900px;
+  max-width: 500px;
+  max-height: 900px;
+  width: 100vw;
+  height: 100vh;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -211,4 +223,32 @@
 
 #modal .modal_container.story .stories_container .slider_container .next {
   right: calc(50% - 350px);
+}
+
+@media (max-width: 1024px) {
+  #modal .modal_container.story {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: 'stories_container';
+  }
+  #modal .modal_container.story .stories_sidebar {
+    display: none;
+  }
+  #modal .modal_container.story .stories_container .slider_container .prev,
+  #modal .modal_container.story .stories_container .slider_container .next {
+    width: 40px;
+    height: 40px;
+    font-size: 25px;
+    background: var(--black);
+    opacity: 40%;
+    border: none;
+    border-radius: 50%;
+    top: 50%;
+  }
+  #modal .modal_container.story .stories_container .slider_container .prev {
+    left: 10px;
+  }
+  #modal .modal_container.story .stories_container .slider_container .next {
+    right: 20px;
+  }
 }

@@ -40,7 +40,17 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
   const { collections } = useTypedSelector((state) => state.collectionsList);
   const { savedPosts } = useTypedSelector((state) => state.savedPostsList);
 
-  const { postId, userFirstName, userLastName, userAvatar, message, images } = post;
+  const {
+    postId,
+    userFirstName,
+    userLastName,
+    userAvatar,
+    message,
+    images,
+    authorFirstName,
+    authorLastName,
+    authorAvatar
+  } = post;
 
   const isPostSaved = !!savedPosts?.filter((savedPost) => savedPost.postId === postId).length;
 
@@ -101,7 +111,11 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
   return (
     <div className="post_card card">
       <div className="post_header flex">
-        <Avatar imageUrl={userAvatar} firstName={userFirstName} lastName={userLastName} />
+        <Avatar
+          imageUrl={userAvatar || authorAvatar}
+          firstName={userFirstName || authorFirstName}
+          lastName={userLastName || authorLastName}
+        />
         {dropDown ? dropDown : !isPostSaved && postCardDropdown}
       </div>
 

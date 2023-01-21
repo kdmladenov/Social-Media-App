@@ -168,7 +168,7 @@
   overflow-y: scroll;
 }
 #modal .modal_container.post_images .post_images_sidebar::-webkit-scrollbar {
-display: none;
+  display: none;
 }
 #modal .modal_container.post_images.full_screen .post_images_sidebar {
   display: none;
@@ -271,6 +271,39 @@ display: none;
     grid-template-areas:
       'post_images_container'
       'sidebar';
+  }
+  #modal .modal_container.post_images.full_screen {
+    height: fit-content;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: 'post_images_container';
+  }
+  #modal
+    .modal_container.post_images
+    .post_images_container
+    .slider_container
+    ul
+    li
+    .slide_container
+    .image {
+    overflow: auto;
+  }
+  #modal .modal_container.post_images .slider_container .prev,
+  #modal .modal_container.post_images .slider_container .next {
+    width: 40px;
+    height: 40px;
+    font-size: 25px;
+    background: var(--black);
+    opacity: 40%;
+    border: none;
+    border-radius: 50%;
+    top: 50%;
+  }
+  #modal .modal_container.post_images .slider_container .prev {
+    left: 10px;
+  }
+  #modal .modal_container.post_images .slider_container .next {
+    right: 20px;
   }
   #modal .modal_container.post_images .post_images_sidebar {
     height: 50vh;

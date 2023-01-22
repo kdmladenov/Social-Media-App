@@ -100,11 +100,11 @@ const updateSchool =
     }
 
     const updated = { ...existingSchool, ...updatedData };
-    const result = await schoolsData.update(updated);
+    const updatedSchool = await schoolsData.update(updated);
 
     return {
       error: null,
-      result
+      updatedSchool
     };
   };
 

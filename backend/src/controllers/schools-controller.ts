@@ -106,7 +106,7 @@ schoolsController
       const { role, userId } = req.user;
       const data = req.body;
 
-      const { error, result } = await schoolsServices.updateSchool(
+      const { error, updatedSchool } = await schoolsServices.updateSchool(
         schoolsData,
         usersData,
         locationsData
@@ -121,7 +121,7 @@ schoolsController
           message: 'You are not authorized to update this school.'
         });
       } else {
-        res.status(200).send(result);
+        res.status(200).send(updatedSchool);
       }
     })
   )

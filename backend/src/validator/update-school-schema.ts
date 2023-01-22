@@ -23,11 +23,10 @@ export default {
     (typeof value === 'string' &&
       value.length >= LOCATIONS.MIN_COUNTRY_LENGTH &&
       value.length <= LOCATIONS.MAX_COUNTRY_LENGTH),
-  startYear: (value: string) =>
-    !value || (typeof value === 'string' && new Date().getFullYear() >= +value),
-  endYear: (value: string) =>
-    !value ||
-    (typeof value === 'string' && typeof value === 'string' && new Date().getFullYear() >= +value),
+  startYear: (value: number) =>
+    !value || (typeof value === 'number' && new Date().getFullYear() >= value),
+  endYear: (value: number) =>
+    !value || (typeof value === 'number' && new Date().getFullYear() >= value),
   isDeleted: (value: number) =>
     !value || (typeof value === 'boolean' && !value) || typeof value === 'boolean'
 };

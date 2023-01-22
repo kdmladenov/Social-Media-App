@@ -110,8 +110,7 @@ workplacesController
     authMiddleware,
     loggedUserGuard,
     validateBody('workplace', updateWorkplaceSchema),
-    // errorHandler(
-    async (req: Request, res: Response) => {
+    errorHandler(async (req: Request, res: Response) => {
       const { workplaceId } = req.params;
       const { role, userId } = req.user;
       const data = req.body;
@@ -133,9 +132,8 @@ workplacesController
       } else {
         res.status(200).send(result);
       }
-    }
+    })
   )
-  // )
 
   // @desc DELETE workplace
   // @route DELETE /workplaces/:workplaceId

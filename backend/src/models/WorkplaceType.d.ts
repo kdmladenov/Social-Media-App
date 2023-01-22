@@ -8,8 +8,8 @@ interface WorkplaceType {
   cityId: number;
   city: string;
   country: string;
-  startDate: string | Date;
-  endDate: string | Date;
+  startDate: string;
+  endDate: string;
   isDeleted: boolean;
 }
 

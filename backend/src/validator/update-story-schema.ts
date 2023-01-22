@@ -9,6 +9,14 @@ export default {
       value.length >= STORY.MIN_MESSAGE_LENGTH &&
       value.length <= STORY.MAX_MESSAGE_LENGTH),
   image: (value: string) => !value || typeof value === 'string',
+  messageSize: (value: string) =>
+    typeof value === 'string' &&
+    +value >= STORY.MIN_MESSAGE_SIZE &&
+    +value <= STORY.MAX_MESSAGE_SIZE,
+  messageColor: (value: string) =>
+    !value || (typeof value === 'string' && STORY.MESSAGE_COLORS.includes(value)),
+  messageBackground: (value: string) =>
+    !value || (typeof value === 'string' && STORY.MESSAGE_BACKGROUNDS.includes(value)),
   feelingType: (value: string) =>
     !value || (typeof value === 'string' && Object.keys(feelingTypes).includes(value)),
   city: (value: string) =>

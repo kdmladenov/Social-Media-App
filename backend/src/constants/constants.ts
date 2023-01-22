@@ -94,7 +94,11 @@ export const post = {
 
 export const story = {
   MIN_MESSAGE_LENGTH: 1,
-  MAX_MESSAGE_LENGTH: 10000
+  MAX_MESSAGE_LENGTH: 10000,
+  MIN_MESSAGE_SIZE: 20,
+  MAX_MESSAGE_SIZE: 40,
+  MESSAGE_COLORS: ['white', 'black', 'red', 'yellow', 'blue', 'green'],
+  MESSAGE_BACKGROUNDS: ['transparent', 'white', 'black', 'red', 'yellow', 'blue', 'green']
 };
 
 export const collection = {

@@ -38,7 +38,7 @@ storiesController
     errorHandler(async (req: Request<{}, {}, {}, RequestQuery>, res: Response) => {
       const { userId } = req.user;
 
-      const { search = '', filter = '', sort = 'sort=createdAt asc' } = req.query;
+      const { search = '', filter = '', sort = 'sort=createdAt desc' } = req.query;
 
       let { pageSize = paging.DEFAULT_STORY_PAGESIZE, page = paging.DEFAULT_PAGE } = req.query;
 

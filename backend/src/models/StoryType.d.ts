@@ -4,6 +4,9 @@ interface StoryType {
   storyId: number;
   userId: number;
   message: string;
+  messageSize: number;
+  messageColor: string;
+  messageBackground: string;
   image: string;
   feelingType: FeelingTypes;
   city: string;

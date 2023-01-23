@@ -22,6 +22,7 @@ import createCollectionInitialInputState from '../../../data/inputs/createCollec
 import changePostCollectionInitialInputState from '../../../data/inputs/changePostCollectionInitialInputState';
 import getImagesClass from '../../../utils/getImagesClass';
 import ShowMoreButton from '../../../components/ShowMoreButton';
+import getPostInfoText from '../../../utils/getPostInfoText';
 
 const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: string }> = ({
   post,
@@ -111,11 +112,14 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
   return (
     <div className="post_card card">
       <div className="post_header flex">
-        <Avatar
-          imageUrl={userAvatar || authorAvatar}
-          firstName={userFirstName || authorFirstName}
-          lastName={userLastName || authorLastName}
-        />
+        <div className="post_header_info flex">
+          <Avatar
+            imageUrl={userAvatar || authorAvatar}
+            firstName={userFirstName || authorFirstName}
+            lastName={userLastName || authorLastName}
+          />
+          <span>{getPostInfoText(post)}</span>
+        </div>
         {dropDown ? dropDown : !isPostSaved && postCardDropdown}
       </div>
 
@@ -144,7 +148,14 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
             <aside className="post_images_sidebar flex_col">
               <div className="sidebar_container">
                 <div className="post_header flex">
-                  <Avatar imageUrl={userAvatar} firstName={userFirstName} lastName={userLastName} />
+                  <div className="post_header_info flex">
+                    <Avatar
+                      imageUrl={userAvatar || authorAvatar}
+                      firstName={userFirstName || authorFirstName}
+                      lastName={userLastName || authorLastName}
+                    />
+                    <span>{getPostInfoText(post)}</span>
+                  </div>
                   {dropDown ? dropDown : !isPostSaved && postCardDropdown}
                 </div>
                 <p className="message">

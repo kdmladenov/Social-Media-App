@@ -2,7 +2,7 @@ import PostImageType from '../types/PostImageType';
 
 const getImagesClass = (images: PostImageType[]) =>
   images?.length === 1
-    ? ''
+    ? 'one'
     : images?.length === 2
     ? 'two'
     : images?.length === 2

@@ -19,6 +19,7 @@ import UserType from '../../../types/UserType';
 import getPostImagesClass from '../../../utils/getPostImagesClass';
 import './styles/PostCreateCard.css';
 import ResizableTextBox from '../../../components/ResizableTextBox';
+import getPostInfoText from '../../../utils/getPostInfoText';
 
 const PostCreateCard: React.FC = () => {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const PostCreateCard: React.FC = () => {
     defaultEndpoint['friendsList']
   );
   const [taggedFriendsList, setTaggedFriendsList] = useState<UserType[]>([]);
-
+  const [postInfo, setPostInfo] = useState('');
   const { user } = useTypedSelector((state) => state.userDetails);
   const { success: successImagesUpload, postImages: uploadedPostImages } = useTypedSelector(
     (state) => state.postImagesUpload
@@ -51,7 +52,7 @@ const PostCreateCard: React.FC = () => {
   const tagFriendHandler = (friend: UserType) => {
     if (!taggedFriendsList?.some((taggedFriend) => taggedFriend.userId === friend.userId)) {
       setTaggedFriendsList([...taggedFriendsList, friend]);
-      setNewPost({ ...newPost, taggedFriends: taggedFriendsList });
+      setNewPost({ ...newPost, taggedFriends: [...taggedFriendsList, friend] });
     }
   };
   const tagFriendRemoveHandler = (friendToRemove: UserType) => {
@@ -81,6 +82,10 @@ const PostCreateCard: React.FC = () => {
       dispatch(listFriends(`${page}${pageSize}${sort}${search}`));
     }
   }, [dispatch, locationEndpoint, taggedFriendsEndpoint, section]);
+
+  useEffect(() => {
+    setPostInfo(getPostInfoText(newPost));
+  }, [newPost]);
 
   return (
     <div className="post_create_card card">
@@ -123,24 +128,7 @@ const PostCreateCard: React.FC = () => {
                   firstName={user?.firstName}
                   lastName={user?.lastName}
                 />
-                {(newPost?.city || newPost?.feelingType || newPost?.taggedFriends?.length) && (
-                  <span>{` is `}</span>
-                )}
-                {newPost?.feelingType ? <span>{` feeling ${newPost?.feelingType}`}</span> : <></>}
-                {newPost?.city ? <span>{` in ${newPost.city}, ${newPost.country}`}</span> : <></>}
-                {newPost?.taggedFriends?.length ? (
-                  <span>{`  with ${newPost?.taggedFriends?.[0].firstName} ${
-                    newPost?.taggedFriends?.[0].lastName
-                  } ${
-                    newPost?.taggedFriends?.length === 2
-                      ? `and 1 other`
-                      : newPost?.taggedFriends?.length > 2
-                      ? `and ${newPost?.taggedFriends?.length - 1} others`
-                      : ''
-                  }`}</span>
-                ) : (
-                  <></>
-                )}
+                <span>{postInfo}</span>
               </div>
 
               {newPost?.images?.length ? (

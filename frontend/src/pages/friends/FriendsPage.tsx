@@ -123,7 +123,7 @@ const FriendsPage = () => {
   ]);
 
   return (
-    <main className="friend_page">
+    <main className={`friend_page ${section}`}>
       <aside className="sidebar">
         <div className="menu">
           <div className="menu_header">

@@ -236,12 +236,13 @@
 }
 
 /* Media Queries */
-/* @media (max-width: 1280px) {
+@media (max-width: 1200px) {
   .timeline_container {
-    padding-left: 60px;
+    padding-left: 0px;
     justify-content: flex-start;
     align-items: flex-start;
-    width: fit-content;
+    width: 375px;
+    gap: 25px;
   }
 
   .timeline_container.horizontal {
@@ -249,7 +250,7 @@
   }
 
   .timeline_container::after {
-    left: calc(60px - 5px);
+    left: 10px;
   }
 
   .timeline_item {
@@ -264,15 +265,12 @@
   .timeline_item_content {
     text-align: left;
     align-items: flex-start;
+    border-radius: 0px 10px 10px 10px;
   }
 
   .timeline_container .timeline_item_content::after {
-    right: auto;
-    left: -9px;
-    border-bottom-color: var(--gray);
-    border-left-color: var(--gray);
-    border-top-color: transparent;
-    border-right-color: transparent;
+    width: 0;
+    height: 0;
   }
 
   .timeline_container.horizontal .timeline_item_content::after,
@@ -285,21 +283,26 @@
     transform: rotate(-45deg);
   }
 
+  .timeline_item:nth-child(odd) .timeline_item_content .point,
   .timeline_item_content .point {
-    left: -35px;
+    left: -23px;
+    top: -20px;
   }
-
+  .timeline_item:nth-child(odd) .timeline_item_content .btn,
   .timeline_item_content .btn {
-    left: -40px;
+    left: -27px;
+    top: -22px;
   }
-
+  .timeline_item:nth-child(odd) .timeline_item_content .date,
   .timeline_item_content .date {
-    left: -205px;
+    left: 0px;
+    top: -27px;
     text-align: right;
+    width: fit-content;
   }
 }
 
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .timeline_container .timeline_item_content {
     width: 300px;
     height: 400px;
@@ -313,9 +316,9 @@
     grid-template-areas: 'image' ' title' 'rating' 'price' 'cart_button';
     padding: 5px;
   }
-}
+} */
 
-@media (max-width: 480px) {
+/* @media (max-width: 480px) {
   .timeline_container .timeline_item_content .post_card {
     width: 280px;
     padding: 5px;

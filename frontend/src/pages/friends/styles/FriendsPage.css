@@ -139,16 +139,45 @@
 
 .friend_page .friends_container .container,
 .friend_page .friends_container > div {
-  justify-content: flex-start;
-  align-items: flex-start
+  justify-content: center;
+  align-items: flex-start;
 }
 
-.friend_page .friends_container .container{
+.friend_page .friends_container .container {
   gap: 40px;
   flex-wrap: wrap;
   width: 100%;
 }
 
-.friend_page .friends_container .timeline_container{
-  width: 100%;
+@media (max-width: 1024px) {
+  .friend_page .friends_container {
+    padding: 10px 0;
+  }
+    .friend_page.home .friends_container span{
+    padding-left: 20px ;
+  }
+  .friend_page .friends_container h1 {
+    padding: 10px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .friend_page {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'sidebar'
+      'friends_container';
+  }
+    .friend_page h1{
+    font-size: 22px;
+  }
+
+  .friend_page:not(.home):not(.timeline):not(.birthdays) {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'sidebar';
+  }
+  .friend_page:not(.home):not(.timeline):not(.birthdays) .friends_container {
+    display: none;
+    padding: 10px;
+  }
 }

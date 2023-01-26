@@ -1,12 +1,11 @@
 import React from 'react';
 import Tooltip from '../../../components/Tooltip';
+import { REACTION_NAMES_COUNT_AT_HOVER } from '../../../data/constants';
 import reactionButtons from '../../../data/inputs/reactionButtons';
 import useTypedSelector from '../../../hooks/useTypedSelector';
 import getGroupReactions from '../../../utils/getGroupReactions';
 
 import './styles/ReactionsList.css';
-
-const REACTION_NAMES_COUNT_AT_HOVER = 1;
 
 export const ReactionsList: React.FC<{
   type: 'post' | 'image' | 'post_comment' | 'image_comment';

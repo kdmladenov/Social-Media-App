@@ -38,37 +38,37 @@ const Reactions: React.FC<{
 
   const { userInfo } = useTypedSelector((state) => state.userLogin);
   const [reactionInState, setReactionInState] = useState<ReactionType | null>(null);
-  const [currentReactionButton, setCurrentReactionButton] = useState<ReactionButtonType>(
-    reactionButtons[0]
-  );
 
   // Post reactions state
   const { postReactions } = useTypedSelector((state) => state.postReactionsList);
-  const { postReaction: createdPostReaction, success: successPostReactionCreate } =
-    useTypedSelector((state) => state.postReactionCreate);
-  const { postReaction: editedPostReaction, success: successPostReactionEdit } = useTypedSelector(
-    (state) => state.postReactionEdit
+  const { success: successPostReactionCreate } = useTypedSelector(
+    (state) => state.postReactionCreate
   );
+  const { success: successPostReactionEdit } = useTypedSelector((state) => state.postReactionEdit);
   const { success: successPostReactionDelete } = useTypedSelector(
     (state) => state.postReactionDelete
   );
 
   // Post Comment reactions state
   const { commentReactions } = useTypedSelector((state) => state.commentReactionsList);
-  const { commentReaction: createdCommentReaction, success: successCommentReactionCreate } =
-    useTypedSelector((state) => state.commentReactionCreate);
-  const { commentReaction: editedCommentReaction, success: successCommentReactionEdit } =
-    useTypedSelector((state) => state.commentReactionEdit);
+  const { success: successCommentReactionCreate } = useTypedSelector(
+    (state) => state.commentReactionCreate
+  );
+  const { success: successCommentReactionEdit } = useTypedSelector(
+    (state) => state.commentReactionEdit
+  );
   const { success: successCommentReactionDelete } = useTypedSelector(
     (state) => state.commentReactionDelete
   );
 
   // Image reactions state
   const { postImageReactions } = useTypedSelector((state) => state.postImageReactionsList);
-  const { postImageReaction: createdPostImageReaction, success: successPostImageReactionCreate } =
-    useTypedSelector((state) => state.postImageReactionCreate);
-  const { postImageReaction: editedPostImageReaction, success: successPostImageReactionEdit } =
-    useTypedSelector((state) => state.postImageReactionEdit);
+  const { success: successPostImageReactionCreate } = useTypedSelector(
+    (state) => state.postImageReactionCreate
+  );
+  const { success: successPostImageReactionEdit } = useTypedSelector(
+    (state) => state.postImageReactionEdit
+  );
   const { success: successPostImageReactionDelete } = useTypedSelector(
     (state) => state.postImageReactionDelete
   );
@@ -78,14 +78,12 @@ const Reactions: React.FC<{
   const { postImageCommentReactions } = useTypedSelector(
     (state) => state.commentPostImageReactionsList
   );
-  const {
-    postImageCommentReaction: createdPostImageCommentReaction,
-    success: successPostImageCommentReactionCreate
-  } = useTypedSelector((state) => state.commentPostImageReactionCreate);
-  const {
-    postImageCommentReaction: editedPostImageCommentReaction,
-    success: successPostImageCommentReactionEdit
-  } = useTypedSelector((state) => state.commentPostImageReactionEdit);
+  const { success: successPostImageCommentReactionCreate } = useTypedSelector(
+    (state) => state.commentPostImageReactionCreate
+  );
+  const { success: successPostImageCommentReactionEdit } = useTypedSelector(
+    (state) => state.commentPostImageReactionEdit
+  );
   const { success: successPostImageCommentReactionDelete } = useTypedSelector(
     (state) => state.commentPostImageReactionDelete
   );
@@ -99,8 +97,6 @@ const Reactions: React.FC<{
       ? dispatch(createPostImageReaction(resourceId, subResourceId, selectedReaction.reactionName))
       : type === 'image_comment' &&
         dispatch(createPostImageCommentReaction(resourceId, selectedReaction.reactionName));
-
-    setCurrentReactionButton(selectedReaction);
   };
 
   const updateSelectionHandler = (selectedReaction: ReactionButtonType) => {
@@ -114,12 +110,9 @@ const Reactions: React.FC<{
         : type === 'image_comment' &&
           dispatch(editPostImageCommentReaction(resourceId, selectedReaction.reactionName));
     }
-    setCurrentReactionButton(selectedReaction);
   };
 
   const unSelectHandler = () => {
-    setCurrentReactionButton(reactionButtons[0]);
-
     if (reactionInState?.reactionId) {
       type === 'post'
         ? dispatch(deletePostReaction(reactionInState.reactionId))
@@ -130,6 +123,7 @@ const Reactions: React.FC<{
         : type === 'image_comment' &&
           dispatch(deletePostImageCommentReaction(reactionInState.reactionId));
     }
+    setReactionInState(null);
   };
 
   useEffect(() => {
@@ -158,119 +152,28 @@ const Reactions: React.FC<{
   ]);
 
   useEffect(() => {
-    if (type === 'post') {
-      setReactionInState(
-        successPostReactionCreate
-          ? createdPostReaction
-          : successPostReactionEdit
-          ? editedPostReaction
-          : null
-      );
-    }
-    if (type === 'post_comment') {
-      setReactionInState(
-        successCommentReactionCreate && resourceId === createdCommentReaction?.commentId
-          ? createdCommentReaction
-          : successCommentReactionEdit && resourceId === editedCommentReaction?.commentId
-          ? editedCommentReaction
-          : null
-      );
-    }
-
-    if (type === 'image') {
-      setReactionInState(
-        successPostImageReactionCreate &&
-          resourceId === createdPostImageReaction?.postId &&
-          subResourceId === createdPostImageReaction?.imageId
-          ? createdPostImageReaction
-          : successPostImageReactionEdit &&
-            resourceId === editedPostImageReaction?.postId &&
-            subResourceId === editedPostImageReaction?.imageId
-          ? editedPostImageReaction
-          : null
-      );
-    }
-    if (type === 'image_comment') {
-      setReactionInState(
-        successPostImageCommentReactionCreate &&
-          resourceId === createdPostImageCommentReaction?.commentId
-          ? createdPostImageCommentReaction
-          : successPostImageCommentReactionEdit &&
-            resourceId === editedPostImageCommentReaction?.commentId
-          ? editedPostImageCommentReaction
-          : null
-      );
-    }
+    setReactionInState(
+      (type === 'post'
+        ? postReactions?.[resourceId]
+        : type === 'post_comment'
+        ? commentReactions?.[resourceId]
+        : type === 'image'
+        ? postImageReactions?.[`${resourceId}/${subResourceId}`]
+        : type === 'image_comment'
+        ? postImageCommentReactions?.[resourceId]
+        : []
+      )?.filter((reaction) => reaction?.userId === userInfo?.userId)[0]
+    );
   }, [
     type,
     resourceId,
     subResourceId,
-    successPostReactionCreate,
-    successPostReactionEdit,
-    successPostReactionDelete,
-    successCommentReactionCreate,
-    successCommentReactionEdit,
-    successCommentReactionDelete,
-    createdCommentReaction,
-    createdPostReaction,
-    editedCommentReaction,
-    editedPostReaction,
-    successPostImageReactionCreate,
-    createdPostImageReaction,
-    successPostImageReactionEdit,
-    editedPostImageReaction,
-    successPostImageCommentReactionCreate,
-    createdPostImageCommentReaction,
-    successPostImageCommentReactionEdit,
-    editedPostImageCommentReaction,
-    successPostImageReactionDelete,
-    successPostImageCommentReactionDelete
-  ]);
-
-  useEffect(() => {
-    if (reactionInState) {
-      if (
-        successPostReactionDelete ||
-        successCommentReactionDelete ||
-        successPostImageReactionDelete ||
-        successPostImageCommentReactionDelete
-      ) {
-        setCurrentReactionButton(reactionButtons[0]);
-      } else {
-        setCurrentReactionButton({
-          reactionIcon: reactionInState?.reactionCode,
-          reactionName: reactionInState?.reactionName
-        });
-      }
-    } else {
-      setCurrentReactionButton(reactionButtons[0]);
-      setReactionInState(
-        (type === 'post'
-          ? postReactions?.[resourceId]
-          : type === 'post_comment'
-          ? commentReactions?.[resourceId]
-          : type === 'image'
-          ? postImageReactions?.[`${resourceId}/${subResourceId}`]
-          : type === 'image_comment'
-          ? postImageCommentReactions?.[resourceId]
-          : []
-        )?.filter((reaction) => reaction?.userId === userInfo?.userId)[0]
-      );
-    }
-  }, [
     reactionInState,
     postReactions,
     commentReactions,
     userInfo,
-    successPostReactionDelete,
-    successCommentReactionDelete,
     postImageCommentReactions,
-    postImageReactions,
-    successPostImageCommentReactionDelete,
-    successPostImageReactionDelete,
-    resourceId,
-    subResourceId,
-    type
+    postImageReactions
   ]);
 
   return (
@@ -299,16 +202,21 @@ const Reactions: React.FC<{
         ))}
       </div>
       <Button
-        classes={`${classes} ${reactionInState ? ' active' : ''} ${
-          currentReactionButton?.reactionName
-        }`}
+        classes={`${classes} ${reactionInState ? ' active' : ''} ${reactionInState?.reactionName}`}
         onClick={() =>
           reactionInState?.reactionId ? unSelectHandler() : selectionHandler(reactionButtons[0])
         }
       >
-        {classes !== 'text' && <i className={currentReactionButton.reactionIcon}></i>}
+        {classes !== 'text' && (
+          <i className={reactionInState?.reactionCode || reactionButtons[0].reactionIcon}></i>
+        )}
         {classes !== 'icon' && (
-          <span>{currentReactionButton.reactionName.replace(/^\w/, (c) => c.toUpperCase())}</span>
+          <span>
+            {(reactionInState?.reactionName || reactionButtons[0].reactionName).replace(
+              /^\w/,
+              (c) => c.toUpperCase()
+            )}
+          </span>
         )}
       </Button>
     </div>

@@ -170,7 +170,6 @@ const PostCard: React.FC<{ post: PostType; dropDown?: JSX.Element; screen?: stri
             </aside>
             <div className="post_images_container">
               <Slider
-                dots={false}
                 slideIndex={selectedPostImageIndex}
                 setSlideIndex={setSelectedPostImageIndex}
               >

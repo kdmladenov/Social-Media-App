@@ -36,6 +36,8 @@ export const RESET_BTN_THRESHOLD_SHOW_CHAR_COUNT = 3;
 export const TEST_ACCOUNT_EMAIL = 'kdmladenov@outlook.com';
 export const TEST_ACCOUNT_PASSWORD = 'Sekretenklu4';
 
+export const REACTION_NAMES_COUNT_AT_HOVER = 5;
+
 export const USER = {
   MIN_FIRST_NAME_LENGTH: 2,
   MAX_FIRST_NAME_LENGTH: 100,

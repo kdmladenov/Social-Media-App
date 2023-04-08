@@ -71,9 +71,11 @@ const Header: React.FC = () => {
           {userInfo?.token ? (
             <ul className="menu_user">
               {userMenuMap(user.userId).map((link, index) => (
-                <NavLink to={link.path} key={link.path}>
-                  <li key={index}>{link.label}</li>
-                </NavLink>
+                <li key={link.label}>
+                  <NavLink to={link.path} key={link.path}>
+                    {link.label}
+                  </NavLink>
+                </li>
               ))}
               <div onClick={() => logoutHandler()}>Log out</div>
             </ul>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Avatar from '../../../components/Avatar';
-import Button from '../../../components/Button';
 import Carousel from '../../../components/Carousel';
 import Loader from '../../../components/Loader';
 import Message from '../../../components/Message';
@@ -30,8 +29,6 @@ const StoriesMy = () => {
   useEffect(() => {
     const { page, pageSize, sort, search } = endpoint;
     dispatch(listMyStories(`${page}${pageSize}${sort}${search}`));
-
-    // }
   }, [dispatch, endpoint]);
 
   return (
@@ -66,14 +63,7 @@ const StoriesMy = () => {
         <Modal classes="story" setIsOpenModal={setIsModalOpen}>
           <>
             <aside className="stories_sidebar flex_col">
-              <h1>Stories</h1>
-              <div className="add_story">
-                <h4>Your Story</h4>
-                <Button classes="icon">
-                  <i className="fa fa-plus"></i>
-                </Button>
-              </div>
-              <h4>All Stories</h4>
+              <h1>All Stories</h1>
               <ul className="flex_col">
                 {stories?.map((story, index) => (
                   <li

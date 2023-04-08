@@ -45,7 +45,6 @@ const CommentCard: React.FC<{
 
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
-
   const [editMode, setEditMode] = useState(false);
   const [contentComment, setContentComment] = useState(content || '');
 

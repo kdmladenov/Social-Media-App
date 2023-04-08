@@ -13,8 +13,6 @@ import {
 import Button from '../../../components/Button';
 import CommentCard from './CommentCard';
 import InputBoxWithAvatar from '../../../components/InputBoxWithAvatar';
-import Loader from '../../../components/Loader';
-import Message from '../../../components/Message';
 import './styles/PostComments.css';
 
 const commentsAtStart = 1;
@@ -24,51 +22,23 @@ const PostComments: React.FC<{
   postId: number;
   imageId?: number;
   type?: 'post' | 'image';
-  isFormVisible: boolean;
-}> = ({ postId, imageId, type = 'post', isFormVisible = false }) => {
+}> = ({ postId, imageId, type = 'post' }) => {
   const dispatch = useDispatch();
 
   const { user: currentUserDetails } = useTypedSelector((state) => state.userDetails);
 
-  const { comments, loading, error } = useTypedSelector((state) => state.commentsList);
+  const { comments } = useTypedSelector((state) => state.commentsList);
   const { imageComments } = useTypedSelector((state) => state.imageCommentsList);
-
-  const {
-    success: successCreate,
-    loading: loadingCreate,
-    error: errorCreate
-  } = useTypedSelector((state) => state.commentCreate);
-
-  const {
-    success: successEdit,
-    loading: loadingEdit,
-    error: errorEdit
-  } = useTypedSelector((state) => state.commentEdit);
-
-  const {
-    success: successDelete,
-    loading: loadingDelete,
-    error: errorDelete
-  } = useTypedSelector((state) => state.commentDelete);
-
-  const {
-    //Todo do not update
-    success: successImageCommentCreate,
-    loading: loadingImageCommentCreate,
-    error: errorImageCommentCreate
-  } = useTypedSelector((state) => state.imageCommentCreate);
-
-  const {
-    success: successImageCommentEdit,
-    loading: loadingImageCommentEdit,
-    error: errorImageCommentEdit
-  } = useTypedSelector((state) => state.imageCommentEdit);
-
-  const {
-    success: successImageCommentDelete,
-    loading: loadingImageCommentDelete,
-    error: errorImageCommentDelete
-  } = useTypedSelector((state) => state.imageCommentDelete);
+  const { success: successCommentCreate } = useTypedSelector((state) => state.commentCreate);
+  const { success: successCommentEdit } = useTypedSelector((state) => state.commentEdit);
+  const { success: successCommentDelete } = useTypedSelector((state) => state.commentDelete);
+  const { success: successImageCommentCreate } = useTypedSelector(
+    (state) => state.imageCommentCreate
+  );
+  const { success: successImageCommentEdit } = useTypedSelector((state) => state.imageCommentEdit);
+  const { success: successImageCommentDelete } = useTypedSelector(
+    (state) => state.imageCommentDelete
+  );
 
   const [endpoint, setEndpoint] = useState({
     ...defaultEndpoint['postComments']
@@ -98,81 +68,53 @@ const PostComments: React.FC<{
     postId,
     imageId,
     type,
-    successCreate,
-    successEdit,
-    successDelete,
+    successCommentCreate,
+    successCommentEdit,
+    successCommentDelete,
     successImageCommentCreate,
     successImageCommentEdit,
     successImageCommentDelete
   ]);
 
-  return comments?.[postId]?.length > 0 ||
-    imageComments?.[`${postId}/${imageId}`]?.length ||
-    isFormVisible ? (
+  return comments?.[postId]?.length > 0 || imageComments?.[`${postId}/${imageId}`]?.length ? (
     <div className="post_comments">
-      {loading ||
-      loadingCreate ||
-      loadingDelete ||
-      loadingEdit ||
-      loadingImageCommentCreate ||
-      loadingImageCommentEdit ||
-      loadingImageCommentDelete ? (
-        <Loader />
-      ) : error ||
-        errorCreate ||
-        errorDelete ||
-        errorEdit ||
-        errorImageCommentCreate ||
-        errorImageCommentEdit ||
-        errorImageCommentDelete ? (
-        <Message type="error">
-          {error ||
-            errorCreate ||
-            errorDelete ||
-            errorEdit ||
-            errorImageCommentCreate ||
-            errorImageCommentEdit ||
-            errorImageCommentDelete}
-        </Message>
-      ) : (
-        <div className="comments_container flex_col">
-          <InputBoxWithAvatar
-            resourceId={postId}
-            subResourceId={imageId}
-            currentUserDetails={currentUserDetails}
-            createAction={type === 'post' ? createComment : createImageComment}
-            validationMin={COMMENT.MIN_CONTENT_LENGTH}
-            validationMax={COMMENT.MAX_CONTENT_LENGTH}
-            placeholder="Write a comment ..."
-            errorMessage={`The comment should be ${COMMENT.MIN_CONTENT_LENGTH} - ${COMMENT.MAX_CONTENT_LENGTH} characters long`}
-            closedButtonText={`Write ${
-              comments?.[postId]?.length > 0 || imageComments?.[`${postId}/${imageId}`]?.length
-                ? 'another'
-                : 'the first'
-            } comment`}
-            closedAtStart={comments?.[postId]?.length > 0}
-          />
+      <div className="comments_container flex_col">
+        <InputBoxWithAvatar
+          resourceId={postId}
+          subResourceId={imageId}
+          currentUserDetails={currentUserDetails}
+          createAction={type === 'post' ? createComment : createImageComment}
+          validationMin={COMMENT.MIN_CONTENT_LENGTH}
+          validationMax={COMMENT.MAX_CONTENT_LENGTH}
+          placeholder="Write a comment ..."
+          errorMessage={`The comment should be ${COMMENT.MIN_CONTENT_LENGTH} - ${COMMENT.MAX_CONTENT_LENGTH} characters long`}
+          closedButtonText={`Write ${
+            comments?.[postId]?.length > 0 || imageComments?.[`${postId}/${imageId}`]?.length
+              ? 'another'
+              : 'the first'
+          } comment`}
+          closedAtStart={comments?.[postId]?.length > 0}
+        />
 
-          {nestedComments?.length! > 0 &&
-            nestedComments
-              ?.filter((comment) => comment.replyTo === -1)
-              .slice(0, commentsCount)
-              .map((comment) => (
-                <CommentCard
-                  key={comment?.commentId}
-                  comment={comment}
-                  currentUserDetails={currentUserDetails}
-                  type={type}
-                />
-              ))}
+        {nestedComments?.length! > 0 &&
+          nestedComments
+            ?.filter((comment) => comment.replyTo === -1)
+            .slice(0, commentsCount)
+            .map((comment) => (
+              <CommentCard
+                key={comment?.commentId}
+                comment={comment}
+                currentUserDetails={currentUserDetails}
+                type={type}
+              />
+            ))}
 
-          {!(nestedComments && commentsCount >= nestedComments?.length) && (
-            <Button classes="text comments_count" onClick={commentsCountHandler}>
-              View other comments
-            </Button>
-          )}
-        </div>
-      )}
+        {!(nestedComments && commentsCount >= nestedComments?.length) && (
+          <Button classes="text comments_count" onClick={commentsCountHandler}>
+            View other comments
+          </Button>
+        )}
+      </div>
     </div>
   ) : (
     <></>

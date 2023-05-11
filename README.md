@@ -3,6 +3,7 @@
 A Full-stack Facebook-like social media site that allows users to share stories, create posts, manage user profiles, save posts, and connect with friends.
 
 A deployed version of the site can be accessed [here](https://social-media-app-99689.web.app/).
+You can find other projects of mine on my [portfolio site](https://portfolio-site-61599.web.app/) or my [LinkedIn page](https://www.linkedin.com/in/kmladenov/)
 
 ## Table of Contents
 
@@ -15,6 +16,32 @@ A deployed version of the site can be accessed [here](https://social-media-app-9
   - [Usage](#usage)
   - [License](#license)
   - [Images](#images)
+      - [Home page](#home-page)
+      - [Post create - images upload](#post-create---images-upload)
+      - [Post create - images uploaded \& comment](#post-create---images-uploaded--comment)
+      - [Post create - tag friends](#post-create---tag-friends)
+      - [Post create - add a feeling](#post-create---add-a-feeling)
+      - [Post create - tag a location](#post-create---tag-a-location)
+      - [Post comments and reactions](#post-comments-and-reactions)
+      - [Post Image Modal - comments and reactions](#post-image-modal---comments-and-reactions)
+      - [Stories](#stories)
+      - [Stories create - add image and comment edit](#stories-create---add-image-and-comment-edit)
+      - [User Profile](#user-profile)
+      - [User Profile - info](#user-profile---info)
+      - [User Profile - info edit](#user-profile---info-edit)
+      - [User Profile - friends](#user-profile---friends)
+      - [User Profile - all photos](#user-profile---all-photos)
+      - [Friends page - home + suggestions](#friends-page---home--suggestions)
+      - [Friends page - all friends](#friends-page---all-friends)
+      - [Friends page - timeline](#friends-page---timeline)
+      - [Saved posts page](#saved-posts-page)
+      - [Mobile view - Home](#mobile-view---home)
+      - [Mobile view - Stories](#mobile-view---stories)
+      - [Mobile view - Post image](#mobile-view---post-image)
+      - [Mobile view - Profile](#mobile-view---profile)
+      - [Mobile view - All Friends](#mobile-view---all-friends)
+      - [Mobile view - Saved Posts](#mobile-view---saved-posts)
+      - [Restore forgotten password](#restore-forgotten-password)
 
 ## Overview
 
@@ -30,7 +57,7 @@ This repository contains the source code for a Full-stack social media site with
 
 ## Technologies Used
 
-- Front-end: React.js, JavaScript, TypeScript, HTML, CSS, Redux
+- Front-end: React.js, TypeScript,JavaScript, HTML, CSS, Redux
 - Back-end: Node.js, Express.js, TypeScript, MariaDB/ MySQL
 - Authentication: JSON Web Tokens (JWT)
 - Additional Libraries and Tools: Axios, React Router, Passport, Bcrypt, Googleapis, Nodemailer
@@ -45,7 +72,7 @@ This repository contains the source code for a Full-stack social media site with
 
 1. Start the backend API in the backend folder : `npm start`
 1. Start the development server in the frontend: `npm start`
-2. Access the site in your browser at `http://localhost:3000`
+1. Access the site in your browser at `http://localhost:3000`
 
 ## License
 
@@ -55,88 +82,80 @@ Please note that this license only applies to the specific project owned by Kras
 
 ## Images
 
-Home screen
+#### Home page
 ![](/assets/images/1.png)
 
-Post create - images upload
+#### Post create - images upload
 ![](/assets/images/2.png)
 
-
-Post create - images uploaded & comment
+#### Post create - images uploaded & comment
 ![](/assets/images/3.png)
 
-Post create - tag friends
+#### Post create - tag friends
 ![](/assets/images/5.png)
 
-Post create - add a feeling
+#### Post create - add a feeling
 ![](/assets/images/6.png)
 
-Post create - tag a location
+#### Post create - tag a location
 ![](/assets/images/7.png)
 
-Post comments and reactions
+#### Post comments and reactions
 ![](/assets/images/8.png)
 
-Post Image Modal - comments and reactions
+#### Post Image Modal - comments and reactions
 ![](/assets/images/9.png)
 
-Stories
+#### Stories
 ![](/assets/images/10.png)
 
-Stories create - add image and comment edit
+#### Stories create - add image and comment edit
 ![](/assets/images/11.png)
 
-User Profile
+#### User Profile
 ![](/assets/images/12.png)
 
-User Profile - info
+#### User Profile - info
 ![](/assets/images/13.png)
 
-User Profile - info edit
+#### User Profile - info edit
 ![](/assets/images/14.png)
 
-User Profile - friends
+#### User Profile - friends
 ![](/assets/images/15.png)
 
-User Profile - all photos
+#### User Profile - all photos
 ![](/assets/images/16.png)
 
-Friends page - home + suggestions
+#### Friends page - home + suggestions
 ![](/assets/images/17.png)
 
-Friends page - all friends
+#### Friends page - all friends
 ![](/assets/images/18.png)
 
-Friends page - timeline
+#### Friends page - timeline
 ![](/assets/images/19.png)
 
-Saved posts page
+#### Saved posts page
 ![](/assets/images/20.png)
 
-Mobile view - Home
-
+#### Mobile view - Home
 ![](/assets/images/21.png)
 
-Mobile view - Stories
-
+#### Mobile view - Stories
 ![](/assets/images/22.png)
 
-Mobile view - Post image
-
+#### Mobile view - Post image
 ![](/assets/images/23.png)
 
-Mobile view - Profile
-
+#### Mobile view - Profile
 ![](/assets/images/24.png)
 
-Mobile view - All Friends
-
+#### Mobile view - All Friends
 ![](/assets/images/25.png)
 
-Mobile view - Saved Posts
-
+#### Mobile view - Saved Posts
 ![](/assets/images/26.png)
 
-Restore forgotten password
-
+#### Restore forgotten password
 ![](/assets/images/27.png)

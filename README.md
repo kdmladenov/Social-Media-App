@@ -1,5 +1,7 @@
 # Social Media Site
 
+[![Video Demo](/assets/images/video_thumb.png)](https://youtu.be/BmeQB878ZdQc)
+
 A Full-stack Facebook-like social media site that allows users to share stories, create posts, manage user profiles, save posts, and connect with friends.
 
 A deployed version of the site can be accessed [here](https://social-media-app-99689.web.app/).

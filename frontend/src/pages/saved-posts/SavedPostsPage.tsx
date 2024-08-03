@@ -22,6 +22,7 @@ import FormComponent from '../../components/FormComponent';
 import ConfirmMessage from '../../components/ConfirmMessage';
 import changePostCollectionInitialInputState from '../../data/inputs/changePostCollectionInitialInputState';
 import createCollectionInitialInputState from '../../data/inputs/createCollectionInitialInputState';
+import Pagination from '../../components/Pagination';
 
 const SavedPostsPage = () => {
   const dispatch = useDispatch();
@@ -221,6 +222,12 @@ const SavedPostsPage = () => {
                   />
                 </li>
               ))}
+            <Pagination
+              updateQuery={(prop, value) => setEndpoint({ ...endpoint, [prop]: value })}
+              currentPage={+endpoint.page.slice('page='.length).replace('&', '')}
+              pageSize={+endpoint.pageSize.slice('pageSize='.length).replace('&', '')}
+              totalItems={savedPosts?.[0]?.totalDBItems}
+            />
           </ul>
         ) : (
           <h2>You have no saved posts</h2>

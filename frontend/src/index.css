@@ -52,7 +52,7 @@
   --battleship: #5b636a;
   --charcoal: #464e56;
   --gray: #e0e5ec;
-  --gray_background: rgb(239, 242, 245);
+  --gray_background: rgb(247, 247, 248);
   --gray_light: #f3f3f3;
   --gray_dark: #838383;
   --dolphin: #6e7780;
@@ -92,6 +92,10 @@ body {
   font-family: 'san-serif';
   color: #333;
   line-height: 1.6;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 #root {

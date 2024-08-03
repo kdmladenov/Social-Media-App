@@ -1,7 +1,7 @@
 const defaultEndpoint = {
   postsMy: {
     page: 'page=1&',
-    pageSize: 'pageSize=1&',
+    pageSize: 'pageSize=5&',
     sort: 'sort=createdAt desc&',
     filter: [],
     search: ''
@@ -29,7 +29,7 @@ const defaultEndpoint = {
   },
   savedPosts: {
     page: 'page=1&',
-    pageSize: 'pageSize=12&',
+    pageSize: 'pageSize=5&',
     sort: 'sort=firstName desc&',
     filter: [],
     search: ''

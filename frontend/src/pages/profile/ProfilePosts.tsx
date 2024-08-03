@@ -22,7 +22,7 @@ const ProfilePosts: React.FC<{ user: UserType }> = ({ user }) => {
       </aside>
       <div className="posts flex_col">
         {isCurrentUser && <PostCreateCard />}
-        <PostsMy />
+        <PostsMy showUserPostsOnly={true} />
       </div>
     </div>
   );

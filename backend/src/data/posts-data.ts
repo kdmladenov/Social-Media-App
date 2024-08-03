@@ -29,6 +29,20 @@ const getAllMyPosts = async (
 
   const offset = page ? (page - 1) * pageSize : 0;
 
+  const friendsSQL = `
+  SELECT source_id as userId
+  FROM friends
+  WHERE request_status_id = 1 AND target_id = ?
+
+  UNION
+
+  SELECT target_id as userId
+  FROM friends
+  WHERE request_status_id = 1 AND source_id = ?`;
+
+  const friendsList = (await db.query(friendsSQL, [+userId, +userId])) as { userId: number }[];
+  const friendsIdList = friendsList.map((userId) => `${userId.userId}`);
+
   const sql = `
   SELECT 
       p.post_id as postId,
@@ -72,7 +86,9 @@ const getAllMyPosts = async (
     LEFT JOIN (SELECT user_id, first_name, last_name, avatar
         FROM users
         GROUP BY user_id) as u USING (user_id)
-    WHERE p.user_id = ? AND p.is_deleted = 0 ${filter || search ? 'AND' : ''}
+    WHERE p.user_id in (? ${friendsIdList.length ? ',': ''} ${friendsIdList.join(',')}) AND p.is_deleted = 0 ${
+    filter || search ? 'AND' : ''
+  }
         ${
           search
             ? `CONCAT_WS(',', p.post_id, p.user_id, p.message, f.feeling_type_id, f.feeling_type, l.location_id, l.city, l.country, p.created_at, p.updated_at, p.is_deleted) Like '%${search}%'`
@@ -165,7 +181,6 @@ const create = async (userId: number, post: newPostType) => {
 
   return getBy('post_id', +result.insertId);
 };
-
 
 const tagFriendToPost = async (userId: number, postId: number) => {
   const sql = `

@@ -6,7 +6,7 @@ const Loader: React.FC = () => {
   return (
     <div className="spinner">
       <Tooltip direction="top" text="Loading...">
-        <i className="fa fa-spinner" />
+        <i className="fa fa-spinner fa-spin-pulse" />
       </Tooltip>
     </div>
   );

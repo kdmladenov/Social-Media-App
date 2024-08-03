@@ -6,14 +6,18 @@ import { listMyPosts } from '../../../context/actions/postActions';
 import defaultEndpoint from '../../../data/inputs/defaultEndpoint';
 import useTypedSelector from '../../../hooks/useTypedSelector';
 import PostCard from './PostCard';
+import Pagination from '../../../components/Pagination';
 import './styles/PostsMy.css';
 
-const PostsMy: React.FC = () => {
+const PostsMy: React.FC<{ showUserPostsOnly?: boolean }> = ({ showUserPostsOnly = false }) => {
   const dispatch = useDispatch();
 
   const [endpoint, setEndpoint] = useState(defaultEndpoint['postsMy']);
 
   const { posts, loading, error } = useTypedSelector((state) => state.postsMyList);
+  const {  userInfo : {userId} } = useTypedSelector((state) => state.userLogin);
+
+  const postsToShow = showUserPostsOnly ? posts?.filter((post) => post.userId === userId) : posts;
 
   useEffect(() => {
     const { page, pageSize, sort, search } = endpoint;
@@ -26,11 +30,17 @@ const PostsMy: React.FC = () => {
         <Loader />
       ) : error ? (
         <Message type="error">{error}</Message>
-      ) : posts?.length > 0 ? (
+      ) : postsToShow?.length > 0 ? (
         <>
-          {posts.map((post) => (
+          {postsToShow.map((post) => (
             <PostCard key={post?.postId} post={post} />
           ))}
+          <Pagination
+            updateQuery={(prop, value) => setEndpoint({ ...endpoint, [prop]: value })}
+            currentPage={+endpoint.page.slice('page='.length).replace('&', '')}
+            pageSize={+endpoint.pageSize.slice('pageSize='.length).replace('&', '')}
+            totalItems={postsToShow?.[0]?.totalDBItems}
+          />
         </>
       ) : (
         <h2>You have no posts</h2>

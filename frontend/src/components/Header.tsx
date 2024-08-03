@@ -30,7 +30,7 @@ const Header: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!user?.email) {
+    if (!user?.email && userInfo?.userId) {
       dispatch(getUserDetails(userInfo?.userId));
     }
   }, [dispatch, user, userInfo]);

@@ -76,48 +76,49 @@ const PostComments: React.FC<{
     successImageCommentDelete
   ]);
 
-  return comments?.[postId]?.length > 0 || imageComments?.[`${postId}/${imageId}`]?.length ? (
+  return (
     <div className="post_comments">
-      <div className="comments_container flex_col">
-        <InputBoxWithAvatar
-          resourceId={postId}
-          subResourceId={imageId}
-          currentUserDetails={currentUserDetails}
-          createAction={type === 'post' ? createComment : createImageComment}
-          validationMin={COMMENT.MIN_CONTENT_LENGTH}
-          validationMax={COMMENT.MAX_CONTENT_LENGTH}
-          placeholder="Write a comment ..."
-          errorMessage={`The comment should be ${COMMENT.MIN_CONTENT_LENGTH} - ${COMMENT.MAX_CONTENT_LENGTH} characters long`}
-          closedButtonText={`Write ${
-            comments?.[postId]?.length > 0 || imageComments?.[`${postId}/${imageId}`]?.length
-              ? 'another'
-              : 'the first'
-          } comment`}
-          closedAtStart={comments?.[postId]?.length > 0}
-        />
+      <InputBoxWithAvatar
+        resourceId={postId}
+        subResourceId={imageId}
+        currentUserDetails={currentUserDetails}
+        createAction={type === 'post' ? createComment : createImageComment}
+        validationMin={COMMENT.MIN_CONTENT_LENGTH}
+        validationMax={COMMENT.MAX_CONTENT_LENGTH}
+        placeholder="Write a comment ..."
+        errorMessage={`The comment should be ${COMMENT.MIN_CONTENT_LENGTH} - ${COMMENT.MAX_CONTENT_LENGTH} characters long`}
+        closedButtonText={`Write ${
+          comments?.[postId]?.length > 0 || imageComments?.[`${postId}/${imageId}`]?.length
+            ? 'another'
+            : 'the first'
+        } comment`}
+        closedAtStart={comments?.[postId]?.length > 0}
+      />
+      {comments?.[postId]?.length > 0 || imageComments?.[`${postId}/${imageId}`]?.length ? (
+        <div className="comments_container flex_col">
+          {nestedComments?.length! > 0 &&
+            nestedComments
+              ?.filter((comment) => comment.replyTo === -1)
+              .slice(0, commentsCount)
+              .map((comment) => (
+                <CommentCard
+                  key={comment?.commentId}
+                  comment={comment}
+                  currentUserDetails={currentUserDetails}
+                  type={type}
+                />
+              ))}
 
-        {nestedComments?.length! > 0 &&
-          nestedComments
-            ?.filter((comment) => comment.replyTo === -1)
-            .slice(0, commentsCount)
-            .map((comment) => (
-              <CommentCard
-                key={comment?.commentId}
-                comment={comment}
-                currentUserDetails={currentUserDetails}
-                type={type}
-              />
-            ))}
-
-        {!(nestedComments && commentsCount >= nestedComments?.length) && (
-          <Button classes="text comments_count" onClick={commentsCountHandler}>
-            View other comments
-          </Button>
-        )}
-      </div>
+          {!(nestedComments && commentsCount >= nestedComments?.length) && (
+            <Button classes="text comments_count" onClick={commentsCountHandler}>
+              View other comments
+            </Button>
+          )}
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
-  ) : (
-    <></>
   );
 };
 
